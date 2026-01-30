@@ -25,6 +25,12 @@ Route::get('/blog', function () {
     return view('pages.blog');
 })->name('blog');
 Route::get('/order-history-ip', [OrderHistoryController::class, 'index'])->name('order-history');
+Route::get('/terms', function () {
+    return view('terms');
+})->name('terms');
+Route::get('/dieu-khoan', function () {
+    return view('terms');
+})->name('terms.vi');
 
 // Auth pages
 Route::get('/login', function () {

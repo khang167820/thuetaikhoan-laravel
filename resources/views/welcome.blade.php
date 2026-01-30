@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Modern UI Enhancement -->
-    <link rel="stylesheet" href="/css/modern-ui.css?v=3">
+    <link rel="stylesheet" href="/css/modern-ui.css?v=5">
     
     <style>
         /* ============================================
@@ -1263,12 +1263,12 @@
             Hệ thống cho thuê tài khoản UnlockTool, Vietmap, Griffin, Samsung Tool và hơn 20+ công cụ GSM khác. Nhận tài khoản ngay sau khi thanh toán!
         </p>
         <form class="search-modern" action="/search" method="GET">
-            <input type="text" name="q" placeholder="Tìm kiếm: UnlockTool, License, Credits, Sơ đồ điện thoại...">
+            <input type="text" name="q" placeholder="Tìm kiếm: Mua sơ đồ, Unlocktool, Tool FRP, Credits, Bypass A12+...">
             <button type="submit">Tìm kiếm</button>
         </form>
         <div class="hero-stats">
             <div class="hero-stat">
-                <span class="hero-stat-number" data-count="15000">15.000</span>
+                <span class="hero-stat-number" data-count="500000">+500.000</span>
                 <span class="hero-stat-label">Đơn hàng</span>
             </div>
             <div class="hero-stat">
@@ -1276,8 +1276,8 @@
                 <span class="hero-stat-label">% Hài lòng</span>
             </div>
             <div class="hero-stat">
-                <span class="hero-stat-number" data-count="24">24</span>
-                <span class="hero-stat-label">Giờ / 7 ngày</span>
+                <span class="hero-stat-number" data-count="6000">+6.000</span>
+                <span class="hero-stat-label">Dịch vụ</span>
             </div>
         </div>
     </div>
@@ -1680,10 +1680,10 @@
         <div class="guide-payment-grid">
             <!-- CỘT TRÁI: HƯỚNG DẪN -->
             <div class="guide-column">
-                <h2 class="guide-column-title">Hướng dẫn thuê tài khoản</h2>
+            <h2 class="guide-column-title">Hướng dẫn thuê tài khoản</h2>
                 <p class="guide-column-sub">Quy trình thuê tài khoản hoàn toàn tự động 24/7</p>
                 <div class="guide-tip">
-                    Săn mã ưu đãi ngay <a href="#fast-order" class="guide-tip-link">Tại đây</a>.
+                    Mẹo: Săn mã ưu đãi ngay <a href="/ma-giam-gia" class="guide-tip-link">Tại đây</a>.
                 </div>
                 <div class="guide-step-item">
                     <div class="guide-step-icon-green">
@@ -1693,8 +1693,8 @@
                         </svg>
                     </div>
                     <div class="guide-step-content">
-                        <div class="guide-step-title">Bước 1: Chọn loại tài khoản</div>
-                        <div class="guide-step-text">Chọn Thuê nhanh theo tài khoản: Unlocktool, Vietmap Live, Griffin-Unlocker, TSM Tool hoặc Android Multitool.</div>
+                        <div class="guide-step-title">Bước 1: Chọn loại tài khoản (Unlocktool/Vietmap Live...)</div>
+                        <div class="guide-step-text">Chọn Thuê nhanh theo tài khoản. Ví dụ: Thuê nhanh Unlocktool hoặc Thuê nhanh Vietmap Live, Griffin, Samsung Tool, DFT Pro, TSM Tool, KG Killer, Android Multitool.</div>
                     </div>
                 </div>
                 <div class="guide-step-item">
@@ -1729,7 +1729,7 @@
                     </div>
                     <div class="guide-step-content">
                         <div class="guide-step-title">Bước 4: Thanh toán</div>
-                        <div class="guide-step-text">Quét mã QR hoặc chuyển khoản theo thông tin trên trang. Hệ thống sẽ tự động nhận diện giao dịch.</div>
+                        <div class="guide-step-text">Sau khi xác nhận, nhấn "Tiến hành thanh toán" để đến trang thanh toán. Quét mã QR hoặc chuyển khoản theo thông tin trên trang. Chờ tại trang thanh toán, hệ thống sẽ tự động nhận diện giao dịch và cập nhật trạng thái đơn hàng.</div>
                     </div>
                 </div>
                 <div class="guide-step-item">
@@ -1740,7 +1740,7 @@
                     </div>
                     <div class="guide-step-content">
                         <div class="guide-step-title">Bước 5: Nhận tài khoản</div>
-                        <div class="guide-step-text">Hệ thống tự động chuyển tới trang hiển thị thông tin tài khoản. Đăng ký để nhận nhiều đặc quyền.</div>
+                        <div class="guide-step-text">Tại trang thanh toán, hệ thống sẽ tự động chuyển tới trang hiển thị thông tin tài khoản. Đăng ký tài khoản để kiểm tra được thông tin đơn cũng như nhận nhiều đặc quyền khuyến mãi của ThueVIP.</div>
                     </div>
                 </div>
             </div>
@@ -1817,20 +1817,7 @@
 </section>
 
 <!-- FOOTER - Giống trang cũ -->
-<footer class="site-footer">
-    <div class="footer-copyright">
-        © 2026 thuetaikhoan.net – Hệ thống cho thuê tài khoản Unlocktool | Vietmap Live tự động
-    </div>
-    <div class="footer-links">
-        <a href="/" class="footer-link">Trang chủ</a>
-        <a href="#" class="footer-link">Điều khoản sử dụng</a>
-        <a href="#" class="footer-link">Chính sách bảo mật</a>
-        <a href="/ma-giam-gia" class="footer-link">Mã giảm giá</a>
-        <a href="https://zalo.me/0777333763" target="_blank" class="footer-link">💬 Zalo hỗ trợ</a>
-        <a href="https://www.facebook.com/people/Thuetaikhoannet/61586731454108/" target="_blank" class="footer-link">👍 Fanpage</a>
-        <a href="tel:0777333763" class="footer-link">📞 Hotline: 0777333763 (Zalo)</a>
-    </div>
-</footer>
+@include('partials.footer')
 
 <script>
     function toggleFeatures(id) {

@@ -94,6 +94,8 @@
             justify-content: space-between;
             gap: 16px;
             width: 100%;
+            max-width: 1440px;
+            margin: 0 auto;
             padding: 0 20px;
         }
         .header-left { display: flex; align-items: center; gap: 4px; }
@@ -107,8 +109,8 @@
         /* Navigation */
         .header-nav { display: flex; align-items: center; gap: 0; }
         .nav-link {
-            display: flex; align-items: center; gap: 5px;
-            padding: 8px 10px; font-size: 13px; font-weight: 600;
+            display: flex; align-items: center; gap: 4px;
+            padding: 6px 8px; font-size: 12px; font-weight: 600;
             color: var(--ink); border-radius: 8px; transition: all 0.2s; white-space: nowrap;
         }
         .nav-link:hover { background: var(--light); color: var(--primary); }
@@ -135,6 +137,26 @@
         .nav-dropdown-menu a:hover { background: #f0f7ff; color: #2563eb; }
         .nav-dropdown-menu a svg { width: 16px; height: 16px; color: #9ca3af; }
         .nav-dropdown-menu a:hover svg { color: #2563eb; }
+        
+        /* Dropdown CTA Button - Premium Style */
+        .nav-dropdown-menu .dropdown-cta {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            color: #fff !important;
+            font-weight: 600;
+            border-radius: 8px;
+            margin-top: 4px;
+            padding: 10px 14px;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(249, 115, 22, 0.25);
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .nav-dropdown-menu .dropdown-cta:hover {
+            background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);
+        }
+        .nav-dropdown-menu .dropdown-cta svg { color: #fff !important; }
         
         /* History Dropdown */
         .header-history-dropdown { position: relative; display: flex; align-items: center; flex-shrink: 0; margin-right: 12px; }
@@ -239,7 +261,7 @@
         }
         
         /* RESPONSIVE */
-        @media (max-width: 1100px) { .header-nav { display: none !important; } }
+        @media (max-width: 1280px) { .header-nav { display: none !important; } }
         @media (max-width: 768px) { .header-right { display: none !important; } .brand-tagline { display: none; } }
         @media (max-width: 600px) { 
             .tool-search-icon { display: none; } 
@@ -252,165 +274,13 @@
 </head>
 <body>
 
-<header class="site-header">
-    <div class="header-main">
-        <div class="header-inner">
-            <div class="header-left">
-                <a class="header-brand" href="/">
-                    <img class="header-logo" src="/assets/images/logo.png" alt="logo" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 36 36%22><rect fill=%22%231e40af%22 width=%2236%22 height=%2236%22 rx=%228%22/><text x=%2218%22 y=%2224%22 fill=%22white%22 font-size=%2218%22 text-anchor=%22middle%22>T</text></svg>'">
-                    <div class="header-brand-text">
-                        <span class="brand-name">thuetaikhoan.net</span>
-                        <span class="brand-tagline">Thuê tài khoản tự động 24/7</span>
-                    </div>
-                </a>
-                
-                <nav class="header-nav">
-                    <a href="/" class="nav-link <?php echo e(request()->is('/') ? 'active' : ''); ?>">
-                        <span class="nav-icon-box">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                                <polyline points="9 22 9 12 15 12 15 22"/>
-                            </svg>
-                        </span>
-                        Trang chủ
-                    </a>
-                    <div class="nav-dropdown">
-                        <a href="#" class="nav-link">
-                            <span class="nav-icon-box">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-                                    <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
-                                </svg>
-                            </span>
-                            Dịch vụ
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.5">
-                                <polyline points="6 9 12 15 18 9"/>
-                            </svg>
-                        </a>
-                        <div class="nav-dropdown-menu">
-                            <a href="/thue-unlocktool"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg> Unlocktool</a>
-                            <a href="/thue-vietmap"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="3"/><path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 7 8 11.7z"/></svg> Vietmap Live</a>
-                            <a href="/thue-tsm"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> TSM Tool</a>
-                            <a href="/thue-griffin"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg> Griffin-Unlocker</a>
-                            <a href="/thue-amt"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Android Multitool</a>
-                        </div>
-                    </div>
-                    <a href="/blog" class="nav-link">
-                        <span class="nav-icon-box">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                <polyline points="14 2 14 8 20 8"/>
-                            </svg>
-                        </span>
-                        Blog
-                    </a>
-                </nav>
-            </div>
-
-            <div class="header-right">
-                <!-- Lịch sử thuê dropdown -->
-                <div class="header-history-dropdown">
-                    <div class="nav-dropdown">
-                        <a href="#" class="nav-link" id="historyNavLink">
-                            <span class="nav-icon-box">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                    <polyline points="14 2 14 8 20 8"/>
-                                    <line x1="16" y1="13" x2="8" y2="13"/>
-                                    <line x1="16" y1="17" x2="8" y2="17"/>
-                                </svg>
-                            </span>
-                            Lịch sử thuê
-                            <svg class="nav-arrow-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="6 9 12 15 18 9"/>
-                            </svg>
-                        </a>
-                        <div class="nav-dropdown-menu history-menu">
-                            <a href="/order-history-ip">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                    <polyline points="14 2 14 8 20 8"/>
-                                    <line x1="16" y1="13" x2="8" y2="13"/>
-                                    <line x1="16" y1="17" x2="8" y2="17"/>
-                                </svg>
-                                Lịch sử thuê 30 ngày
-                            </a>
-                            <div class="history-search-in-dropdown">
-                                <form class="history-search-form-dropdown" action="/order-detail">
-                                    <input type="text" name="code" placeholder="Tìm mã đơn hàng..." class="history-search-input-dropdown">
-                                    <button type="submit" class="history-search-btn-dropdown">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <circle cx="11" cy="11" r="8"/>
-                                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                                        </svg>
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Auth buttons -->
-                <div class="header-auth">
-                    <a href="/login" class="auth-login-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
-                            <polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/>
-                        </svg>
-                        Đăng nhập
-                    </a>
-                    <a href="/register" class="auth-register-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                            <circle cx="8.5" cy="7" r="4"/>
-                            <line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/>
-                        </svg>
-                        Đăng ký
-                    </a>
-                    <button class="theme-toggle" id="theme-toggle" title="Chuyển đổi ban ngày/đêm">
-                        <span id="theme-icon">🌙</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-
-<!-- SEARCH BAR - Mua License, Credits & Sơ đồ -->
-<div class="tool-search-bar">
-    <div class="tool-search-inner">
-        <div class="tool-search-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        </div>
-        <div class="tool-search-content">
-            <span class="tool-search-title">Mua License, Credits & Sơ đồ</span>
-            <span class="tool-search-desc">UnlockTool, Chimera, SamKey, Sơ đồ điện thoại...</span>
-        </div>
-        <form class="tool-search-form" action="/search" method="GET">
-            <input type="text" name="q" class="tool-search-input" placeholder="Borneo, UnlockTool, ChatGPT, Credits, Bypass A12+...">
-            <button type="submit" class="tool-search-btn">Tìm kiếm</button>
-        </form>
-    </div>
-</div>
+<?php echo $__env->make('partials.header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
 <main>
     <?php echo $__env->yieldContent('content'); ?>
 </main>
 
-<footer class="site-footer">
-    <div class="footer-copyright">
-        © <?php echo e(date('Y')); ?> thuetaikhoan.net – Hệ thống cho thuê tài khoản Unlocktool | Vietmap Live tự động
-    </div>
-    <div class="footer-links">
-        <a href="/" class="footer-link">Trang chủ</a>
-        <a href="#" class="footer-link">Điều khoản sử dụng</a>
-        <a href="#" class="footer-link">Chính sách bảo mật</a>
-        <a href="/ma-giam-gia" class="footer-link">Mã giảm giá</a>
-        <a href="https://zalo.me/0777333763" target="_blank" class="footer-link">💬 Zalo hỗ trợ</a>
-        <a href="https://www.facebook.com/people/Thuetaikhoannet/61586731454108/" target="_blank" class="footer-link">👍 Fanpage</a>
-        <a href="tel:0777333763" class="footer-link">📞 Hotline: 0777333763</a>
-    </div>
-</footer>
+<?php echo $__env->make('partials.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
 <script>
 // Dark Mode Toggle
