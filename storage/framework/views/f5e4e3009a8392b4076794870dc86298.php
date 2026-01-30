@@ -1296,7 +1296,7 @@
                 </div>
                 <h3 class="fo-title-compact">Unlocktool</h3>
                 <p class="fo-desc-compact">Tool đa năng: FRP, Bootloader, Flash, mật khẩu, Off FMI cloud, quản lý EFS và nhiều tính năng khác</p>
-                <ul class="fo-features-compact" id="features-unlocktool">
+                <ul class="fo-features-compact collapsed" id="features-unlocktool">
                     <li><span class="dot orange"></span>Xóa FRP, Mở khóa Bootloader</li>
                     <li><span class="dot blue"></span>Flash Firmware nhanh</li>
                     <li class="fo-feature-extra"><span class="dot green"></span>Off FMI cloud, Quản lý EFS</li>
@@ -1304,7 +1304,7 @@
                     <li class="fo-feature-extra"><span class="dot yellow"></span>Xóa mật khẩu màn hình</li>
                 </ul>
                 <button class="fo-more-compact" onclick="toggleFeatures('unlocktool')">
-                    <span class="collapse-text">Thu gọn</span>
+                    <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
                 <a href="/thue-unlocktool" class="fo-cta-compact">
@@ -1331,7 +1331,7 @@
                 </ul>
                 <button class="fo-more-compact" onclick="toggleFeatures('vietmap')">
                     <span class="collapse-text">Thu gọn</span>
-                    <span class="expand-text">Xem thêm</span>
+                    <span class="expand-text" style="display:none">Xem thêm</span>
                 </button>
                 <a href="/thue-vietmap" class="fo-cta-compact green">
                     <span class="fo-price-compact">8.000 VND</span>
@@ -1355,7 +1355,7 @@
                 </ul>
                 <button class="fo-more-compact" onclick="toggleFeatures('griffin')">
                     <span class="collapse-text">Thu gọn</span>
-                    <span class="expand-text">Xem thêm</span>
+                    <span class="expand-text" style="display:none">Xem thêm</span>
                 </button>
                 <a href="/thue-griffin" class="fo-cta-compact blue">
                     <span class="fo-price-compact">19.455 VND</span>
@@ -1380,7 +1380,7 @@
                 </ul>
                 <button class="fo-more-compact" onclick="toggleFeatures('amt')">
                     <span class="collapse-text">Thu gọn</span>
-                    <span class="expand-text">Xem thêm</span>
+                    <span class="expand-text" style="display:none">Xem thêm</span>
                 </button>
                 <a href="/thue-amt" class="fo-cta-compact orange">
                     <span class="fo-price-compact">8.000 VND</span>
@@ -1404,7 +1404,7 @@
                 </ul>
                 <button class="fo-more-compact" onclick="toggleFeatures('kg')">
                     <span class="collapse-text">Thu gọn</span>
-                    <span class="expand-text">Xem thêm</span>
+                    <span class="expand-text" style="display:none">Xem thêm</span>
                 </button>
                 <a href="/thue-kg-killer" class="fo-cta-compact">
                     <span class="fo-price-compact">8.000 VND</span>
@@ -1428,7 +1428,7 @@
                 </ul>
                 <button class="fo-more-compact" onclick="toggleFeatures('samsung')">
                     <span class="collapse-text">Thu gọn</span>
-                    <span class="expand-text">Xem thêm</span>
+                    <span class="expand-text" style="display:none">Xem thêm</span>
                 </button>
                 <a href="/thue-samsung-tool" class="fo-cta-compact orange">
                     <span class="fo-price-compact">162.000 VND</span>
@@ -1452,7 +1452,7 @@
                 </ul>
                 <button class="fo-more-compact" onclick="toggleFeatures('dft')">
                     <span class="collapse-text">Thu gọn</span>
-                    <span class="expand-text">Xem thêm</span>
+                    <span class="expand-text" style="display:none">Xem thêm</span>
                 </button>
                 <a href="/thue-dft" class="fo-cta-compact blue">
                     <span class="fo-price-compact">105.000 VND</span>
@@ -1477,7 +1477,7 @@
                 </ul>
                 <button class="fo-more-compact" onclick="toggleFeatures('tsm')">
                     <span class="collapse-text">Thu gọn</span>
-                    <span class="expand-text">Xem thêm</span>
+                    <span class="expand-text" style="display:none">Xem thêm</span>
                 </button>
                 <a href="/thue-tsm" class="fo-cta-compact">
                     <span class="fo-price-compact">6.000 VND</span>
