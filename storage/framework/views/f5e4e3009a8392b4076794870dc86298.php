@@ -1295,11 +1295,18 @@
                     <img src="/images/services/unlocktool.png" alt="UnlockTool">
                 </div>
                 <h3 class="fo-title-compact">Unlocktool</h3>
-                <p class="fo-desc-compact">Tool đa năng: FRP, Bootloader, Flash...</p>
-                <ul class="fo-features-compact">
+                <p class="fo-desc-compact">Tool đa năng: FRP, Bootloader, Flash, mật khẩu, Off FMI cloud, quản lý EFS và nhiều tính năng khác</p>
+                <ul class="fo-features-compact" id="features-unlocktool">
                     <li><span class="dot orange"></span>Xóa FRP, Mở khóa Bootloader</li>
                     <li><span class="dot blue"></span>Flash Firmware nhanh</li>
+                    <li class="fo-feature-extra"><span class="dot green"></span>Off FMI cloud, Quản lý EFS</li>
+                    <li class="fo-feature-extra"><span class="dot purple"></span>Hỗ trợ đa dạng thiết bị</li>
+                    <li class="fo-feature-extra"><span class="dot yellow"></span>Xóa mật khẩu màn hình</li>
                 </ul>
+                <button class="fo-more-compact" onclick="toggleFeatures('unlocktool')">
+                    <span class="collapse-text">Thu gọn</span>
+                    <span class="expand-text">Xem thêm</span>
+                </button>
                 <a href="/thue-unlocktool" class="fo-cta-compact">
                     <span class="fo-price-compact">8.000 VND</span>
                     <span class="fo-price-old-compact">25.000₫</span>
@@ -1314,11 +1321,18 @@
                     <img src="/images/services/vietmap.png" alt="Vietmap Live">
                 </div>
                 <h3 class="fo-title-compact">Vietmap Live (PRO)</h3>
-                <p class="fo-desc-compact">Cảnh báo giao thông, camera, tốc độ</p>
-                <ul class="fo-features-compact">
-                    <li><span class="dot green"></span>Cảnh báo vượt tốc độ</li>
-                    <li><span class="dot blue"></span>Cảnh báo camera, đường cấm</li>
+                <p class="fo-desc-compact">Cảnh báo giao thông, camera, tốc độ, cảnh báo vượt quá tốc độ, cảnh báo camera, đường cấm, cấm dừng/đỗ</p>
+                <ul class="fo-features-compact" id="features-vietmap">
+                    <li><span class="dot green"></span>Cảnh báo vượt quá tốc độ</li>
+                    <li><span class="dot blue"></span>Cảnh báo camera, đường cấm, cấm dừng/đỗ</li>
+                    <li class="fo-feature-extra"><span class="dot orange"></span>Cảnh báo cấm vượt</li>
+                    <li class="fo-feature-extra"><span class="dot purple"></span>Cảnh báo phí qua trạm cao tốc</li>
+                    <li class="fo-feature-extra"><span class="dot yellow"></span>Cập nhật dữ liệu giao thông</li>
                 </ul>
+                <button class="fo-more-compact" onclick="toggleFeatures('vietmap')">
+                    <span class="collapse-text">Thu gọn</span>
+                    <span class="expand-text">Xem thêm</span>
+                </button>
                 <a href="/thue-vietmap" class="fo-cta-compact green">
                     <span class="fo-price-compact">8.000 VND</span>
                     <span class="fo-price-old-compact">19.000₫</span>
@@ -1332,12 +1346,17 @@
                 <div class="fo-logo-compact">
                     <img src="/images/services/griffin.png" alt="Griffin-Unlocker">
                 </div>
-                <h3 class="fo-title-compact">Griffin-Unlocker</h3>
+                <h3 class="fo-title-compact">Griffin-Unlocker (Premium Pack)</h3>
                 <p class="fo-desc-compact">Gói Premium, hỗ trợ nhiều nền tảng</p>
-                <ul class="fo-features-compact">
-                    <li><span class="dot purple"></span>Hỗ trợ thiết bị A12+</li>
-                    <li><span class="dot blue"></span>Bypass iOS 18.6 – 26.1</li>
+                <ul class="fo-features-compact" id="features-griffin">
+                    <li><span class="dot purple"></span>Hỗ trợ đầy đủ thiết bị A12+ (iPhone XR trở lên)</li>
+                    <li><span class="dot blue"></span>A12+ Bypass (iOS 18.6 - 26.1)</li>
+                    <li class="fo-feature-extra"><span class="dot orange"></span>Samsung dòng máy đời cao</li>
                 </ul>
+                <button class="fo-more-compact" onclick="toggleFeatures('griffin')">
+                    <span class="collapse-text">Thu gọn</span>
+                    <span class="expand-text">Xem thêm</span>
+                </button>
                 <a href="/thue-griffin" class="fo-cta-compact blue">
                     <span class="fo-price-compact">19.455 VND</span>
                     <span class="fo-price-old-compact">49.000₫</span>
@@ -1353,10 +1372,16 @@
                 </div>
                 <h3 class="fo-title-compact">Android Multitool</h3>
                 <p class="fo-desc-compact">Tool đa năng cho Android</p>
-                <ul class="fo-features-compact">
+                <ul class="fo-features-compact" id="features-amt">
                     <li><span class="dot orange"></span>Mở khóa màn hình</li>
                     <li><span class="dot blue"></span>Bypass FRP</li>
+                    <li class="fo-feature-extra"><span class="dot green"></span>Off FMI cloud & Quản lý EFS</li>
+                    <li class="fo-feature-extra"><span class="dot purple"></span>Hỗ trợ đa dạng thiết bị Android</li>
                 </ul>
+                <button class="fo-more-compact" onclick="toggleFeatures('amt')">
+                    <span class="collapse-text">Thu gọn</span>
+                    <span class="expand-text">Xem thêm</span>
+                </button>
                 <a href="/thue-amt" class="fo-cta-compact orange">
                     <span class="fo-price-compact">8.000 VND</span>
                     <span class="fo-price-old-compact">30.000₫</span>
@@ -1371,11 +1396,16 @@
                     <img src="/images/services/kg-killer.png" alt="KG Killer Tool">
                 </div>
                 <h3 class="fo-title-compact">KG Killer Tool</h3>
-                <p class="fo-desc-compact">Xóa KG, Gỡ IT Admin & MDM</p>
-                <ul class="fo-features-compact">
-                    <li><span class="dot red"></span>Xóa KG Android 13 & 14</li>
+                <p class="fo-desc-compact">Xóa KG, Gỡ IT Admin & MDM chuyên nghiệp</p>
+                <ul class="fo-features-compact" id="features-kg">
+                    <li><span class="dot red"></span>Xóa KG Android 13 & 14 nhanh chóng, an toàn</li>
                     <li><span class="dot orange"></span>Gỡ IT Admin & Device Owner</li>
+                    <li class="fo-feature-extra"><span class="dot blue"></span>Hỗ trợ Samsung Knox Guard</li>
                 </ul>
+                <button class="fo-more-compact" onclick="toggleFeatures('kg')">
+                    <span class="collapse-text">Thu gọn</span>
+                    <span class="expand-text">Xem thêm</span>
+                </button>
                 <a href="/thue-kg-killer" class="fo-cta-compact">
                     <span class="fo-price-compact">8.000 VND</span>
                     <span class="fo-price-old-compact">35.000₫</span>
@@ -1390,11 +1420,16 @@
                     <img src="/images/services/samsung-tool.png" alt="Samsung Tool">
                 </div>
                 <h3 class="fo-title-compact">Samsung Tool</h3>
-                <p class="fo-desc-compact">KG Lock Bypass Solution</p>
-                <ul class="fo-features-compact">
-                    <li><span class="dot orange"></span>Bypass KG Lock ổn định</li>
+                <p class="fo-desc-compact">KG Lock Bypass Solution chuyên nghiệp</p>
+                <ul class="fo-features-compact" id="features-samsung">
+                    <li><span class="dot orange"></span>Bypass KG Lock ổn định, Factory Reset không bị khóa lại</li>
                     <li><span class="dot blue"></span>Remove FRP, Lost Mode</li>
+                    <li class="fo-feature-extra"><span class="dot green"></span>Hỗ trợ nhiều model Samsung mới</li>
                 </ul>
+                <button class="fo-more-compact" onclick="toggleFeatures('samsung')">
+                    <span class="collapse-text">Thu gọn</span>
+                    <span class="expand-text">Xem thêm</span>
+                </button>
                 <a href="/thue-samsung-tool" class="fo-cta-compact orange">
                     <span class="fo-price-compact">162.000 VND</span>
                     <span class="fo-price-old-compact">250.000₫</span>
@@ -1410,10 +1445,15 @@
                 </div>
                 <h3 class="fo-title-compact">DFT Pro Tool</h3>
                 <p class="fo-desc-compact">Flash, repair, unlock đa nền tảng</p>
-                <ul class="fo-features-compact">
-                    <li><span class="dot blue"></span>Read/Write NVRAM, NVDATA</li>
-                    <li><span class="dot yellow"></span>Repair IMEI / baseband</li>
+                <ul class="fo-features-compact" id="features-dft">
+                    <li><span class="dot blue"></span>Read/Write NVRAM, NVDATA, RPMB</li>
+                    <li><span class="dot yellow"></span>Repair IMEI / baseband (tuân thủ quy định)</li>
+                    <li class="fo-feature-extra"><span class="dot green"></span>Hỗ trợ nhiều chipset MediaTek, Qualcomm</li>
                 </ul>
+                <button class="fo-more-compact" onclick="toggleFeatures('dft')">
+                    <span class="collapse-text">Thu gọn</span>
+                    <span class="expand-text">Xem thêm</span>
+                </button>
                 <a href="/thue-dft" class="fo-cta-compact blue">
                     <span class="fo-price-compact">105.000 VND</span>
                     <span class="fo-price-old-compact">130.000₫</span>
@@ -1428,11 +1468,17 @@
                     <img src="/images/services/tsm.png" alt="TSM Tool">
                 </div>
                 <h3 class="fo-title-compact">TSM Tool</h3>
-                <p class="fo-desc-compact">FRP, bootloader, mật khẩu...</p>
-                <ul class="fo-features-compact">
-                    <li><span class="dot yellow"></span>Xóa FRP & Bootloader</li>
-                    <li><span class="dot blue"></span>Off FMI cloud & EFS</li>
+                <p class="fo-desc-compact">Tool đa năng: FRP, bootloader, mật khẩu...</p>
+                <ul class="fo-features-compact" id="features-tsm">
+                    <li><span class="dot yellow"></span>Remove FRP (Auth) Server • Sideload</li>
+                    <li><span class="dot blue"></span>Xiaomi • Poco • Redmi ✓ - 1 Credit</li>
+                    <li class="fo-feature-extra"><span class="dot orange"></span>Xóa FRP & Mở khóa Bootloader</li>
+                    <li class="fo-feature-extra"><span class="dot green"></span>Off FMI cloud & Quản lý EFS</li>
                 </ul>
+                <button class="fo-more-compact" onclick="toggleFeatures('tsm')">
+                    <span class="collapse-text">Thu gọn</span>
+                    <span class="expand-text">Xem thêm</span>
+                </button>
                 <a href="/thue-tsm" class="fo-cta-compact">
                     <span class="fo-price-compact">6.000 VND</span>
                     <span class="fo-price-old-compact">25.000₫</span>
@@ -2001,6 +2047,23 @@
 <script>
 function toggleContactFloat() {
     document.getElementById('contact-float').classList.toggle('open');
+}
+
+function toggleFeatures(cardId) {
+    const features = document.getElementById('features-' + cardId);
+    const button = features.nextElementSibling;
+    features.classList.toggle('collapsed');
+    
+    // Update button text visibility
+    const expandText = button.querySelector('.expand-text');
+    const collapseText = button.querySelector('.collapse-text');
+    if (features.classList.contains('collapsed')) {
+        expandText.style.display = 'inline';
+        collapseText.style.display = 'none';
+    } else {
+        expandText.style.display = 'none';
+        collapseText.style.display = 'inline';
+    }
 }
 </script>
 

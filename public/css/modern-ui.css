@@ -396,10 +396,38 @@
     cursor: pointer;
     padding: 0;
     margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 .fo-more-compact:hover {
     text-decoration: underline;
+}
+
+/* Collapsible Features - Show all by default */
+.fo-features-compact li.fo-feature-extra {
+    display: flex;
+}
+
+.fo-features-compact.collapsed li.fo-feature-extra {
+    display: none;
+}
+
+.fo-more-compact .expand-text {
+    display: none;
+}
+
+.fo-more-compact .collapse-text {
+    display: inline;
+}
+
+.fo-features-compact.collapsed+.fo-more-compact .expand-text {
+    display: inline;
+}
+
+.fo-features-compact.collapsed+.fo-more-compact .collapse-text {
+    display: none;
 }
 
 /* Price Button - Compact */
