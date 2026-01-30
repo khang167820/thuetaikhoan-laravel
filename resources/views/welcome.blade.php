@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Modern UI Enhancement -->
-    <link rel="stylesheet" href="/css/modern-ui.css?v=2">
+    <link rel="stylesheet" href="/css/modern-ui.css?v=3">
     
     <style>
         /* ============================================
@@ -2068,8 +2068,10 @@ function toggleContactFloat() {
 
 function toggleFeatures(cardId) {
     const features = document.getElementById('features-' + cardId);
+    const card = features.closest('.fo-card-compact');
     const button = features.nextElementSibling;
     features.classList.toggle('collapsed');
+    card.classList.toggle('expanded');
     
     // Update button text visibility
     const expandText = button.querySelector('.expand-text');
