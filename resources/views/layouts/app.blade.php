@@ -94,9 +94,7 @@
             justify-content: space-between;
             gap: 16px;
             width: 100%;
-            max-width: 1440px;
-            margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 40px;
         }
         .header-left { display: flex; align-items: center; gap: 4px; }
         .header-right { display: flex; align-items: center; gap: 12px; margin-left: auto; }
