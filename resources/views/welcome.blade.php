@@ -1295,20 +1295,20 @@
                     <img src="/images/services/unlocktool.png" alt="UnlockTool">
                 </div>
                 <h3 class="fo-title-compact">Unlocktool</h3>
-                <p class="fo-desc-compact">Tool đa năng: FRP, Bootloader, Flash, mật khẩu, Off FMI cloud, quản lý EFS và nhiều tính năng khác</p>
+                <p class="fo-desc-compact">Tool đa năng: FRP, bootloader, flash, mật khẩu, Off FMI cloud, quản lý EFS và nhiều tính năng khác</p>
                 <ul class="fo-features-compact collapsed" id="features-unlocktool">
                     <li><span class="dot orange"></span>Xóa FRP, Mở khóa Bootloader</li>
-                    <li><span class="dot blue"></span>Flash Firmware nhanh</li>
+                    <li><span class="dot blue"></span>Flash Firmware</li>
                     <li class="fo-feature-extra"><span class="dot green"></span>Off FMI cloud, Quản lý EFS</li>
                     <li class="fo-feature-extra"><span class="dot purple"></span>Hỗ trợ đa dạng thiết bị</li>
-                    <li class="fo-feature-extra"><span class="dot yellow"></span>Xóa mật khẩu màn hình</li>
+                    <li class="fo-feature-extra"><span class="dot yellow"></span>Xóa mật khẩu</li>
                 </ul>
                 <button class="fo-more-compact" onclick="toggleFeatures('unlocktool')">
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
                 <a href="/thue-unlocktool" class="fo-cta-compact">
-                    <span class="fo-price-compact">8.000 VND</span>
+                    <span class="fo-price-compact">10.000 VND</span>
                     <span class="fo-price-old-compact">25.000₫</span>
                 </a>
             </article>
@@ -1347,19 +1347,23 @@
                     <img src="/images/services/griffin.png" alt="Griffin-Unlocker">
                 </div>
                 <h3 class="fo-title-compact">Griffin-Unlocker (Premium Pack)</h3>
-                <p class="fo-desc-compact">Gói Premium, hỗ trợ nhiều nền tảng</p>
+                <p class="fo-desc-compact">Gói Premium, hỗ trợ nhiều nền tảng: iPhone, Samsung, OneClick Only, tự động trích xuất GUID/ECID</p>
                 <ul class="fo-features-compact collapsed" id="features-griffin">
                     <li><span class="dot purple"></span>Hỗ trợ đầy đủ thiết bị A12+ (iPhone XR trở lên)</li>
                     <li><span class="dot blue"></span>A12+ Bypass (iOS 18.6 - 26.1)</li>
                     <li class="fo-feature-extra"><span class="dot orange"></span>Samsung dòng máy đời cao</li>
+                    <li class="fo-feature-extra"><span class="dot green"></span>Xóa FRP, Mở khóa Bootloader</li>
+                    <li class="fo-feature-extra"><span class="dot yellow"></span>OneClick Only – thao tác nhanh gọn</li>
+                    <li class="fo-feature-extra"><span class="dot red"></span>Tự động trích xuất GUID/ECID</li>
+                    <li class="fo-feature-extra"><span class="dot cyan"></span>Thêm 2 Method bypass mới</li>
                 </ul>
                 <button class="fo-more-compact" onclick="toggleFeatures('griffin')">
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
                 <a href="/thue-griffin" class="fo-cta-compact blue">
-                    <span class="fo-price-compact">19.455 VND</span>
-                    <span class="fo-price-old-compact">49.000₫</span>
+                    <span class="fo-price-compact">42.000 VND</span>
+                    <span class="fo-price-old-compact">100.000₫</span>
                 </a>
             </article>
 
@@ -1371,19 +1375,21 @@
                     <img src="/images/services/amt.svg" alt="Android Multitool">
                 </div>
                 <h3 class="fo-title-compact">Android Multitool</h3>
-                <p class="fo-desc-compact">Tool đa năng cho Android</p>
+                <p class="fo-desc-compact">Tool đa năng cho Android: mở khóa màn hình, Bypass FRP, Flash firmware & Root, Wipe data/cache, khởi động lại linh hoạt, kiểm tra thông tin thiết bị</p>
                 <ul class="fo-features-compact collapsed" id="features-amt">
                     <li><span class="dot orange"></span>Mở khóa màn hình</li>
                     <li><span class="dot blue"></span>Bypass FRP</li>
-                    <li class="fo-feature-extra"><span class="dot green"></span>Off FMI cloud & Quản lý EFS</li>
-                    <li class="fo-feature-extra"><span class="dot purple"></span>Hỗ trợ đa dạng thiết bị Android</li>
+                    <li class="fo-feature-extra"><span class="dot green"></span>Flash firmware & Root</li>
+                    <li class="fo-feature-extra"><span class="dot purple"></span>Wipe data / cache</li>
+                    <li class="fo-feature-extra"><span class="dot yellow"></span>Khởi động lại linh hoạt</li>
+                    <li class="fo-feature-extra"><span class="dot red"></span>Kiểm tra thông tin thiết bị</li>
                 </ul>
                 <button class="fo-more-compact" onclick="toggleFeatures('amt')">
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
                 <a href="/thue-amt" class="fo-cta-compact orange">
-                    <span class="fo-price-compact">8.000 VND</span>
+                    <span class="fo-price-compact">9.000 VND</span>
                     <span class="fo-price-old-compact">30.000₫</span>
                 </a>
             </article>
@@ -1396,11 +1402,14 @@
                     <img src="/images/services/kg-killer.png" alt="KG Killer Tool">
                 </div>
                 <h3 class="fo-title-compact">KG Killer Tool</h3>
-                <p class="fo-desc-compact">Xóa KG, Gỡ IT Admin & MDM chuyên nghiệp</p>
+                <p class="fo-desc-compact">Xóa KG, Gỡ IT Admin & MDM chuyên nghiệp: Xóa KG Android 13 & 14, gỡ IT Admin & Device Owner, gỡ MDM tất cả hãng Android, bật ADB bằng mã QR</p>
                 <ul class="fo-features-compact collapsed" id="features-kg">
                     <li><span class="dot red"></span>Xóa KG Android 13 & 14 nhanh chóng, an toàn</li>
-                    <li><span class="dot orange"></span>Gỡ IT Admin & Device Owner</li>
-                    <li class="fo-feature-extra"><span class="dot blue"></span>Hỗ trợ Samsung Knox Guard</li>
+                    <li><span class="dot orange"></span>Gỡ IT Admin & Device Owner (hỗ trợ đến Android 15)</li>
+                    <li class="fo-feature-extra"><span class="dot blue"></span>Gỡ MDM cho tất cả các hãng Android</li>
+                    <li class="fo-feature-extra"><span class="dot green"></span>Bật ADB bằng mã QR (Android 11-14)</li>
+                    <li class="fo-feature-extra"><span class="dot purple"></span>Công cụ chuyên nghiệp cho kỹ thuật viên: nhanh, ổn định, cập nhật liên tục</li>
+                    <li class="fo-feature-extra"><span class="dot yellow"></span>🔑 Mật khẩu giải nén (Zip Password): V2.2@@</li>
                 </ul>
                 <button class="fo-more-compact" onclick="toggleFeatures('kg')">
                     <span class="collapse-text" style="display:none">Thu gọn</span>
@@ -1420,11 +1429,13 @@
                     <img src="/images/services/samsung-tool.png" alt="Samsung Tool">
                 </div>
                 <h3 class="fo-title-compact">Samsung Tool</h3>
-                <p class="fo-desc-compact">KG Lock Bypass Solution chuyên nghiệp</p>
+                <p class="fo-desc-compact">KG Lock Bypass Solution: Xóa KG Lock, Factory Reset OK, Remove FRP, Remove Lost Mode, PayJoy/Device Control Lock, hỗ trợ Samsung 2025</p>
                 <ul class="fo-features-compact collapsed" id="features-samsung">
                     <li><span class="dot orange"></span>Bypass KG Lock ổn định, Factory Reset không bị khóa lại</li>
-                    <li><span class="dot blue"></span>Remove FRP, Lost Mode</li>
-                    <li class="fo-feature-extra"><span class="dot green"></span>Hỗ trợ nhiều model Samsung mới</li>
+                    <li><span class="dot blue"></span>Remove FRP, Lost Mode, PayJoy Lock, Device Control Lock</li>
+                    <li class="fo-feature-extra"><span class="dot green"></span>Hỗ trợ Galaxy A, M, S, Tab Series (Android 10-16)</li>
+                    <li class="fo-feature-extra"><span class="dot purple"></span>Hỗ trợ Samsung 2025 Qualcomm với 300+ models mới nhất</li>
+                    <li class="fo-feature-extra"><span class="dot yellow"></span>Bật ADB bằng QR Code, Flash/Erase/Backup nhanh chóng</li>
                 </ul>
                 <button class="fo-more-compact" onclick="toggleFeatures('samsung')">
                     <span class="collapse-text" style="display:none">Thu gọn</span>
@@ -1444,11 +1455,13 @@
                     <img src="/images/services/dft-pro.png" alt="DFT Pro Tool">
                 </div>
                 <h3 class="fo-title-compact">DFT Pro Tool</h3>
-                <p class="fo-desc-compact">Flash, repair, unlock đa nền tảng</p>
+                <p class="fo-desc-compact">Flash, repair, unlock đa nền tảng: hỗ trợ Qualcomm, MediaTek, HiSilicon, Unisoc; đọc/ghi NVRAM, repair IMEI</p>
                 <ul class="fo-features-compact collapsed" id="features-dft">
                     <li><span class="dot blue"></span>Read/Write NVRAM, NVDATA, RPMB</li>
-                    <li><span class="dot yellow"></span>Repair IMEI / baseband (tuân thủ quy định)</li>
-                    <li class="fo-feature-extra"><span class="dot green"></span>Hỗ trợ nhiều chipset MediaTek, Qualcomm</li>
+                    <li><span class="dot yellow"></span>Repair IMEI / baseband (tuân thủ quy định địa phương)</li>
+                    <li class="fo-feature-extra"><span class="dot green"></span>Reset FRP, Mi Account, set Slot (A/B)</li>
+                    <li class="fo-feature-extra"><span class="dot orange"></span>Fix Null baseband, exit Brom/Meta mode</li>
+                    <li class="fo-feature-extra"><span class="dot purple"></span>Backup/Restore NVRAM & oeminfo nhanh chóng</li>
                 </ul>
                 <button class="fo-more-compact" onclick="toggleFeatures('dft')">
                     <span class="collapse-text" style="display:none">Thu gọn</span>
@@ -1468,12 +1481,16 @@
                     <img src="/images/services/tsm.png" alt="TSM Tool">
                 </div>
                 <h3 class="fo-title-compact">TSM Tool</h3>
-                <p class="fo-desc-compact">Tool đa năng: FRP, bootloader, mật khẩu...</p>
+                <p class="fo-desc-compact">Tool đa năng: FRP, bootloader, mật khẩu, Off FMI cloud, quản lý EFS, hỗ trợ đa dạng thiết bị Samsung</p>
                 <ul class="fo-features-compact collapsed" id="features-tsm">
-                    <li><span class="dot yellow"></span>Remove FRP (Auth) Server • Sideload</li>
-                    <li><span class="dot blue"></span>Xiaomi • Poco • Redmi ✓ - 1 Credit</li>
-                    <li class="fo-feature-extra"><span class="dot orange"></span>Xóa FRP & Mở khóa Bootloader</li>
-                    <li class="fo-feature-extra"><span class="dot green"></span>Off FMI cloud & Quản lý EFS</li>
+                    <li><span class="dot yellow"></span>Xóa FRP & Mở khóa Bootloader</li>
+                    <li><span class="dot blue"></span>Off FMI cloud & Quản lý EFS</li>
+                    <li class="fo-feature-extra"><span class="dot orange"></span>Flash firmware (hỗ trợ nhiều định dạng)</li>
+                    <li class="fo-feature-extra"><span class="dot green"></span>Gỡ KG / Knox Guard & Remove MDM</li>
+                    <li class="fo-feature-extra"><span class="dot purple"></span>Xóa mật khẩu / Unlock mật khẩu thiết bị</li>
+                    <li class="fo-feature-extra"><span class="dot red"></span>Hỗ trợ EDL & ADB (tùy model)</li>
+                    <li class="fo-feature-extra"><span class="dot cyan"></span>Tương thích chipset Qualcomm, MediaTek, Unisoc, HiSilicon</li>
+                    <li class="fo-feature-extra"><span class="dot pink"></span>Factory Reset & Reset Security</li>
                 </ul>
                 <button class="fo-more-compact" onclick="toggleFeatures('tsm')">
                     <span class="collapse-text" style="display:none">Thu gọn</span>
