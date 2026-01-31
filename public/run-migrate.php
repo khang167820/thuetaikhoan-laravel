@@ -12,6 +12,7 @@ require __DIR__.'/../vendor/autoload.php';
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
 $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+$kernel->bootstrap();
 
 echo "<h1>Laravel Migration Runner</h1>";
 echo "<pre style='background:#222;color:#0f0;padding:20px;'>";
@@ -20,8 +21,8 @@ echo "<pre style='background:#222;color:#0f0;padding:20px;'>";
 echo "Running migrations...\n\n";
 
 try {
-    $exitCode = Artisan::call('migrate', ['--force' => true]);
-    echo Artisan::output();
+    $exitCode = \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+    echo \Illuminate\Support\Facades\Artisan::output();
     
     if ($exitCode === 0) {
         echo "\n✅ Migrations completed successfully!\n";
@@ -30,6 +31,7 @@ try {
     }
 } catch (Exception $e) {
     echo "❌ Error: " . $e->getMessage() . "\n";
+    echo $e->getTraceAsString();
 }
 
 echo "</pre>";
