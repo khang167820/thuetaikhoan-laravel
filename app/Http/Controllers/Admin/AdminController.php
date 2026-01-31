@@ -621,26 +621,25 @@ class AdminController extends Controller
         $newUsers = User::where('created_at', '>=', $startDate)->count();
         
         // Revenue by service
-        $revenueByService = Order::selectRaw('service_type, COUNT(*) as order_count, SUM(amount) as total_revenue')
+        $revenueByService = Order::selectRaw('COALESCE(service_type, "Khác") as service_type, COUNT(*) as order_count, SUM(amount) as total_revenue')
             ->whereIn('status', ['paid', 'completed'])
             ->where('paid_at', '>=', $startDate)
             ->groupBy('service_type')
             ->orderByDesc('total_revenue')
             ->get();
         
-        // Top users
-        $topUsers = Order::selectRaw('user_id, COUNT(*) as order_count, SUM(amount) as total_spent')
+        // Top customers by IP (since we don't have user_id)
+        $topUsers = Order::selectRaw('ip_address, customer_email, COUNT(*) as order_count, SUM(amount) as total_spent')
             ->whereIn('status', ['paid', 'completed'])
             ->where('paid_at', '>=', $startDate)
-            ->whereNotNull('user_id')
-            ->groupBy('user_id')
+            ->whereNotNull('ip_address')
+            ->groupBy('ip_address', 'customer_email')
             ->orderByDesc('total_spent')
             ->limit(10)
             ->get()
             ->map(function($item) {
-                $user = User::find($item->user_id);
-                $item->name = $user?->name;
-                $item->email = $user?->email;
+                $item->name = $item->customer_email ?: 'Guest';
+                $item->email = $item->customer_email ?: $item->ip_address;
                 return $item;
             });
         
