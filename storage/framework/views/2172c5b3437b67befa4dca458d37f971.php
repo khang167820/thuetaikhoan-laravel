@@ -127,6 +127,60 @@
                 
                 <!-- Auth buttons -->
                 <div class="header-auth">
+                    <?php if(auth()->guard()->check()): ?>
+                    
+                    <div class="user-balance">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+                        </svg>
+                        <span><?php echo e(number_format(Auth::user()->balance ?? 0, 0, ',', '.')); ?>đ</span>
+                    </div>
+                    <div class="nav-dropdown user-dropdown">
+                        <a href="#" class="user-btn">
+                            <span class="user-avatar"><?php echo e(substr(Auth::user()->name ?? Auth::user()->fullname ?? 'U', 0, 1)); ?></span>
+                            <span class="user-name"><?php echo e(Auth::user()->name ?? Auth::user()->fullname ?? 'User'); ?></span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </a>
+                        <div class="nav-dropdown-menu">
+                            <a href="/account">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="12" cy="7" r="4"/>
+                                </svg>
+                                Tài khoản
+                            </a>
+                            <a href="/order-history">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                </svg>
+                                Lịch sử đơn hàng
+                            </a>
+                            <a href="/deposit">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                                    <line x1="1" y1="10" x2="23" y2="10"/>
+                                </svg>
+                                Nạp tiền
+                            </a>
+                            <div style="border-top: 1px solid #e5e7eb; margin: 8px 0;"></div>
+                            <form action="/logout" method="POST" style="margin: 0;">
+                                <?php echo csrf_field(); ?>
+                                <button type="submit" class="logout-btn">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                                        <polyline points="16 17 21 12 16 7"/>
+                                        <line x1="21" y1="12" x2="9" y2="12"/>
+                                    </svg>
+                                    Đăng xuất
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <?php else: ?>
+                    
                     <a href="/login" class="auth-login-btn">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
@@ -142,6 +196,7 @@
                         </svg>
                         Đăng ký
                     </a>
+                    <?php endif; ?>
                     <button class="theme-toggle" id="theme-toggle" title="Chuyển đổi ban ngày/đêm">
                         <span id="theme-icon">🌙</span>
                     </button>

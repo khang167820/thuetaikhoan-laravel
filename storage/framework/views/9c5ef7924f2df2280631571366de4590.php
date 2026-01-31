@@ -1,0 +1,165 @@
+
+
+<?php $__env->startSection('title', 'Thông tin Hệ thống'); ?>
+<?php $__env->startSection('page-title', 'Thông tin Hệ thống'); ?>
+
+<?php $__env->startSection('content'); ?>
+<!-- Server Info -->
+<div class="stats-grid" style="grid-template-columns: repeat(4, 1fr);">
+    <div class="stat-card" style="background: linear-gradient(135deg, #3b82f6, #2563eb); border: none;">
+        <div class="stat-info" style="width: 100%; text-align: center;">
+            <div class="stat-label" style="color: rgba(255,255,255,0.8);">PHP Version</div>
+            <div class="stat-value" style="color: #fff; font-size: 20px;"><?php echo e(phpversion()); ?></div>
+        </div>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg, #10b981, #059669); border: none;">
+        <div class="stat-info" style="width: 100%; text-align: center;">
+            <div class="stat-label" style="color: rgba(255,255,255,0.8);">Laravel</div>
+            <div class="stat-value" style="color: #fff; font-size: 20px;"><?php echo e(app()->version()); ?></div>
+        </div>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); border: none;">
+        <div class="stat-info" style="width: 100%; text-align: center;">
+            <div class="stat-label" style="color: rgba(255,255,255,0.8);">Database</div>
+            <div class="stat-value" style="color: #fff; font-size: 20px;"><?php echo e(config('database.default')); ?></div>
+        </div>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg, #f59e0b, #d97706); border: none;">
+        <div class="stat-info" style="width: 100%; text-align: center;">
+            <div class="stat-label" style="color: rgba(255,255,255,0.8);">Environment</div>
+            <div class="stat-value" style="color: #fff; font-size: 20px;"><?php echo e(app()->environment()); ?></div>
+        </div>
+    </div>
+</div>
+
+<!-- Database Stats -->
+<div class="admin-card">
+    <div class="admin-card-title">📊 Thống kê Database</div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+        <?php $__currentLoopData = $dbStats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $table => $count): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <div style="background: #0f172a; padding: 16px; border-radius: 12px; text-align: center;">
+            <div style="font-size: 24px; font-weight: 700; color: #3b82f6;"><?php echo e(number_format($count)); ?></div>
+            <div style="font-size: 12px; color: #64748b; margin-top: 4px;"><?php echo e($table); ?></div>
+        </div>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+    </div>
+</div>
+
+<!-- Disk Usage -->
+<div class="admin-card">
+    <div class="admin-card-title">💾 Dung lượng Lưu trữ</div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+        <div style="background: #0f172a; padding: 20px; border-radius: 12px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="color: #94a3b8;">Tổng dung lượng</span>
+                <span style="color: #f1f5f9; font-weight: 600;"><?php echo e($diskInfo['total']); ?></span>
+            </div>
+            <div style="height: 8px; background: #334155; border-radius: 4px; overflow: hidden;">
+                <div style="width: <?php echo e($diskInfo['used_percent']); ?>%; height: 100%; background: linear-gradient(90deg, #3b82f6, #8b5cf6);"></div>
+            </div>
+        </div>
+        <div style="background: #0f172a; padding: 20px; border-radius: 12px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="color: #94a3b8;">Đã sử dụng</span>
+                <span style="color: #10b981; font-weight: 600;"><?php echo e($diskInfo['used']); ?></span>
+            </div>
+        </div>
+        <div style="background: #0f172a; padding: 20px; border-radius: 12px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="color: #94a3b8;">Còn trống</span>
+                <span style="color: #f59e0b; font-weight: 600;"><?php echo e($diskInfo['free']); ?></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="admin-card">
+    <div class="admin-card-title">⚡ Thao tác Nhanh</div>
+    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <form action="<?php echo e(route('admin.system.clear-cache')); ?>" method="POST" style="margin:0;">
+            <?php echo csrf_field(); ?>
+            <button type="submit" class="btn btn-secondary" onclick="return confirm('Xóa tất cả cache?')">
+                🗑️ Xóa Cache
+            </button>
+        </form>
+        <form action="<?php echo e(route('admin.system.clear-views')); ?>" method="POST" style="margin:0;">
+            <?php echo csrf_field(); ?>
+            <button type="submit" class="btn btn-secondary" onclick="return confirm('Xóa compiled views?')">
+                📄 Xóa Views Cache
+            </button>
+        </form>
+        <a href="<?php echo e(route('admin.system.phpinfo')); ?>" class="btn btn-secondary" target="_blank">
+            ℹ️ PHP Info
+        </a>
+    </div>
+</div>
+
+<!-- Server Info -->
+<div class="admin-card">
+    <div class="admin-card-title">🖥️ Thông tin Server</div>
+    <table class="admin-table">
+        <tbody>
+            <tr>
+                <td style="width: 200px; font-weight: 600;">Server Software</td>
+                <td><?php echo e($_SERVER['SERVER_SOFTWARE'] ?? 'N/A'); ?></td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600;">Server Name</td>
+                <td><?php echo e($_SERVER['SERVER_NAME'] ?? 'N/A'); ?></td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600;">Document Root</td>
+                <td style="font-family: monospace; font-size: 12px;"><?php echo e($_SERVER['DOCUMENT_ROOT'] ?? 'N/A'); ?></td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600;">PHP Memory Limit</td>
+                <td><?php echo e(ini_get('memory_limit')); ?></td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600;">Max Upload Size</td>
+                <td><?php echo e(ini_get('upload_max_filesize')); ?></td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600;">Max Execution Time</td>
+                <td><?php echo e(ini_get('max_execution_time')); ?>s</td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600;">Timezone</td>
+                <td><?php echo e(config('app.timezone')); ?></td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600;">Cache Driver</td>
+                <td><?php echo e(config('cache.default')); ?></td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600;">Session Driver</td>
+                <td><?php echo e(config('session.driver')); ?></td>
+            </tr>
+            <tr>
+                <td style="font-weight: 600;">Queue Driver</td>
+                <td><?php echo e(config('queue.default')); ?></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Extensions -->
+<div class="admin-card">
+    <div class="admin-card-title">🔧 PHP Extensions</div>
+    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <?php $__currentLoopData = $extensions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ext): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <span style="background: #0f172a; padding: 6px 12px; border-radius: 6px; font-size: 12px; color: #94a3b8;">
+            <?php echo e($ext); ?>
+
+        </span>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+    </div>
+</div>
+
+<?php if(session('success')): ?>
+<script>alert('<?php echo e(session('success')); ?>')</script>
+<?php endif; ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin.layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\Dowload\thuetaikhoan\thuetaikhoan-laravel\resources\views/admin/system/info.blade.php ENDPATH**/ ?>

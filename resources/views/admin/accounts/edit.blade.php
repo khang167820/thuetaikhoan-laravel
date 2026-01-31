@@ -1,0 +1,206 @@
+@extends('admin.layouts.app')
+
+@section('title', 'Sửa tài khoản #' . $account->id)
+@section('page-title', 'Sửa tài khoản #' . $account->id)
+
+@section('content')
+<style>
+.edit-form { max-width: 800px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+@media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+.input-group { display: flex; gap: 8px; }
+.input-group .form-input { flex: 1; }
+.btn-copy { padding: 10px 16px; background: #475569; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 12px; white-space: nowrap; }
+.btn-copy:hover { background: #64748b; }
+.btn-suggest { padding: 10px 16px; background: #8b5cf6; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 12px; white-space: nowrap; }
+.btn-suggest:hover { background: #7c3aed; }
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 30px; }
+.form-note { font-size: 11px; color: #64748b; margin-top: 4px; }
+</style>
+
+<a href="{{ route('admin.accounts') }}" style="color: #94a3b8; margin-bottom: 20px; display: inline-block;">← Quay lại danh sách</a>
+
+<div class="admin-card edit-form">
+    <form action="{{ route('admin.accounts.update', $account->id) }}" method="POST" id="updateForm">
+        @csrf
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Tên đăng nhập</label>
+                <div class="input-group">
+                    <input type="text" name="username" id="username" class="form-input" 
+                           value="{{ $account->username }}" readonly style="background: #334155;">
+                    <button type="button" class="btn-copy" onclick="copyText('username')">Copy TK</button>
+                </div>
+                <div class="form-note">Không cho phép sửa tên đăng nhập</div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Mật khẩu</label>
+                <div class="input-group">
+                    <input type="text" name="password" id="password" class="form-input" 
+                           value="{{ $account->password }}">
+                    <button type="button" class="btn-suggest" onclick="suggestPassword()">Đề xuất</button>
+                    <button type="button" class="btn-copy" onclick="copyText('password')">Copy MK</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Loại</label>
+                <select name="type" class="form-select">
+                    <option value="Unlocktool" {{ ($account->type ?? '') == 'Unlocktool' ? 'selected' : '' }}>Unlocktool</option>
+                    <option value="VietMap" {{ ($account->type ?? '') == 'VietMap' ? 'selected' : '' }}>VietMap</option>
+                    <option value="Griffin" {{ ($account->type ?? '') == 'Griffin' ? 'selected' : '' }}>Griffin</option>
+                    <option value="AMT" {{ ($account->type ?? '') == 'AMT' ? 'selected' : '' }}>AMT</option>
+                    <option value="TSM" {{ ($account->type ?? '') == 'TSM' ? 'selected' : '' }}>TSM</option>
+                    <option value="DFT" {{ ($account->type ?? '') == 'DFT' ? 'selected' : '' }}>DFT</option>
+                    <option value="SamsungTool" {{ ($account->type ?? '') == 'SamsungTool' ? 'selected' : '' }}>SamsungTool</option>
+                    <option value="KGKiller" {{ ($account->type ?? '') == 'KGKiller' ? 'selected' : '' }}>KG Killer</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Ghi chú (nội dung)</label>
+                <input type="text" name="note" class="form-input" 
+                       value="{{ $account->note ?? '' }}" placeholder="Nhập ghi chú">
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Ngày ghi chú (lịch)</label>
+                <input type="date" name="note_date" class="form-input" 
+                       value="{{ isset($account->note_date) && $account->note_date ? \Carbon\Carbon::parse($account->note_date)->format('Y-m-d') : '' }}">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Trạng thái hiện tại</label>
+                <div style="padding: 10px; background: #0f172a; border-radius: 8px; font-size: 13px;">
+                    @php $status = $account->status ?? ($account->is_available ?? 0); @endphp
+                    @if($status == 'available' || $status == 1 || ($account->is_available ?? false))
+                        <span style="color: #10b981;">🟢 Chờ thuê (Có sẵn)</span>
+                    @else
+                        <span style="color: #f59e0b;">🟡 Đang thuê</span>
+                    @endif
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Ngày hết hạn</label>
+                <input type="datetime-local" name="expires_at" class="form-input" 
+                       value="{{ isset($account->expires_at) && $account->expires_at ? \Carbon\Carbon::parse($account->expires_at)->format('Y-m-d\TH:i') : '' }}">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">2FA / OTP (nếu có)</label>
+                <input type="text" name="otp_secret" class="form-input" 
+                       value="{{ $account->otp_secret ?? '' }}" placeholder="Secret key">
+            </div>
+        </div>
+        
+        <div class="btn-row">
+            <!-- Chờ thuê (Set Available) -->
+            <button type="button" class="btn btn-success" onclick="setStatus('available')">
+                ✓ Chờ thuê
+            </button>
+            
+            <!-- Đổi pass -->
+            <button type="button" class="btn" style="background: #dc2626;" onclick="changePassword()">
+                🔑 Đổi pass
+            </button>
+            
+            <!-- Cập nhật -->
+            <button type="submit" class="btn btn-primary">
+                💾 Cập nhật
+            </button>
+            
+            <!-- Quay lại -->
+            <a href="{{ route('admin.accounts') }}" class="btn btn-secondary">
+                ← Quay lại
+            </a>
+            
+            <!-- Xóa -->
+            <button type="button" class="btn btn-danger" onclick="deleteAccount()">
+                🗑️ Xóa
+            </button>
+            
+            <!-- Reset TG (Telegram) -->
+            <button type="button" class="btn" style="background: #f97316;" onclick="resetTelegram()">
+                📱 Reset TG
+            </button>
+        </div>
+    </form>
+    
+    <!-- Hidden forms for other actions -->
+    <form action="{{ route('admin.accounts.toggle', $account->id) }}" method="POST" id="toggleForm" style="display:none;">
+        @csrf
+        <input type="hidden" name="status" id="toggleStatus">
+    </form>
+    
+    <form action="{{ route('admin.accounts.change-pass', $account->id) }}" method="POST" id="changePassForm" style="display:none;">
+        @csrf
+        <input type="hidden" name="password" id="newPassword">
+    </form>
+    
+    <form action="{{ route('admin.accounts.reset-tg', $account->id) }}" method="POST" id="resetTGForm" style="display:none;">
+        @csrf
+    </form>
+    
+    <form action="{{ route('admin.accounts.delete', $account->id) }}" method="POST" id="deleteForm" style="display:none;">
+        @csrf
+        @method('DELETE')
+    </form>
+</div>
+
+<script>
+function copyText(inputId) {
+    const input = document.getElementById(inputId);
+    navigator.clipboard.writeText(input.value);
+    alert('Đã copy: ' + input.value);
+}
+
+function suggestPassword() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+    let password = '';
+    for (let i = 0; i < 10; i++) {
+        password += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    document.getElementById('password').value = password;
+}
+
+function setStatus(status) {
+    if (confirm('Đặt tài khoản về trạng thái Chờ thuê?')) {
+        document.getElementById('toggleStatus').value = status;
+        document.getElementById('toggleForm').submit();
+    }
+}
+
+function changePassword() {
+    const newPass = document.getElementById('password').value;
+    if (!newPass) {
+        alert('Vui lòng nhập mật khẩu mới!');
+        return;
+    }
+    if (confirm('Đổi mật khẩu thành: ' + newPass + '?')) {
+        document.getElementById('newPassword').value = newPass;
+        document.getElementById('changePassForm').submit();
+    }
+}
+
+function resetTelegram() {
+    if (confirm('Reset Telegram session của tài khoản này?')) {
+        document.getElementById('resetTGForm').submit();
+    }
+}
+
+function deleteAccount() {
+    if (confirm('⚠️ Xác nhận XÓA tài khoản này? Hành động không thể hoàn tác!')) {
+        document.getElementById('deleteForm').submit();
+    }
+}
+</script>
+@endsection

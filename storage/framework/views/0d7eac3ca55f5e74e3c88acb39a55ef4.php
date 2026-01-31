@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo $__env->yieldContent('title', 'Admin Panel'); ?> - ThueTaiKhoan.vn</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+    
+    /* Layout */
+    .admin-layout { display: flex; min-height: 100vh; }
+    
+    /* Sidebar */
+    .admin-sidebar {
+        width: 260px;
+        background: #1e293b;
+        border-right: 1px solid #334155;
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 100;
+    }
+    .admin-logo {
+        padding: 20px 24px;
+        border-bottom: 1px solid #334155;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .admin-logo img { width: 40px; height: 40px; border-radius: 10px; }
+    .admin-logo-text { font-size: 16px; font-weight: 700; color: #f1f5f9; }
+    .admin-logo-sub { font-size: 11px; color: #64748b; }
+    
+    .admin-nav { padding: 16px 12px; flex: 1; overflow-y: auto; }
+    .admin-nav-section { margin-bottom: 24px; }
+    .admin-nav-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #64748b; padding: 0 12px; margin-bottom: 8px; }
+    
+    .admin-nav-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        border-radius: 10px;
+        text-decoration: none;
+        color: #94a3b8;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.2s;
+        margin-bottom: 4px;
+    }
+    .admin-nav-item:hover { background: #334155; color: #f1f5f9; }
+    .admin-nav-item.active { background: #3b82f6; color: #fff; }
+    .admin-nav-item svg { width: 20px; height: 20px; }
+    .admin-nav-badge { background: #ef4444; color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 10px; margin-left: auto; }
+    
+    /* Main Content */
+    .admin-main { flex: 1; margin-left: 260px; min-height: 100vh; }
+    
+    .admin-header {
+        background: #1e293b;
+        border-bottom: 1px solid #334155;
+        padding: 16px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+    }
+    .admin-header-title { font-size: 18px; font-weight: 700; }
+    .admin-header-user {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .admin-header-user span { font-size: 13px; color: #94a3b8; }
+    .admin-header-user strong { color: #f1f5f9; }
+    .admin-logout {
+        padding: 8px 16px;
+        background: #dc2626;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    
+    .admin-content { padding: 24px; }
+    
+    /* Cards */
+    .admin-card {
+        background: #1e293b;
+        border-radius: 16px;
+        padding: 20px;
+        border: 1px solid #334155;
+        margin-bottom: 20px;
+    }
+    .admin-card-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #94a3b8;
+        margin-bottom: 16px;
+    }
+    
+    /* Stats Grid */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .stat-card {
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 16px;
+        padding: 20px;
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+    }
+    .stat-icon.green { background: rgba(16, 185, 129, 0.15); }
+    .stat-icon.blue { background: rgba(59, 130, 246, 0.15); }
+    .stat-icon.orange { background: rgba(249, 115, 22, 0.15); }
+    .stat-icon.purple { background: rgba(139, 92, 246, 0.15); }
+    .stat-info { flex: 1; }
+    .stat-label { font-size: 12px; color: #64748b; margin-bottom: 4px; }
+    .stat-value { font-size: 24px; font-weight: 700; color: #f1f5f9; }
+    .stat-sub { font-size: 11px; color: #64748b; margin-top: 4px; }
+    
+    /* Tables */
+    .admin-table { width: 100%; border-collapse: collapse; }
+    .admin-table th, .admin-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #334155; }
+    .admin-table th { font-size: 11px; font-weight: 600; text-transform: uppercase; color: #64748b; background: #0f172a; }
+    .admin-table td { font-size: 13px; color: #e2e8f0; }
+    .admin-table tr:hover { background: #334155/30; }
+    
+    /* Badges */
+    .badge { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+    .badge-pending { background: #fef3c7; color: #d97706; }
+    .badge-paid { background: #dbeafe; color: #2563eb; }
+    .badge-completed { background: #dcfce7; color: #16a34a; }
+    .badge-cancelled { background: #fee2e2; color: #dc2626; }
+    .badge-active { background: #dcfce7; color: #16a34a; }
+    .badge-inactive { background: #fee2e2; color: #dc2626; }
+    
+    /* Buttons */
+    .btn { padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; }
+    .btn-primary { background: #3b82f6; color: #fff; }
+    .btn-primary:hover { background: #2563eb; }
+    .btn-success { background: #10b981; color: #fff; }
+    .btn-danger { background: #dc2626; color: #fff; }
+    .btn-secondary { background: #334155; color: #e2e8f0; }
+    .btn-sm { padding: 6px 12px; font-size: 11px; }
+    
+    /* Forms */
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 12px; font-weight: 600; color: #94a3b8; margin-bottom: 6px; }
+    .form-input, .form-select {
+        width: 100%;
+        padding: 10px 14px;
+        background: #0f172a;
+        border: 1px solid #334155;
+        border-radius: 8px;
+        color: #e2e8f0;
+        font-size: 13px;
+    }
+    .form-input:focus, .form-select:focus { outline: none; border-color: #3b82f6; }
+    
+    /* Filter Bar */
+    .filter-bar { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+    .filter-bar .form-input, .filter-bar .form-select { width: auto; min-width: 180px; }
+    
+    /* Pagination */
+    .pagination { display: flex; gap: 4px; justify-content: center; margin-top: 20px; flex-wrap: wrap; align-items: center; }
+    .pagination a, .pagination span { padding: 8px 14px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #94a3b8; font-size: 12px; text-decoration: none; }
+    .pagination a:hover { background: #334155; color: #f1f5f9; }
+    .pagination .active, .pagination .active span { background: #3b82f6; border-color: #3b82f6; color: #fff; }
+    .pagination svg { width: 14px; height: 14px; display: inline-block; }
+    .pagination nav { display: flex; align-items: center; gap: 8px; }
+    .pagination nav > div { display: flex; align-items: center; gap: 8px; }
+    .pagination nav > div:first-child { display: none; } /* Hide "Showing X to Y" on small screens */
+    .pagination nav > div:last-child { display: flex; align-items: center; }
+    .pagination nav span[aria-disabled="true"] svg, 
+    .pagination nav a svg { width: 16px; height: 16px; }
+    
+    /* Fix Laravel Tailwind Pagination */
+    nav[role="navigation"] { display: flex; justify-content: center; align-items: center; gap: 4px; flex-wrap: wrap; }
+    nav[role="navigation"] > div { display: flex; align-items: center; gap: 8px; }
+    nav[role="navigation"] > div:first-child { font-size: 13px; color: #94a3b8; }
+    nav[role="navigation"] span[aria-current="page"] span { background: #3b82f6; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; }
+    nav[role="navigation"] a { padding: 8px 14px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #94a3b8; font-size: 12px; text-decoration: none; }
+    nav[role="navigation"] a:hover { background: #334155; color: #f1f5f9; }
+    nav[role="navigation"] span[aria-disabled="true"] { padding: 8px 14px; background: #0f172a; border: 1px solid #334155; border-radius: 6px; color: #475569; font-size: 12px; cursor: not-allowed; }
+    nav[role="navigation"] svg { width: 16px; height: 16px; }
+    
+    /* Alerts */
+    .alert { padding: 12px 16px; border-radius: 10px; margin-bottom: 20px; font-size: 13px; }
+    .alert-success { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .alert-error { background: rgba(220, 38, 38, 0.15); color: #ef4444; border: 1px solid rgba(220, 38, 38, 0.3); }
+    
+    /* Mobile */
+    @media (max-width: 768px) {
+        .admin-sidebar { width: 100%; position: relative; }
+        .admin-main { margin-left: 0; }
+        .stats-grid { grid-template-columns: 1fr; }
+    }
+    </style>
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="admin-logo">
+                <img src="/assets/images/logo.png" alt="Logo">
+                <div>
+                    <div class="admin-logo-text">Admin Panel</div>
+                    <div class="admin-logo-sub">ThueTaiKhoan.vn</div>
+                </div>
+            </div>
+            
+            <nav class="admin-nav">
+                <div class="admin-nav-section">
+                    <div class="admin-nav-title">Tổng quan</div>
+                    <a href="<?php echo e(route('admin.dashboard')); ?>" class="admin-nav-item <?php echo e(request()->routeIs('admin.dashboard') ? 'active' : ''); ?>">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        Dashboard
+                    </a>
+                </div>
+                
+                <div class="admin-nav-section">
+                    <div class="admin-nav-title">Quản lý</div>
+                    <a href="<?php echo e(route('admin.accounts')); ?>" class="admin-nav-item <?php echo e(request()->routeIs('admin.accounts') ? 'active' : ''); ?>">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Tài khoản
+                    </a>
+                    <a href="<?php echo e(route('admin.prices')); ?>" class="admin-nav-item <?php echo e(request()->routeIs('admin.prices') ? 'active' : ''); ?>">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                        Gói thuê
+                    </a>
+                    <a href="<?php echo e(route('admin.orders')); ?>" class="admin-nav-item <?php echo e(request()->routeIs('admin.orders') ? 'active' : ''); ?>">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                        Đơn hàng
+                    </a>
+                    <a href="<?php echo e(route('admin.coupons')); ?>" class="admin-nav-item <?php echo e(request()->routeIs('admin.coupons') ? 'active' : ''); ?>">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                        Mã giảm giá
+                    </a>
+                </div>
+                
+                <div class="admin-nav-section">
+                    <div class="admin-nav-title">ADY Unlocker</div>
+                    <a href="<?php echo e(route('admin.ady.config')); ?>" class="admin-nav-item <?php echo e(request()->routeIs('admin.ady.config') ? 'active' : ''); ?>">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                        ADY Config
+                    </a>
+                    <a href="<?php echo e(route('admin.ady.products')); ?>" class="admin-nav-item <?php echo e(request()->routeIs('admin.ady.products') ? 'active' : ''); ?>">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+                        Sản phẩm ADY
+                    </a>
+                    <a href="<?php echo e(route('admin.ady.orders')); ?>" class="admin-nav-item <?php echo e(request()->routeIs('admin.ady.orders') ? 'active' : ''); ?>">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        Đơn ADY
+                    </a>
+                </div>
+                
+                <div class="admin-nav-section">
+                    <div class="admin-nav-title">Hệ thống</div>
+                    <a href="<?php echo e(route('admin.underpaid')); ?>" class="admin-nav-item <?php echo e(request()->routeIs('admin.underpaid') ? 'active' : ''); ?>">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        Thiếu tiền
+                    </a>
+                    <a href="<?php echo e(route('admin.users')); ?>" class="admin-nav-item <?php echo e(request()->routeIs('admin.users') ? 'active' : ''); ?>">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                        Users
+                    </a>
+                    <a href="<?php echo e(route('admin.blog')); ?>" class="admin-nav-item <?php echo e(request()->routeIs('admin.blog*') ? 'active' : ''); ?>">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                        Blog
+                    </a>
+                    <a href="<?php echo e(route('admin.reports')); ?>" class="admin-nav-item <?php echo e(request()->routeIs('admin.reports') ? 'active' : ''); ?>">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                        Báo cáo
+                    </a>
+                    <a href="<?php echo e(route('admin.settings')); ?>" class="admin-nav-item <?php echo e(request()->routeIs('admin.settings') ? 'active' : ''); ?>">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                        Cài đặt
+                    </a>
+                    <a href="<?php echo e(route('admin.logs')); ?>" class="admin-nav-item <?php echo e(request()->routeIs('admin.logs') ? 'active' : ''); ?>">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                        Nhật ký
+                    </a>
+                </div>
+                
+                <div class="admin-nav-section">
+                    <div class="admin-nav-title">Công cụ</div>
+                    <a href="<?php echo e(route('admin.export')); ?>" class="admin-nav-item <?php echo e(request()->routeIs('admin.export') ? 'active' : ''); ?>">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        Export/Import
+                    </a>
+                    <a href="<?php echo e(route('admin.backup')); ?>" class="admin-nav-item <?php echo e(request()->routeIs('admin.backup') ? 'active' : ''); ?>">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                        Backup
+                    </a>
+                    <a href="<?php echo e(route('admin.system')); ?>" class="admin-nav-item <?php echo e(request()->routeIs('admin.system*') ? 'active' : ''); ?>">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                        Hệ thống
+                    </a>
+                </div>
+                
+                <div class="admin-nav-section">
+                    <div class="admin-nav-title">Khác</div>
+                    <a href="/" class="admin-nav-item" target="_blank">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                        Xem website
+                    </a>
+                </div>
+            </nav>
+        </aside>
+        
+        <!-- Main -->
+        <main class="admin-main">
+            <header class="admin-header">
+                <h1 class="admin-header-title"><?php echo $__env->yieldContent('page-title', 'Dashboard'); ?></h1>
+                
+                <!-- Global Search -->
+                <div style="flex: 1; max-width: 400px; margin: 0 24px;">
+                    <form action="<?php echo e(route('admin.search')); ?>" method="GET" style="margin: 0;">
+                        <div style="position: relative;">
+                            <input type="text" name="q" placeholder="Tìm kiếm đơn hàng, user, tài khoản..." 
+                                   value="<?php echo e(request('q')); ?>"
+                                   style="width: 100%; padding: 10px 16px 10px 40px; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: #f1f5f9; font-size: 13px;">
+                            <svg style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: #64748b;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="admin-header-user">
+                    <span>Xin chào, <strong><?php echo e(session('admin_username', 'Admin')); ?></strong></span>
+                    <form action="<?php echo e(route('admin.logout')); ?>" method="POST" style="margin:0;">
+                        <?php echo csrf_field(); ?>
+                        <button type="submit" class="admin-logout">Đăng xuất</button>
+                    </form>
+                </div>
+            </header>
+            
+            <div class="admin-content">
+                <?php if(session('success')): ?>
+                    <div class="alert alert-success"><?php echo e(session('success')); ?></div>
+                <?php endif; ?>
+                <?php if(session('error')): ?>
+                    <div class="alert alert-error"><?php echo e(session('error')); ?></div>
+                <?php endif; ?>
+                
+                <?php echo $__env->yieldContent('content'); ?>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
+<?php /**PATH D:\Dowload\thuetaikhoan\thuetaikhoan-laravel\resources\views/admin/layouts/app.blade.php ENDPATH**/ ?>

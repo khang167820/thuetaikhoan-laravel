@@ -219,20 +219,31 @@
 
         <form class="auth-form" method="POST" action="/register">
             @csrf
+            
+            @if ($errors->any())
+            <div style="background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 14px 18px; border-radius: 10px; margin-bottom: 16px; font-size: 14px;">
+                <ul style="margin: 0; padding-left: 18px;">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+                </ul>
+            </div>
+            @endif
+            
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label">Họ và tên</label>
-                    <input type="text" name="name" class="form-input" placeholder="Nguyễn Văn A" required>
+                    <input type="text" name="name" class="form-input" placeholder="Nguyễn Văn A" required value="{{ old('name') }}">
                 </div>
                 <div class="form-group">
                     <label class="form-label">Số điện thoại</label>
-                    <input type="tel" name="phone" class="form-input" placeholder="0912345678" required>
+                    <input type="tel" name="phone" class="form-input" placeholder="0912345678" value="{{ old('phone') }}">
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="form-label">Email</label>
-                <input type="email" name="email" class="form-input" placeholder="email@example.com" required>
+                <input type="email" name="email" class="form-input" placeholder="email@example.com" required value="{{ old('email') }}">
             </div>
 
             <div class="form-group">

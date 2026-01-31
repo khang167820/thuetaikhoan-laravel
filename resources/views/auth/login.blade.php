@@ -204,9 +204,18 @@
 
         <form class="auth-form" method="POST" action="/login">
             @csrf
+            
+            @if ($errors->any())
+            <div style="background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 14px 18px; border-radius: 10px; margin-bottom: 16px; font-size: 14px;">
+                @foreach ($errors->all() as $error)
+                    {{ $error }}
+                @endforeach
+            </div>
+            @endif
+            
             <div class="form-group">
                 <label class="form-label">Email hoặc Số điện thoại</label>
-                <input type="text" name="email" class="form-input" placeholder="Nhập email hoặc SĐT" required>
+                <input type="text" name="email" class="form-input" placeholder="Nhập email hoặc SĐT" required value="{{ old('email') }}">
             </div>
 
             <div class="form-group">

@@ -70,10 +70,11 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: var(--bg);
+            background: #fff;
             box-shadow: 0 1px 3px rgba(0,0,0,0.08);
             transition: background 0.3s;
         }
+        [data-theme="dark"] .site-header { background: var(--bg); }
         
         /* Theme Toggle */
         .theme-toggle {
@@ -93,8 +94,8 @@
             align-items: center;
             justify-content: space-between;
             gap: 16px;
-            width: 100%;
-            padding: 0 40px;
+            max-width: 100%;
+            padding: 0 20px;
         }
         .header-left { display: flex; align-items: center; gap: 4px; }
         .header-right { display: flex; align-items: center; gap: 12px; margin-left: auto; }
@@ -212,6 +213,42 @@
             color: var(--ink); background: transparent; border-radius: 8px; border: 2px solid #e5e7eb; transition: all 0.2s;
         }
         .auth-register-btn:hover { border-color: var(--primary); color: var(--primary); }
+        
+        /* User Balance */
+        .user-balance {
+            display: flex; align-items: center; gap: 6px;
+            padding: 6px 12px; font-size: 13px; font-weight: 600;
+            background: #ecfdf5; color: #059669; border-radius: 8px;
+        }
+        .user-balance svg { color: #10b981; }
+        
+        /* User Dropdown */
+        .user-dropdown { position: relative; }
+        .user-btn {
+            display: flex; align-items: center; gap: 8px;
+            padding: 6px 12px; font-size: 13px; font-weight: 600;
+            color: var(--ink); border-radius: 10px; cursor: pointer;
+            border: 1px solid #e5e7eb; transition: all 0.2s;
+        }
+        .user-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .user-avatar {
+            width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: #fff; border-radius: 8px; font-size: 13px; font-weight: 700;
+        }
+        .user-name { max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .logout-btn {
+            display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 14px;
+            background: none; border: none; cursor: pointer;
+            color: #dc2626; font-size: 14px; font-weight: 500; border-radius: 6px; transition: all 0.15s;
+        }
+        .logout-btn:hover { background: #fef2f2; }
+        .logout-btn svg { color: #dc2626; }
+        
+        /* Dark mode for user elements */
+        [data-theme="dark"] .user-balance { background: #064e3b; color: #a7f3d0; }
+        [data-theme="dark"] .user-btn { border-color: #475569; }
+        [data-theme="dark"] .user-btn:hover { border-color: #60a5fa; }
         
         /* FOOTER */
         .site-footer {

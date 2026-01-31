@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class OrderHistoryController extends Controller
@@ -45,6 +47,63 @@ class OrderHistoryController extends Controller
         }
 
         return view('pages.order-history', compact('orders', 'error', 'customerIp'));
+    }
+    
+    /**
+     * Display order history for authenticated user
+     * Shows orders by user_id or IP address
+     */
+    public function userOrders(Request $request)
+    {
+        $user = Auth::user();
+        $filter = $request->input('status', 'all');
+        
+        // Build query for authenticated user's orders
+        $query = DB::table('orders')
+            ->leftJoin('accounts', 'orders.account_id', '=', 'accounts.id')
+            ->leftJoin('prices', 'orders.price_id', '=', 'prices.id')
+            ->select(
+                'orders.id',
+                'orders.tracking_code',
+                'orders.hours',
+                'orders.amount',
+                'orders.status',
+                'orders.service_type',
+                'orders.created_at',
+                'orders.paid_at',
+                'orders.expires_at',
+                'accounts.type as account_type',
+                'accounts.username as account_username',
+                'accounts.password as account_password',
+                'prices.type as price_type'
+            )
+            ->where(function ($q) use ($user, $request) {
+                // Match by user_id if exists in orders table
+                $q->where('orders.user_id', $user->id)
+                  // Or by IP for backward compatibility
+                  ->orWhere('orders.ip_address', $request->ip());
+            })
+            ->orderBy('orders.created_at', 'desc');
+        
+        // Apply status filter
+        if ($filter !== 'all') {
+            $query->where('orders.status', $filter);
+        }
+        
+        // Paginate results
+        $orders = $query->paginate(20)->withQueryString();
+        
+        // Get counts for each status
+        $statusCounts = DB::table('orders')
+            ->where(function ($q) use ($user, $request) {
+                $q->where('user_id', $user->id)
+                  ->orWhere('ip_address', $request->ip());
+            })
+            ->select('status', DB::raw('count(*) as count'))
+            ->groupBy('status')
+            ->pluck('count', 'status');
+        
+        return view('order-history', compact('orders', 'filter', 'statusCounts', 'user'));
     }
 
     /**

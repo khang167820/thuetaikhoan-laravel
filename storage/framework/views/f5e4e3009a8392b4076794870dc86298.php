@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Modern UI Enhancement -->
-    <link rel="stylesheet" href="/css/modern-ui.css?v=5">
+    <link rel="stylesheet" href="/css/modern-ui.css?v=6">
     
     <style>
         /* ============================================
@@ -343,6 +343,42 @@
             border-color: var(--primary);
             color: var(--primary);
         }
+
+        /* User Balance */
+        .user-balance {
+            display: flex; align-items: center; gap: 6px;
+            padding: 6px 12px; font-size: 13px; font-weight: 600;
+            background: #ecfdf5; color: #059669; border-radius: 8px;
+        }
+        .user-balance svg { color: #10b981; }
+        
+        /* User Dropdown */
+        .user-dropdown { position: relative; }
+        .user-btn {
+            display: flex; align-items: center; gap: 8px;
+            padding: 6px 12px; font-size: 13px; font-weight: 600;
+            color: var(--ink); border-radius: 10px; cursor: pointer;
+            border: 1px solid #e5e7eb; transition: all 0.2s;
+        }
+        .user-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .user-avatar {
+            width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: #fff; border-radius: 8px; font-size: 13px; font-weight: 700;
+        }
+        .user-name { max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .logout-btn {
+            display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 14px;
+            background: none; border: none; cursor: pointer;
+            color: #dc2626; font-size: 14px; font-weight: 500; border-radius: 6px; transition: all 0.15s;
+        }
+        .logout-btn:hover { background: #fef2f2; }
+        .logout-btn svg { color: #dc2626; }
+        
+        /* Dark mode for user elements */
+        [data-theme="dark"] .user-balance { background: #064e3b; color: #a7f3d0; }
+        [data-theme="dark"] .user-btn { border-color: #475569; }
+        [data-theme="dark"] .user-btn:hover { border-color: #60a5fa; }
 
         /* Mobile menu button */
         .btn-mobile-menu {
@@ -1223,6 +1259,60 @@
                 
                 <!-- Auth buttons -->
                 <div class="header-auth">
+                    <?php if(auth()->guard()->check()): ?>
+                    
+                    <div class="user-balance">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+                        </svg>
+                        <span><?php echo e(number_format(Auth::user()->balance ?? 0, 0, ',', '.')); ?>đ</span>
+                    </div>
+                    <div class="nav-dropdown user-dropdown">
+                        <a href="#" class="user-btn">
+                            <span class="user-avatar"><?php echo e(substr(Auth::user()->name ?? Auth::user()->fullname ?? 'U', 0, 1)); ?></span>
+                            <span class="user-name"><?php echo e(Auth::user()->name ?? Auth::user()->fullname ?? 'User'); ?></span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </a>
+                        <div class="nav-dropdown-menu">
+                            <a href="/account">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="12" cy="7" r="4"/>
+                                </svg>
+                                Tài khoản
+                            </a>
+                            <a href="/order-history">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                </svg>
+                                Lịch sử đơn hàng
+                            </a>
+                            <a href="/deposit">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                                    <line x1="1" y1="10" x2="23" y2="10"/>
+                                </svg>
+                                Nạp tiền
+                            </a>
+                            <div style="border-top: 1px solid #e5e7eb; margin: 8px 0;"></div>
+                            <form action="/logout" method="POST" style="margin: 0;">
+                                <?php echo csrf_field(); ?>
+                                <button type="submit" class="logout-btn">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                                        <polyline points="16 17 21 12 16 7"/>
+                                        <line x1="21" y1="12" x2="9" y2="12"/>
+                                    </svg>
+                                    Đăng xuất
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <?php else: ?>
+                    
                     <a href="/login" class="auth-login-btn">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
@@ -1240,6 +1330,7 @@
                         </svg>
                         Đăng ký
                     </a>
+                    <?php endif; ?>
                 </div>
             </div>
 
@@ -1307,10 +1398,10 @@
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
-                <a href="/thue-unlocktool" class="fo-cta-compact">
+                <button type="button" onclick="openPriceModal('unlocktool')" class="fo-cta-compact">
                     <span class="fo-price-compact">10.000 VND</span>
                     <span class="fo-price-old-compact">25.000₫</span>
-                </a>
+                </button>
             </article>
 
             <!-- CARD: Vietmap Live PRO -->
@@ -1333,10 +1424,10 @@
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
-                <a href="/thue-vietmap" class="fo-cta-compact green">
+                <button type="button" onclick="openPriceModal('vietmap')" class="fo-cta-compact green">
                     <span class="fo-price-compact">8.000 VND</span>
                     <span class="fo-price-old-compact">19.000₫</span>
-                </a>
+                </button>
             </article>
 
             <!-- CARD: Griffin Premium -->
@@ -1361,10 +1452,10 @@
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
-                <a href="/thue-griffin" class="fo-cta-compact blue">
+                <button type="button" onclick="openPriceModal('griffin')" class="fo-cta-compact blue">
                     <span class="fo-price-compact">42.000 VND</span>
                     <span class="fo-price-old-compact">100.000₫</span>
-                </a>
+                </button>
             </article>
 
             <!-- CARD: Android Multitool -->
@@ -1388,10 +1479,10 @@
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
-                <a href="/thue-amt" class="fo-cta-compact orange">
+                <button type="button" onclick="openPriceModal('amt')" class="fo-cta-compact orange">
                     <span class="fo-price-compact">9.000 VND</span>
                     <span class="fo-price-old-compact">30.000₫</span>
-                </a>
+                </button>
             </article>
 
             <!-- CARD: KG Killer Tool -->
@@ -1415,10 +1506,10 @@
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
-                <a href="/thue-kg-killer" class="fo-cta-compact">
+                <button type="button" onclick="openPriceModal('kg-killer')" class="fo-cta-compact">
                     <span class="fo-price-compact">8.000 VND</span>
                     <span class="fo-price-old-compact">35.000₫</span>
-                </a>
+                </button>
             </article>
 
             <!-- CARD: Samsung Tool -->
@@ -1441,10 +1532,10 @@
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
-                <a href="/thue-samsung-tool" class="fo-cta-compact orange">
+                <button type="button" onclick="openPriceModal('samsung-tool')" class="fo-cta-compact orange">
                     <span class="fo-price-compact">162.000 VND</span>
                     <span class="fo-price-old-compact">250.000₫</span>
-                </a>
+                </button>
             </article>
 
             <!-- CARD: DFT Pro Tool -->
@@ -1467,10 +1558,10 @@
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
-                <a href="/thue-dft" class="fo-cta-compact blue">
+                <button type="button" onclick="openPriceModal('dft')" class="fo-cta-compact blue">
                     <span class="fo-price-compact">105.000 VND</span>
                     <span class="fo-price-old-compact">130.000₫</span>
-                </a>
+                </button>
             </article>
 
             <!-- CARD: TSM Tool -->
@@ -1496,10 +1587,10 @@
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
-                <a href="/thue-tsm" class="fo-cta-compact">
+                <button type="button" onclick="openPriceModal('tsm')" class="fo-cta-compact">
                     <span class="fo-price-compact">6.000 VND</span>
                     <span class="fo-price-old-compact">25.000₫</span>
-                </a>
+                </button>
             </article>
         </div>
     </div>
@@ -2073,7 +2164,789 @@ function toggleFeatures(cardId) {
 }
 </script>
 
+<!-- ========== PRICE POPUP MODAL (FULL VERSION) ========== -->
+<div id="price-modal" class="price-modal">
+    <div class="price-modal-backdrop" onclick="closePriceModal()"></div>
+    <div class="price-modal-content">
+        <button class="price-modal-close" onclick="closePriceModal()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+        </button>
+        
+        <!-- Modal Header -->
+        <div class="pm-header">
+            <h2 class="pm-title">Chọn gói thuê</h2>
+            <p class="pm-subtitle">Chọn gói thuê cho tài khoản: <strong id="pm-service-name">UNLOCKTOOL</strong></p>
+        </div>
+        
+        <!-- User Points -->
+        <div class="pm-points" id="pm-points-section" style="display:none;">
+            <span class="pm-points-label">Điểm hiện có:</span>
+            <span class="pm-points-value" id="pm-user-points">0 điểm</span>
+            <span class="pm-points-vnd">(≈ <span id="pm-points-vnd">0</span> VND)</span>
+        </div>
+        
+        <!-- Promo Notice -->
+        <div class="pm-promo-notice">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+            </svg>
+            <span>Tích lũy điểm, khuyến mại và mã giảm giá sẽ được áp dụng ở bước thanh toán. Chọn gói phù hợp nhu cầu của bạn.</span>
+        </div>
+        
+        <!-- Price Options List -->
+        <div class="pm-options-scroll">
+            <div class="pm-options" id="pm-options">
+                <!-- Dynamic options will be inserted here -->
+            </div>
+        </div>
+        
+        <!-- Discount Section -->
+        <div class="pm-discount-section">
+            <!-- Use Points Checkbox -->
+            <label class="pm-checkbox" id="pm-use-points-wrapper" style="display:none;">
+                <input type="checkbox" id="pm-use-points">
+                <span class="pm-checkbox-mark"></span>
+                <span class="pm-checkbox-label">Sử dụng điểm tích lũy (<span id="pm-points-deduct">0</span> VND)</span>
+            </label>
+            
+            <!-- Use Coupon Checkbox -->
+            <label class="pm-checkbox">
+                <input type="checkbox" id="pm-use-coupon" onchange="toggleCouponSection()">
+                <span class="pm-checkbox-mark"></span>
+                <span class="pm-checkbox-label">Sử dụng mã giảm giá</span>
+            </label>
+            
+            <!-- Coupon Selection -->
+            <div class="pm-coupon-section" id="pm-coupon-section" style="display:none;">
+                <div class="pm-coupon-title">
+                    <span>🎫</span> Chọn mã giảm giá:
+                </div>
+                <div class="pm-coupon-list" id="pm-coupon-list">
+                    <div class="pm-coupon-item" data-code="THUE2000" onclick="selectCoupon('THUE2000', 2000, 'fixed')">
+                        <div class="pm-coupon-code">THUE2000</div>
+                        <div class="pm-coupon-info">
+                            <div class="pm-coupon-value">Giảm 2,000đ</div>
+                            <div class="pm-coupon-limit">Không giới hạn</div>
+                        </div>
+                        <span class="pm-coupon-use">Dùng</span>
+                    </div>
+                    <div class="pm-coupon-item" data-code="GIAM10" onclick="selectCoupon('GIAM10', 10, 'percent')">
+                        <div class="pm-coupon-code">GIAM10</div>
+                        <div class="pm-coupon-info">
+                            <div class="pm-coupon-value">Giảm 10%</div>
+                            <div class="pm-coupon-limit">Không giới hạn</div>
+                        </div>
+                        <span class="pm-coupon-use">Dùng</span>
+                    </div>
+                </div>
+                <div class="pm-coupon-input">
+                    <input type="text" id="pm-coupon-code" placeholder="Hoặc nhập mã khác...">
+                    <button type="button" onclick="applyCouponCode()">ÁP DỤNG</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal Footer -->
+        <div class="pm-footer">
+            <button type="button" class="pm-btn-cancel" onclick="closePriceModal()">Hủy</button>
+            <button type="button" class="pm-btn-confirm" id="pm-btn-confirm" onclick="confirmRental()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                    <line x1="1" y1="10" x2="23" y2="10"/>
+                </svg>
+                Xác nhận thuê
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ========== ENHANCED PRICE MODAL STYLES ========== */
+.price-modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+.price-modal.open {
+    opacity: 1;
+    visibility: visible;
+}
+.price-modal-backdrop {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(6px);
+}
+.price-modal-content {
+    position: relative;
+    background: #fff;
+    border-radius: 16px;
+    max-width: 560px;
+    width: 95%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25);
+    transform: scale(0.95) translateY(20px);
+    transition: transform 0.3s ease;
+    overflow: hidden;
+}
+.price-modal.open .price-modal-content {
+    transform: scale(1) translateY(0);
+}
+.price-modal-close {
+    position: absolute;
+    top: 12px; right: 12px;
+    width: 32px; height: 32px;
+    border: none;
+    background: #f3f4f6;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6b7280;
+    transition: all 0.2s;
+    z-index: 10;
+}
+.price-modal-close:hover {
+    background: #e5e7eb;
+    color: #1f2937;
+}
+
+/* Modal Header */
+.pm-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #f1f5f9;
+}
+.pm-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 4px;
+}
+.pm-subtitle {
+    font-size: 13px;
+    color: #6b7280;
+}
+.pm-subtitle strong {
+    color: #1e40af;
+    font-weight: 600;
+}
+
+/* User Points */
+.pm-points {
+    padding: 10px 24px;
+    background: #ecfdf5;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+}
+.pm-points-label { color: #059669; }
+.pm-points-value { font-weight: 700; color: #047857; }
+.pm-points-vnd { color: #10b981; }
+
+/* Promo Notice */
+.pm-promo-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 24px;
+    background: #fefce8;
+    border-bottom: 1px solid #fef08a;
+    font-size: 12px;
+    color: #854d0e;
+    line-height: 1.5;
+}
+.pm-promo-notice svg {
+    flex-shrink: 0;
+    margin-top: 1px;
+    color: #ca8a04;
+}
+
+/* Options Scroll */
+.pm-options-scroll {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 320px;
+    padding: 12px 24px;
+}
+.pm-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Single Price Option */
+.pm-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #fff;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.pm-option:hover {
+    border-color: #3b82f6;
+    background: #eff6ff;
+}
+.pm-option.selected {
+    border-color: #2563eb;
+    background: #dbeafe;
+}
+.pm-option-radio {
+    width: 18px; height: 18px;
+    border: 2px solid #d1d5db;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+.pm-option.selected .pm-option-radio {
+    border-color: #2563eb;
+}
+.pm-option.selected .pm-option-radio::after {
+    content: '';
+    width: 10px; height: 10px;
+    background: #2563eb;
+    border-radius: 50%;
+}
+
+/* Tags */
+.pm-option-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 4px;
+}
+.pm-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+.pm-tag.flash-sale { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+.pm-tag.hot { background: #fff7ed; color: #ea580c; border: 1px solid #fed7aa; }
+.pm-tag.promo { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
+.pm-tag.special { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+.pm-tag.duration { background: #f3f4f6; color: #4b5563; border: 1px solid #e5e7eb; }
+
+.pm-option-info { flex: 1; min-width: 0; }
+.pm-option-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 2px;
+}
+.pm-option-duration {
+    font-size: 12px;
+    color: #6b7280;
+}
+.pm-option-price {
+    text-align: right;
+    flex-shrink: 0;
+}
+.pm-option-current {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1f2937;
+}
+.pm-option-old {
+    font-size: 11px;
+    color: #9ca3af;
+    text-decoration: line-through;
+}
+.pm-option-discount {
+    display: inline-block;
+    padding: 2px 6px;
+    background: #dcfce7;
+    color: #16a34a;
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 4px;
+    margin-top: 2px;
+}
+
+/* Discount Section */
+.pm-discount-section {
+    padding: 16px 24px;
+    background: #f9fafb;
+    border-top: 1px solid #e5e7eb;
+}
+.pm-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: #374151;
+}
+.pm-checkbox input { display: none; }
+.pm-checkbox-mark {
+    width: 18px; height: 18px;
+    border: 2px solid #d1d5db;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+.pm-checkbox input:checked + .pm-checkbox-mark {
+    background: #2563eb;
+    border-color: #2563eb;
+}
+.pm-checkbox input:checked + .pm-checkbox-mark::after {
+    content: '✓';
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* Coupon Section */
+.pm-coupon-section {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed #e5e7eb;
+}
+.pm-coupon-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 10px;
+}
+.pm-coupon-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+.pm-coupon-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: #fff;
+    border: 1px solid #fed7aa;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.pm-coupon-item:hover {
+    border-color: #f97316;
+    background: #fff7ed;
+}
+.pm-coupon-item.selected {
+    border-color: #f97316;
+    background: #ffedd5;
+}
+.pm-coupon-code {
+    padding: 6px 12px;
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 6px;
+}
+.pm-coupon-info { flex: 1; }
+.pm-coupon-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #c2410c;
+}
+.pm-coupon-limit {
+    font-size: 11px;
+    color: #9ca3af;
+}
+.pm-coupon-use {
+    color: #f97316;
+    font-size: 13px;
+    font-weight: 600;
+}
+.pm-coupon-input {
+    display: flex;
+    gap: 8px;
+}
+.pm-coupon-input input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.pm-coupon-input input:focus {
+    border-color: #3b82f6;
+}
+.pm-coupon-input button {
+    padding: 10px 18px;
+    background: #1e40af;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.pm-coupon-input button:hover {
+    background: #1e3a8a;
+}
+
+/* Footer */
+.pm-footer {
+    display: flex;
+    gap: 12px;
+    padding: 16px 24px;
+    border-top: 1px solid #e5e7eb;
+    background: #fff;
+}
+.pm-btn-cancel {
+    flex: 1;
+    padding: 12px 20px;
+    background: #fff;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.pm-btn-cancel:hover {
+    background: #f3f4f6;
+}
+.pm-btn-confirm {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.pm-btn-confirm:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+/* Dark Mode */
+[data-theme="dark"] .price-modal-content {
+    background: #1e293b;
+}
+[data-theme="dark"] .pm-header,
+[data-theme="dark"] .pm-footer {
+    border-color: #334155;
+}
+[data-theme="dark"] .pm-title,
+[data-theme="dark"] .pm-option-name,
+[data-theme="dark"] .pm-option-current {
+    color: #f1f5f9;
+}
+[data-theme="dark"] .pm-subtitle,
+[data-theme="dark"] .pm-option-duration {
+    color: #94a3b8;
+}
+[data-theme="dark"] .pm-option {
+    background: #0f172a;
+    border-color: #334155;
+}
+[data-theme="dark"] .pm-option:hover {
+    background: #1e293b;
+    border-color: #3b82f6;
+}
+[data-theme="dark"] .pm-option.selected {
+    background: #1e3a8a;
+    border-color: #3b82f6;
+}
+[data-theme="dark"] .pm-discount-section {
+    background: #0f172a;
+    border-color: #334155;
+}
+[data-theme="dark"] .pm-checkbox-label {
+    color: #e2e8f0;
+}
+[data-theme="dark"] .pm-promo-notice {
+    background: #422006;
+    border-color: #854d0e;
+    color: #fef08a;
+}
+[data-theme="dark"] .pm-btn-cancel {
+    background: #334155;
+    color: #e2e8f0;
+    border-color: #475569;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .price-modal-content {
+        width: 100%;
+        max-height: 95vh;
+        border-radius: 16px 16px 0 0;
+        margin-top: auto;
+    }
+    .pm-options-scroll {
+        max-height: 280px;
+    }
+    .pm-option {
+        padding: 10px 12px;
+    }
+    .pm-footer {
+        flex-direction: column;
+    }
+    .pm-btn-cancel, .pm-btn-confirm {
+        flex: none;
+    }
+}
+</style>
+
+<script>
+// ========== ENHANCED PRICE DATA ==========
+const servicePricesV2 = {
+    'unlocktool': {
+        name: 'UNLOCKTOOL',
+        packages: [
+            { hours: 6, name: 'Unlocktool 6 giờ', price: 15000, oldPrice: 25000, tags: ['special', 'promo'], specialTag: 'Tưng bừng khai trương' },
+            { hours: 12, name: 'Unlocktool 12 giờ', price: 19000, oldPrice: 29000, tags: ['flash-sale', 'promo'], discount: 34 },
+            { hours: 24, name: 'Unlocktool 1 ngày', price: 33000, oldPrice: 50000, tags: ['flash-sale', 'hot'] },
+            { hours: 48, name: 'Unlocktool 2 ngày', price: 43000, oldPrice: 80000, tags: ['flash-sale', 'promo'] },
+            { hours: 120, name: 'Unlocktool 5 ngày', price: 67000, oldPrice: 120000, tags: ['flash-sale', 'promo'] },
+            { hours: 168, name: 'Unlocktool 7 ngày', price: 96000, oldPrice: 160000, tags: [] },
+            { hours: 336, name: 'Unlocktool 14 ngày', price: 147000, oldPrice: 280000, tags: ['flash-sale', 'promo'] },
+            { hours: 720, name: 'Unlocktool 30 ngày', price: 249000, oldPrice: 268000, tags: ['flash-sale', 'promo'], discount: 7 }
+        ]
+    },
+    'vietmap': {
+        name: 'VIETMAP LIVE PRO',
+        packages: [
+            { hours: 6, name: 'Vietmap 6 giờ', price: 8000, oldPrice: 15000, tags: ['hot'] },
+            { hours: 24, name: 'Vietmap 1 ngày', price: 15000, oldPrice: 25000, tags: ['promo'] },
+            { hours: 168, name: 'Vietmap 7 ngày', price: 45000, oldPrice: 80000, tags: ['flash-sale'] },
+            { hours: 720, name: 'Vietmap 30 ngày', price: 90000, oldPrice: 150000, tags: ['flash-sale', 'promo'], discount: 40 }
+        ]
+    },
+    'griffin': {
+        name: 'GRIFFIN-UNLOCKER',
+        packages: [
+            { hours: 6, name: 'Griffin 6 giờ', price: 42000, oldPrice: 80000, tags: ['hot'] },
+            { hours: 24, name: 'Griffin 1 ngày', price: 75000, oldPrice: 150000, tags: ['promo'] },
+            { hours: 168, name: 'Griffin 7 ngày', price: 200000, oldPrice: 400000, tags: ['flash-sale', 'promo'] },
+            { hours: 720, name: 'Griffin 30 ngày', price: 450000, oldPrice: 800000, tags: ['flash-sale'], discount: 44 }
+        ]
+    },
+    'amt': {
+        name: 'ANDROID MULTITOOL',
+        packages: [
+            { hours: 6, name: 'AMT 6 giờ', price: 9000, oldPrice: 20000, tags: ['flash-sale'] },
+            { hours: 24, name: 'AMT 1 ngày', price: 20000, oldPrice: 40000, tags: ['promo'] },
+            { hours: 168, name: 'AMT 7 ngày', price: 60000, oldPrice: 120000, tags: ['flash-sale', 'promo'] },
+            { hours: 720, name: 'AMT 30 ngày', price: 150000, oldPrice: 300000, tags: ['hot'], discount: 50 }
+        ]
+    },
+    'kg-killer': {
+        name: 'KG KILLER TOOL',
+        packages: [
+            { hours: 6, name: 'KG Killer 6 giờ', price: 8000, oldPrice: 25000, tags: ['hot'] },
+            { hours: 24, name: 'KG Killer 1 ngày', price: 18000, oldPrice: 45000, tags: ['promo'] },
+            { hours: 168, name: 'KG Killer 7 ngày', price: 55000, oldPrice: 130000, tags: ['flash-sale'] },
+            { hours: 720, name: 'KG Killer 30 ngày', price: 120000, oldPrice: 280000, tags: ['flash-sale', 'promo'], discount: 57 }
+        ]
+    },
+    'samsung-tool': {
+        name: 'SAMSUNG TOOL',
+        packages: [
+            { hours: 6, name: 'Samsung Tool 6 giờ', price: 162000, oldPrice: 200000, tags: ['hot'] },
+            { hours: 24, name: 'Samsung Tool 1 ngày', price: 280000, oldPrice: 380000, tags: ['promo'] },
+            { hours: 168, name: 'Samsung Tool 7 ngày', price: 650000, oldPrice: 900000, tags: ['flash-sale'] },
+            { hours: 720, name: 'Samsung Tool 30 ngày', price: 1200000, oldPrice: 1800000, tags: ['flash-sale', 'promo'], discount: 33 }
+        ]
+    },
+    'dft': {
+        name: 'DFT PRO TOOL',
+        packages: [
+            { hours: 6, name: 'DFT Pro 6 giờ', price: 105000, oldPrice: 130000, tags: ['hot'] },
+            { hours: 24, name: 'DFT Pro 1 ngày', price: 180000, oldPrice: 250000, tags: ['promo'] },
+            { hours: 168, name: 'DFT Pro 7 ngày', price: 450000, oldPrice: 650000, tags: ['flash-sale'] },
+            { hours: 720, name: 'DFT Pro 30 ngày', price: 900000, oldPrice: 1400000, tags: ['flash-sale', 'promo'], discount: 36 }
+        ]
+    },
+    'tsm': {
+        name: 'TSM TOOL',
+        packages: [
+            { hours: 6, name: 'TSM 6 giờ', price: 6000, oldPrice: 15000, tags: ['flash-sale'] },
+            { hours: 24, name: 'TSM 1 ngày', price: 15000, oldPrice: 30000, tags: ['promo'] },
+            { hours: 168, name: 'TSM 7 ngày', price: 45000, oldPrice: 90000, tags: ['flash-sale', 'hot'] },
+            { hours: 720, name: 'TSM 30 ngày', price: 100000, oldPrice: 200000, tags: ['flash-sale', 'promo'], discount: 50 }
+        ]
+    }
+};
+
+let currentServiceId = null;
+let selectedPackageIndex = 0;
+let selectedCoupon = null;
+
+function openPriceModal(serviceId) {
+    const service = servicePricesV2[serviceId];
+    if (!service) return;
+    
+    currentServiceId = serviceId;
+    selectedPackageIndex = 0;
+    selectedCoupon = null;
+    
+    // Set service name
+    document.getElementById('pm-service-name').textContent = service.name;
+    
+    // Check if user is logged in and has points
+    const userPoints = <?php echo e(Auth::check() ? (Auth::user()->balance ?? 0) : 0); ?>;
+    if (userPoints > 0) {
+        document.getElementById('pm-points-section').style.display = 'flex';
+        document.getElementById('pm-user-points').textContent = userPoints.toLocaleString('vi-VN') + ' điểm';
+        document.getElementById('pm-points-vnd').textContent = userPoints.toLocaleString('vi-VN');
+        document.getElementById('pm-use-points-wrapper').style.display = 'flex';
+        document.getElementById('pm-points-deduct').textContent = userPoints.toLocaleString('vi-VN');
+    } else {
+        document.getElementById('pm-points-section').style.display = 'none';
+        document.getElementById('pm-use-points-wrapper').style.display = 'none';
+    }
+    
+    // Build package options
+    const optionsContainer = document.getElementById('pm-options');
+    optionsContainer.innerHTML = service.packages.map((pkg, index) => {
+        const tagsHtml = pkg.tags.map(tag => {
+            const labels = {
+                'flash-sale': 'Flash Sale',
+                'hot': 'HOT',
+                'promo': 'Khuyến mãi',
+                'special': pkg.specialTag || 'Đặc biệt'
+            };
+            return `<span class="pm-tag ${tag}">${labels[tag]}</span>`;
+        }).join('');
+        
+        const durationText = pkg.hours < 24 ? `${pkg.hours} giờ` : 
+                             pkg.hours === 24 ? '24 giờ' :
+                             `${pkg.hours} giờ`;
+        
+        const discountBadge = pkg.discount ? `<span class="pm-option-discount">Giảm ${pkg.discount}%</span>` : '';
+        
+        return `
+            <div class="pm-option ${index === 0 ? 'selected' : ''}" onclick="selectPackage(${index})">
+                <div class="pm-option-radio"></div>
+                <div class="pm-option-info">
+                    <div class="pm-option-tags">
+                        ${tagsHtml}
+                        <span class="pm-tag duration">${pkg.hours < 24 ? pkg.hours + ' giờ' : (pkg.hours / 24) + ' ngày'}</span>
+                    </div>
+                    <div class="pm-option-name">${pkg.name}</div>
+                    <div class="pm-option-duration">Thời hạn: ${durationText}</div>
+                </div>
+                <div class="pm-option-price">
+                    <div class="pm-option-current">${pkg.price.toLocaleString('vi-VN')} VND</div>
+                    <div class="pm-option-old">${pkg.oldPrice.toLocaleString('vi-VN')} VND</div>
+                    ${discountBadge}
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    // Reset coupon section
+    document.getElementById('pm-use-coupon').checked = false;
+    document.getElementById('pm-coupon-section').style.display = 'none';
+    document.getElementById('pm-coupon-code').value = '';
+    document.querySelectorAll('.pm-coupon-item').forEach(item => item.classList.remove('selected'));
+    
+    // Show modal
+    document.getElementById('price-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function selectPackage(index) {
+    selectedPackageIndex = index;
+    document.querySelectorAll('.pm-option').forEach((opt, i) => {
+        opt.classList.toggle('selected', i === index);
+    });
+}
+
+function toggleCouponSection() {
+    const isChecked = document.getElementById('pm-use-coupon').checked;
+    document.getElementById('pm-coupon-section').style.display = isChecked ? 'block' : 'none';
+}
+
+function selectCoupon(code, value, type) {
+    selectedCoupon = { code, value, type };
+    document.querySelectorAll('.pm-coupon-item').forEach(item => {
+        item.classList.toggle('selected', item.dataset.code === code);
+    });
+    document.getElementById('pm-coupon-code').value = code;
+}
+
+function applyCouponCode() {
+    const code = document.getElementById('pm-coupon-code').value.trim();
+    if (code) {
+        selectedCoupon = { code, value: 0, type: 'custom' };
+        alert('Mã giảm giá "' + code + '" sẽ được áp dụng khi thanh toán!');
+    }
+}
+
+function confirmRental() {
+    const service = servicePricesV2[currentServiceId];
+    if (!service) return;
+    
+    const pkg = service.packages[selectedPackageIndex];
+    const usePoints = document.getElementById('pm-use-points')?.checked || false;
+    const useCoupon = document.getElementById('pm-use-coupon').checked;
+    
+    let url = `/thanh-toan?service=${currentServiceId}&hours=${pkg.hours}`;
+    if (usePoints) url += '&use_points=1';
+    if (useCoupon && selectedCoupon) url += `&coupon=${selectedCoupon.code}`;
+    
+    window.location.href = url;
+}
+
+function closePriceModal() {
+    document.getElementById('price-modal').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+// Close on escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closePriceModal();
+});
+</script>
+
 
 </body>
 </html>
+
+
+
+
+
+
+
+
 <?php /**PATH D:\Dowload\thuetaikhoan\thuetaikhoan-laravel\resources\views/welcome.blade.php ENDPATH**/ ?>
