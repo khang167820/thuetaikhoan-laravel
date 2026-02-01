@@ -592,19 +592,19 @@
             position: relative;
             background: #ffffff;
             border-radius: 24px;
-            border: 3px solid #fec9a5;
+            border: 3px solid #f97316;
             padding: 20px 18px 16px;
             display: flex;
             flex-direction: column;
             overflow: visible;
-            box-shadow: 0 6px 14px rgba(0,0,0,.08);
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.15), 0 4px 8px rgba(0,0,0,.1);
             transition: transform .18s ease-out, box-shadow .18s ease-out, border-color .18s ease-out;
             height: 100%;
         }
         .fo-card:hover {
-            transform: translateY(-4px) scale(1.01);
-            border-color: #fca567;
-            box-shadow: 0 10px 22px rgba(0,0,0,.12);
+            transform: translateY(-6px) scale(1.02);
+            border-color: #ea580c;
+            box-shadow: 0 14px 32px rgba(249, 115, 22, 0.25), 0 6px 12px rgba(0,0,0,.15);
         }
         .fo-ribbon {
             position: absolute;
