@@ -318,8 +318,29 @@
             color: #fff; border: none; font-size: 13px; font-weight: 600; cursor: pointer;
         }
         
+        /* Mobile Menu Button - Hide on desktop, show on mobile */
+        .btn-mobile-menu {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            padding: 8px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-mobile-menu span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background: var(--ink);
+            transition: all 0.2s;
+        }
+        
         /* RESPONSIVE */
-        @media (max-width: 1280px) { .header-nav { display: none !important; } }
+        @media (max-width: 1280px) { 
+            .header-nav { display: none !important; } 
+            .btn-mobile-menu { display: flex !important; }
+        }
         @media (max-width: 768px) { .header-right { display: none !important; } .brand-tagline { display: none; } }
         @media (max-width: 600px) { 
             .tool-search-icon { display: none; } 
