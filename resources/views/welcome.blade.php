@@ -1,10 +1,18 @@
-@extends('layouts.app')
-
-@section('title', 'Thuê GSM Tool & Unlock Services – Unlocktool, TSM Tool, Vietmap Live, Griffin, AMT | ThueTaiKhoan.net')
-
-@section('meta_description', 'ThueTaiKhoan.net cung cấp dịch vụ thuê tài khoản UnlockTool, Vietmap Live, TSM Tool, Griffin-Unlocker và nhiều phần mềm kỹ thuật số khác. Hệ thống tự động, giá cạnh tranh, hỗ trợ nhanh chóng 24/7.')
-
-@section('styles')
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thuê GSM Tool & Unlock Services – Unlocktool, TSM Tool, Vietmap Live, Griffin, AMT | ThueTaiKhoan.net</title>
+    <meta name="description" content="ThueTaiKhoan.net cung cấp dịch vụ thuê tài khoản UnlockTool, Vietmap Live, TSM Tool, Griffin-Unlocker và nhiều phần mềm kỹ thuật số khác. Hệ thống tự động, giá cạnh tranh, hỗ trợ nhanh chóng 24/7.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Modern UI Enhancement -->
+    <link rel="stylesheet" href="/css/modern-ui.css?v=6">
+    
     <!-- Mobile Menu Styles -->
     <link rel="stylesheet" href="/css/mobile-menu.css?v=1">
     
@@ -60,6 +68,83 @@
         [data-theme="dark"] .site-footer { background: var(--bg); }
         [data-theme="dark"] .guide-payment-section { background: #0f172a; }
         [data-theme="dark"] .fast-order-wrap { background: var(--bg); }
+
+        /* HERO SECTION - Modern */
+        .hero-modern {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3b82f6 100%);
+            padding: 60px 20px;
+            text-align: center;
+            color: #fff;
+        }
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .hero-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+        .hero-title-accent {
+            color: #fbbf24;
+        }
+        .hero-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        .search-modern {
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto 24px;
+            background: #fff;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        }
+        .search-modern input {
+            flex: 1;
+            padding: 16px 24px;
+            border: none;
+            font-size: 15px;
+            outline: none;
+        }
+        .search-modern button {
+            padding: 16px 28px;
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            color: #fff;
+            border: none;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        .hero-stat {
+            text-align: center;
+        }
+        .hero-stat-number {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fbbf24;
+        }
+        .hero-stat-label {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+        @media (max-width: 768px) {
+            .hero-title { font-size: 1.6rem; }
+            .hero-modern { padding: 40px 16px; }
+            .hero-stats { gap: 24px; }
+            .hero-stat-number { font-size: 1.4rem; }
+        }
 
         /* RESET & BASE */
         *, *::before, *::after { box-sizing: border-box; }
@@ -1135,9 +1220,15 @@
             .footer-links { flex-direction: column; align-items: center; }
         }
     </style>
-@endsection
+</head>
+<body>
 
-@section('content')
+
+<!-- SHARED HEADER -->
+@include('partials.header')
+
+@include('partials.mobile-menu')
+
 <!-- HERO SECTION - MODERN -->
 <section class="hero-modern">
     <div class="hero-content">
@@ -2523,9 +2614,6 @@ function toggleFeatures(cardId) {
 }
 </style>
 
-@endsection
-
-@section('scripts')
 <script>
 // ========== ENHANCED PRICE DATA ==========
 const servicePricesV2 = {
@@ -2738,4 +2826,15 @@ document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closePriceModal();
 });
 </script>
-@endsection
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
