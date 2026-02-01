@@ -1347,55 +1347,132 @@
 <!-- Mobile Menu Overlay -->
 <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
 
-<!-- Mobile Menu Panel -->
+<!-- Mobile Menu Panel - Redesigned like legacy -->
 <nav class="mobile-menu" id="mobileMenu">
     <div class="mobile-menu-header">
         <a href="/" class="mobile-menu-logo">
             <img src="/assets/images/logo.png" alt="logo" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 36 36%22><rect fill=%22%231e40af%22 width=%2236%22 height=%2236%22 rx=%228%22/><text x=%2218%22 y=%2224%22 fill=%22white%22 font-size=%2218%22 text-anchor=%22middle%22>T</text></svg>'">
             <span>thuetaikhoan.net</span>
         </a>
-        <button class="mobile-menu-close" id="mobileMenuClose">&times;</button>
+        <button class="mobile-menu-close" id="mobileMenuClose">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+        </button>
+    </div>
+    
+    <!-- Search Bar -->
+    <div class="mobile-menu-search">
+        <form action="/order-history-ip" method="GET" class="mobile-search-form">
+            <input type="text" name="order_id" placeholder="Nhập mã đơn hàng...">
+            <button type="submit">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+            </button>
+        </form>
     </div>
     
     <div class="mobile-menu-body">
-        <a href="/" class="mobile-menu-link active">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-            Trang chủ
+        <!-- Navigation Links -->
+        <a href="/" class="mobile-menu-link {{ request()->is('/') ? 'active' : '' }}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            <span>Trang chủ</span>
         </a>
         
-        <div class="mobile-menu-section">Dịch vụ</div>
-        <a href="/thue-unlocktool" class="mobile-menu-link">🔓 Unlocktool</a>
-        <a href="/thue-vietmap" class="mobile-menu-link">🗺️ Vietmap Live</a>
-        <a href="/thue-tsm" class="mobile-menu-link">📱 TSM Tool</a>
-        <a href="/thue-griffin" class="mobile-menu-link">🦅 Griffin-Unlocker</a>
-        <a href="/thue-amt" class="mobile-menu-link">🤖 Android Multitool</a>
-        <a href="/thue-kg-killer" class="mobile-menu-link">⚡ KG Killer Tool</a>
-        <a href="/thue-samsung-tool" class="mobile-menu-link">🛡️ Samsung Tool</a>
-        <a href="/ord-services" class="mobile-menu-link" style="color: var(--primary); font-weight: 600;">📦 Thuê Dịch Vụ Khác</a>
+        <a href="#fast-order" class="mobile-menu-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+            </svg>
+            <span>Dịch vụ</span>
+        </a>
         
-        <div class="mobile-menu-section">Khác</div>
-        <a href="#huong-dan" class="mobile-menu-link">📖 Hướng dẫn</a>
-        <a href="/blog" class="mobile-menu-link">📝 Blog</a>
-        <a href="/order-history-ip" class="mobile-menu-link">📋 Lịch sử thuê</a>
-        <a href="/ma-giam-gia" class="mobile-menu-link">🎁 Mã giảm giá</a>
+        <a href="#huong-dan" class="mobile-menu-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="9" x2="15" y2="9"/>
+                <line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/>
+            </svg>
+            <span>Hướng dẫn</span>
+        </a>
         
-        <div class="mobile-menu-section">Tài khoản</div>
-        @auth
-        <a href="/account" class="mobile-menu-link">👤 Tài khoản</a>
-        <a href="/deposit" class="mobile-menu-link">💳 Nạp tiền</a>
-        <form action="/logout" method="POST" style="margin: 0;">
-            @csrf
-            <button type="submit" class="mobile-menu-link" style="width: 100%; text-align: left; background: none; border: none; font: inherit; cursor: pointer; color: inherit;">🚪 Đăng xuất</button>
-        </form>
-        @else
-        <a href="/login" class="mobile-menu-link">🔐 Đăng nhập</a>
-        <a href="/register" class="mobile-menu-link">📝 Đăng ký</a>
-        @endauth
-        <div class="mobile-menu-section">Giao diện</div>
-        <button type="button" class="mobile-menu-link theme-toggle-btn" id="mobileThemeToggle" onclick="toggleMobileTheme()">
-            <span class="theme-icon">🌙</span>
+        <a href="/blog" class="mobile-menu-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+            <span>Blog</span>
+        </a>
+        
+        <a href="/ord-services" class="mobile-menu-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+            <span>Thuê Dịch Vụ Khác</span>
+        </a>
+        
+        <a href="/order-history-ip" class="mobile-menu-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/>
+            </svg>
+            <span>Lịch sử thuê 30 ngày</span>
+        </a>
+        
+        <!-- Theme Toggle -->
+        <button type="button" class="mobile-menu-link" id="mobileThemeToggle" onclick="toggleMobileTheme()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="theme-icon-sun" style="display:none;">
+                <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="theme-icon-moon">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
             <span class="theme-text">Chế độ tối</span>
         </button>
+    </div>
+    
+    <!-- Auth Buttons -->
+    <div class="mobile-menu-footer">
+        @auth
+        <a href="/account" class="mobile-menu-btn mobile-menu-btn-outline">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+            </svg>
+            Tài khoản
+        </a>
+        <form action="/logout" method="POST" style="flex:1;">
+            @csrf
+            <button type="submit" class="mobile-menu-btn mobile-menu-btn-primary" style="width:100%;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/>
+                    <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+                Đăng xuất
+            </button>
+        </form>
+        @else
+        <a href="/login" class="mobile-menu-btn mobile-menu-btn-outline">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/>
+                <line x1="15" y1="12" x2="3" y2="12"/>
+            </svg>
+            Đăng nhập
+        </a>
+        <a href="/register" class="mobile-menu-btn mobile-menu-btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/>
+            </svg>
+            Đăng ký
+        </a>
+        @endauth
     </div>
 </nav>
 
@@ -1452,20 +1529,61 @@
     border-radius: 8px;
 }
 .mobile-menu-close {
-    width: 36px;
-    height: 36px;
-    border: none;
-    background: #f1f5f9;
-    border-radius: 8px;
-    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #e5e7eb;
+    background: #fff;
+    border-radius: 10px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: #64748b;
+    transition: all 0.2s;
+}
+.mobile-menu-close:hover {
+    border-color: #1e40af;
+    color: #1e40af;
+}
+
+/* Search Bar */
+.mobile-menu-search {
+    padding: 16px;
+    border-bottom: 1px solid #e5e7eb;
+}
+.mobile-search-form {
+    display: flex;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.2s;
+}
+.mobile-search-form:focus-within {
+    border-color: #1e40af;
+    box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+}
+.mobile-search-form input {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    font-size: 14px;
+    outline: none;
+    background: transparent;
+}
+.mobile-search-form button {
+    padding: 12px 16px;
+    background: #1e40af;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.mobile-search-form button:hover {
+    background: #1e3a8a;
 }
 
 .mobile-menu-body {
-    padding: 16px;
+    padding: 16px 16px 100px;
 }
 .mobile-menu-section {
     font-size: 11px;
@@ -1518,30 +1636,93 @@
 [data-theme="dark"] .mobile-menu-link:hover, [data-theme="dark"] .mobile-menu-link.active {
     background: #334155;
 }
+/* Theme Toggle */
+.theme-icon-moon, .theme-icon-sun {
+    flex-shrink: 0;
+}
+[data-theme="dark"] .theme-icon-moon {
+    display: none !important;
+}
+[data-theme="dark"] .theme-icon-sun {
+    display: block !important;
+}
 
-/* Theme Toggle Button */
-.theme-toggle-btn {
-    width: 100%;
-    text-align: left;
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-    border: 2px solid #e2e8f0;
+/* Footer Buttons */
+.mobile-menu-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 16px;
+    background: #fff;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    gap: 12px;
+    z-index: 10000;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+}
+.mobile-menu.active .mobile-menu-footer {
+    transform: translateX(0);
+}
+.mobile-menu-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
     cursor: pointer;
-    font: inherit;
+    transition: all 0.2s;
 }
-.theme-toggle-btn:hover {
-    border-color: var(--primary);
-    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+.mobile-menu-btn-outline {
+    background: #fff;
+    color: #1e40af;
+    border: 2px solid #e5e7eb;
 }
-.theme-icon {
-    font-size: 18px;
+.mobile-menu-btn-outline:hover {
+    border-color: #1e40af;
+    background: #eff6ff;
 }
-[data-theme="dark"] .theme-toggle-btn {
-    background: linear-gradient(135deg, #334155 0%, #475569 100%);
+.mobile-menu-btn-primary {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: #fff;
+    border: none;
+}
+.mobile-menu-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+/* Dark mode for new elements */
+[data-theme="dark"] .mobile-menu-search {
+    border-color: #334155;
+}
+[data-theme="dark"] .mobile-search-form {
     border-color: #475569;
+    background: #1e293b;
+}
+[data-theme="dark"] .mobile-search-form input {
     color: #f1f5f9;
 }
-[data-theme="dark"] .theme-toggle-btn:hover {
-    border-color: #60a5fa;
+[data-theme="dark"] .mobile-search-form input::placeholder {
+    color: #64748b;
+}
+[data-theme="dark"] .mobile-menu-footer {
+    background: #1e293b;
+    border-color: #334155;
+}
+[data-theme="dark"] .mobile-menu-btn-outline {
+    background: #334155;
+    border-color: #475569;
+    color: #93c5fd;
+}
+[data-theme="dark"] .mobile-menu-section {
+    color: #64748b;
 }
 </style>
 
@@ -1595,21 +1776,24 @@
 function toggleMobileTheme() {
     const html = document.documentElement;
     const isDark = html.getAttribute('data-theme') === 'dark';
-    const btn = document.getElementById('mobileThemeToggle');
     
     if (isDark) {
         html.removeAttribute('data-theme');
         localStorage.setItem('theme', 'light');
-        if (btn) {
-            btn.querySelector('.theme-icon').textContent = '🌙';
-            btn.querySelector('.theme-text').textContent = 'Chế độ tối';
-        }
+        updateThemeUI(false);
     } else {
         html.setAttribute('data-theme', 'dark');
         localStorage.setItem('theme', 'dark');
-        if (btn) {
-            btn.querySelector('.theme-icon').textContent = '☀️';
-            btn.querySelector('.theme-text').textContent = 'Chế độ sáng';
+        updateThemeUI(true);
+    }
+}
+
+function updateThemeUI(isDark) {
+    const btn = document.getElementById('mobileThemeToggle');
+    if (btn) {
+        const textEl = btn.querySelector('.theme-text');
+        if (textEl) {
+            textEl.textContent = isDark ? 'Chế độ sáng' : 'Chế độ tối';
         }
     }
 }
@@ -1618,13 +1802,14 @@ function toggleMobileTheme() {
 (function() {
     const savedTheme = localStorage.getItem('theme');
     const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const btn = document.getElementById('mobileThemeToggle');
     
     if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
         document.documentElement.setAttribute('data-theme', 'dark');
-        if (btn) {
-            btn.querySelector('.theme-icon').textContent = '☀️';
-            btn.querySelector('.theme-text').textContent = 'Chế độ sáng';
+        // Update UI after DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() { updateThemeUI(true); });
+        } else {
+            updateThemeUI(true);
         }
     }
 })();
