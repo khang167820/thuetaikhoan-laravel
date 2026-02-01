@@ -1,18 +1,10 @@
-﻿<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thuê GSM Tool & Unlock Services – Unlocktool, TSM Tool, Vietmap Live, Griffin, AMT | ThueTaiKhoan.net</title>
-    <meta name="description" content="ThueTaiKhoan.net cung cấp dịch vụ thuê tài khoản UnlockTool, Vietmap Live, TSM Tool, Griffin-Unlocker và nhiều phần mềm kỹ thuật số khác. Hệ thống tự động, giá cạnh tranh, hỗ trợ nhanh chóng 24/7.">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Modern UI Enhancement -->
-    <link rel="stylesheet" href="/css/modern-ui.css?v=6">
-    
+@extends('layouts.app')
+
+@section('title', 'Thuê GSM Tool & Unlock Services – Unlocktool, TSM Tool, Vietmap Live, Griffin, AMT | ThueTaiKhoan.net')
+
+@section('meta_description', 'ThueTaiKhoan.net cung cấp dịch vụ thuê tài khoản UnlockTool, Vietmap Live, TSM Tool, Griffin-Unlocker và nhiều phần mềm kỹ thuật số khác. Hệ thống tự động, giá cạnh tranh, hỗ trợ nhanh chóng 24/7.')
+
+@section('styles')
     <!-- Mobile Menu Styles -->
     <link rel="stylesheet" href="/css/mobile-menu.css?v=1">
     
@@ -1143,15 +1135,9 @@
             .footer-links { flex-direction: column; align-items: center; }
         }
     </style>
-</head>
-<body>
+@endsection
 
-<!-- SHARED HEADER -->
-@include('partials.header')
-
-@include('partials.mobile-menu')
-
-
+@section('content')
 <!-- HERO SECTION - MODERN -->
 <section class="hero-modern">
     <div class="hero-content">
@@ -2537,6 +2523,9 @@ function toggleFeatures(cardId) {
 }
 </style>
 
+@endsection
+
+@section('scripts')
 <script>
 // ========== ENHANCED PRICE DATA ==========
 const servicePricesV2 = {
@@ -2749,15 +2738,4 @@ document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closePriceModal();
 });
 </script>
-
-
-</body>
-</html>
-
-
-
-
-
-
-
-
+@endsection
