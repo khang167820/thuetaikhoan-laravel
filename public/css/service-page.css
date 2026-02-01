@@ -6,6 +6,61 @@
  */
 
 /* =========================================
+   FO-CARD-COMPACT OVERRIDE for Service Page
+   ========================================= */
+/* Override để card trên service page có border cam giống homepage */
+.fo-card-compact {
+  border: 3px solid #f97316 !important;
+  box-shadow: 0 8px 20px rgba(249, 115, 22, 0.15), 0 4px 8px rgba(0, 0, 0, .1) !important;
+  padding: 20px 18px 16px !important;
+  border-radius: 24px !important;
+}
+
+.fo-card-compact:hover {
+  border-color: #ea580c !important;
+  box-shadow: 0 14px 32px rgba(249, 115, 22, 0.25), 0 6px 12px rgba(0, 0, 0, .15) !important;
+}
+
+/* Logo lớn hơn cho service page */
+.fo-logo-compact {
+  width: 100px !important;
+  height: 100px !important;
+  border: 3px solid #fed7aa !important;
+}
+
+.fo-logo-compact img {
+  width: 75px !important;
+  height: 75px !important;
+}
+
+/* Title và description lớn hơn */
+.fo-title-compact {
+  font-size: 18px !important;
+  margin-bottom: 6px !important;
+}
+
+.fo-desc-compact {
+  font-size: 13px !important;
+  margin-bottom: 12px !important;
+}
+
+/* Features list spacing */
+.fo-features-compact {
+  font-size: 12px !important;
+}
+
+/* CTA button lớn và đẹp hơn */
+.fo-cta-compact {
+  padding: 14px 18px !important;
+  font-size: 16px !important;
+  border-radius: 12px !important;
+}
+
+.fo-price-compact {
+  font-size: 18px !important;
+}
+
+/* =========================================
    FO-CARD - Service Card (synced with homepage)
    ========================================= */
 .fo-card {
