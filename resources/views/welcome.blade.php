@@ -1383,14 +1383,14 @@
         </a>
         
         <!-- Services Section (Collapsible) -->
-        <button type="button" class="mobile-menu-section-toggle" onclick="toggleServicesMenu()">
+        <button type="button" class="mobile-menu-section-toggle collapsed" onclick="toggleServicesMenu()">
             <span>Dịch vụ GSM</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="toggle-icon">
                 <polyline points="6 9 12 15 18 9"/>
             </svg>
         </button>
         
-        <div class="mobile-services-list" id="mobileServicesList">
+        <div class="mobile-services-list collapsed" id="mobileServicesList">
             <a href="/thue-unlocktool" class="mobile-menu-link">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
