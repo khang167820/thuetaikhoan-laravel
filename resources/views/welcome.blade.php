@@ -1391,6 +1391,11 @@
         <a href="/login" class="mobile-menu-link">🔐 Đăng nhập</a>
         <a href="/register" class="mobile-menu-link">📝 Đăng ký</a>
         @endauth
+        <div class="mobile-menu-section">Giao diện</div>
+        <button type="button" class="mobile-menu-link theme-toggle-btn" id="mobileThemeToggle" onclick="toggleMobileTheme()">
+            <span class="theme-icon">🌙</span>
+            <span class="theme-text">Chế độ tối</span>
+        </button>
     </div>
 </nav>
 
@@ -1513,6 +1518,31 @@
 [data-theme="dark"] .mobile-menu-link:hover, [data-theme="dark"] .mobile-menu-link.active {
     background: #334155;
 }
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+    width: 100%;
+    text-align: left;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border: 2px solid #e2e8f0;
+    cursor: pointer;
+    font: inherit;
+}
+.theme-toggle-btn:hover {
+    border-color: var(--primary);
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+}
+.theme-icon {
+    font-size: 18px;
+}
+[data-theme="dark"] .theme-toggle-btn {
+    background: linear-gradient(135deg, #334155 0%, #475569 100%);
+    border-color: #475569;
+    color: #f1f5f9;
+}
+[data-theme="dark"] .theme-toggle-btn:hover {
+    border-color: #60a5fa;
+}
 </style>
 
 <script>
@@ -1558,6 +1588,44 @@
         document.addEventListener('DOMContentLoaded', initMobileMenu);
     } else {
         initMobileMenu();
+    }
+})();
+
+// Theme Toggle Function
+function toggleMobileTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    const btn = document.getElementById('mobileThemeToggle');
+    
+    if (isDark) {
+        html.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+        if (btn) {
+            btn.querySelector('.theme-icon').textContent = '🌙';
+            btn.querySelector('.theme-text').textContent = 'Chế độ tối';
+        }
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+        if (btn) {
+            btn.querySelector('.theme-icon').textContent = '☀️';
+            btn.querySelector('.theme-text').textContent = 'Chế độ sáng';
+        }
+    }
+}
+
+// Initialize theme on load
+(function() {
+    const savedTheme = localStorage.getItem('theme');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const btn = document.getElementById('mobileThemeToggle');
+    
+    if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        if (btn) {
+            btn.querySelector('.theme-icon').textContent = '☀️';
+            btn.querySelector('.theme-text').textContent = 'Chế độ sáng';
+        }
     }
 })();
 </script>
