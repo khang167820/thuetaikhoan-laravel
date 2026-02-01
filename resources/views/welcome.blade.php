@@ -2489,6 +2489,7 @@ function toggleFeatures(cardId) {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 20px;
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
