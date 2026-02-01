@@ -340,16 +340,7 @@
     position: relative;
 }
 
-:root:not([data-theme="dark"]) .fo-card-compact:not(.expanded) .fo-desc-compact::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 60px;
-    height: 1.4em;
-    background: linear-gradient(to right, transparent, white 70%);
-    pointer-events: none;
-}
+/* Gradient fade removed - user requested clean text display */
 
 .fo-card-compact.expanded .fo-desc-compact {
     -webkit-line-clamp: unset;
