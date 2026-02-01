@@ -2507,10 +2507,11 @@ function toggleFeatures(cardId) {
 .price-modal-content {
     position: relative;
     background: #fff;
-    border-radius: 16px;
+    border-radius: 20px;
     max-width: 560px;
-    width: 95%;
-    max-height: 90vh;
+    width: 92%;
+    max-height: 80vh;
+    margin-bottom: 10vh;
     display: flex;
     flex-direction: column;
     box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25);
