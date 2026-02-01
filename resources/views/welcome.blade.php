@@ -302,6 +302,19 @@
         [data-theme="dark"] .history-search-in-dropdown { border-color: #334155; }
         [data-theme="dark"] .history-search-form-dropdown { background: #1e293b; border-color: #334155; }
         [data-theme="dark"] .history-search-input-dropdown { color: #f1f5f9; }
+        
+        /* Theme Toggle Button */
+        .theme-toggle-btn {
+            display: flex; align-items: center; justify-content: center;
+            width: 40px; height: 40px;
+            background: #f1f5f9; border: none; border-radius: 10px;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .theme-toggle-btn:hover { background: #e2e8f0; }
+        .theme-toggle-btn svg { color: #64748b; }
+        [data-theme="dark"] .theme-toggle-btn { background: #334155; }
+        [data-theme="dark"] .theme-toggle-btn:hover { background: #475569; }
+        [data-theme="dark"] .theme-toggle-btn svg { color: #fbbf24; }
 
         /* Auth buttons */
         .header-auth {
@@ -1215,6 +1228,19 @@
 
             <!-- Right: Auth -->
             <div class="header-right">
+                <!-- Theme Toggle -->
+                <button type="button" class="theme-toggle-btn" id="desktopThemeToggle" onclick="toggleDesktopTheme()" title="Chuyển chế độ sáng/tối">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="theme-icon-sun" style="display:none;">
+                        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="theme-icon-moon">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+                
                 <!-- Lịch sử thuê dropdown -->
                 <div class="header-history-dropdown">
                     <div class="nav-dropdown">
@@ -1911,12 +1937,45 @@ function toggleMobileTheme() {
     }
 }
 
+// Desktop Theme Toggle Function
+function toggleDesktopTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    
+    if (isDark) {
+        html.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+        updateThemeUI(false);
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+        updateThemeUI(true);
+    }
+}
+
 function updateThemeUI(isDark) {
-    const btn = document.getElementById('mobileThemeToggle');
-    if (btn) {
-        const textEl = btn.querySelector('.theme-text');
+    // Mobile theme toggle
+    const mobileBtn = document.getElementById('mobileThemeToggle');
+    if (mobileBtn) {
+        const textEl = mobileBtn.querySelector('.theme-text');
         if (textEl) {
             textEl.textContent = isDark ? 'Chế độ sáng' : 'Chế độ tối';
+        }
+        const sunIcon = mobileBtn.querySelector('.theme-icon-sun');
+        const moonIcon = mobileBtn.querySelector('.theme-icon-moon');
+        if (sunIcon && moonIcon) {
+            sunIcon.style.display = isDark ? 'block' : 'none';
+            moonIcon.style.display = isDark ? 'none' : 'block';
+        }
+    }
+    // Desktop theme toggle
+    const desktopBtn = document.getElementById('desktopThemeToggle');
+    if (desktopBtn) {
+        const sunIcon = desktopBtn.querySelector('.theme-icon-sun');
+        const moonIcon = desktopBtn.querySelector('.theme-icon-moon');
+        if (sunIcon && moonIcon) {
+            sunIcon.style.display = isDark ? 'block' : 'none';
+            moonIcon.style.display = isDark ? 'none' : 'block';
         }
     }
 }
