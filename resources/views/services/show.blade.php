@@ -6,6 +6,7 @@
 
 @section('styles')
 <link rel="stylesheet" href="/css/service-page.css">
+<link rel="stylesheet" href="/css/modern-ui.css">
 <style>
 /* Dark Mode for Service Page */
 [data-theme="dark"] h1, [data-theme="dark"] .service-section-title { color: var(--ink) !important; }
@@ -36,63 +37,39 @@
     </div>
     
     <div style="display: flex; justify-content: center;">
-        <article class="fo-card" style="max-width: 400px; width: 100%;">
-            <div class="fo-ribbon">Flash Sale</div>
-            <a class="fo-coupon-pill" href="/ma-giam-gia">Mã giảm giá</a>
-
-            <div class="fo-logo-wrap">
-                <div class="fo-logo-circle">
-                    <img src="{{ $service['logo'] }}" alt="{{ $service['name'] }}">
-                </div>
+        <article class="fo-card-compact" style="max-width: 400px; width: 100%;">
+            <span class="fo-badge-compact">Flash Sale</span>
+            <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
+            
+            <div class="fo-logo-compact">
+                <img src="{{ $service['logo'] }}" alt="{{ $service['name'] }}">
             </div>
-
-            <div class="fo-title">{{ $service['name'] }}</div>
-            <div class="fo-subline">{{ $service['description'] }}</div>
-
-            @php
-                $hasDiscount = $info['discMax'] > 0;
-            @endphp
-
-            @if($hasDiscount)
-            <div class="fo-event">
-                <div class="fo-event-line1">% Đang giảm giá đến {{ $info['discMax'] }}%</div>
-                <div class="fo-event-line2">Sự kiện Flash Sale: Khung giờ vàng</div>
-            </div>
-            @endif
-
-            <ul class="fo-features">
-                @foreach($service['features'] as $feature)
-                <li>
-                    <span class="fo-dot {{ $feature['dot'] }}"></span>
-                    <span class="fo-feature-text">{{ $feature['text'] }}</span>
+            
+            <h3 class="fo-title-compact">{{ $service['name'] }}</h3>
+            <p class="fo-desc-compact">{{ $service['description'] }}</p>
+            
+            <ul class="fo-features-compact collapsed" id="features-service">
+                @foreach($service['features'] as $index => $feature)
+                <li class="{{ $index >= 2 ? 'fo-feature-extra' : '' }}">
+                    <span class="dot {{ $feature['dot'] }}"></span>{{ $feature['text'] }}
                 </li>
                 @endforeach
             </ul>
-
-            <div class="fo-divider"></div>
-
-            <div class="fo-price-row">
-                <div class="fo-price-left">
-                    <div class="fo-price-label">Từ</div>
-                    <div class="fo-price-main">
-                        <span class="fo-price-from">{{ number_format($info['min']) }} VND</span>
-                        @if($hasDiscount)
-                        <span class="fo-price-badge">-{{ $info['discMax'] }}%</span>
-                        @endif
-                    </div>
-                </div>
-                <div class="fo-price-right">
-                    <span class="fo-package-pill">{{ $info['count'] }} gói thuê</span>
-                </div>
-            </div>
-
+            
+            <button class="fo-more-compact" onclick="toggleFeatures('service')">
+                <span class="collapse-text" style="display:none">Thu gọn</span>
+                <span class="expand-text">Xem thêm</span>
+            </button>
+            
             @if($info['available'])
-            <button class="fo-bottom-btn" type="button" onclick="openPackageModal()">
-                <span>🛒</span>
-                <span>Flash Sale</span>
+            <button type="button" onclick="openPackageModal()" class="fo-cta-compact">
+                <span class="fo-price-compact">{{ number_format($info['min']) }} VND</span>
+                @if($info['maxOld'] > $info['min'])
+                <span class="fo-price-old-compact">{{ number_format($info['maxOld']) }}₫</span>
+                @endif
             </button>
             @else
-            <button class="fo-bottom-btn fo-bottom-btn--disabled" type="button" disabled>
+            <button class="fo-cta-compact" style="background: #9ca3af; cursor: not-allowed;" disabled>
                 <span>Hết tài khoản</span>
             </button>
             @endif
@@ -279,6 +256,18 @@
 @section('scripts')
 <script>
 const SERVICE_TYPE = '{{ $type }}';
+
+function toggleFeatures(id) {
+    const features = document.getElementById('features-' + id);
+    const card = features.closest('.fo-card-compact');
+    if (features.classList.contains('collapsed')) {
+        features.classList.remove('collapsed');
+        card?.classList.add('expanded');
+    } else {
+        features.classList.add('collapsed');
+        card?.classList.remove('expanded');
+    }
+}
 
 function openPackageModal() {
     document.getElementById('pkg-modal').classList.add('active');
