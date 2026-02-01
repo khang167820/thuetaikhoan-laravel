@@ -2507,7 +2507,7 @@ function toggleFeatures(cardId) {
 .price-modal-content {
     position: relative;
     background: #fff;
-    border-radius: 20px;
+    border-radius: 24px !important;
     max-width: 560px;
     width: 92%;
     max-height: 80vh;
@@ -2517,7 +2517,8 @@ function toggleFeatures(cardId) {
     box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25);
     transform: scale(0.95) translateY(20px);
     transition: transform 0.3s ease;
-    overflow: hidden;
+    overflow: hidden !important;
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
 }
 .price-modal.open .price-modal-content {
     transform: scale(1) translateY(0);
