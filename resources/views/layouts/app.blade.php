@@ -257,6 +257,19 @@
         [data-theme="dark"] .user-btn { border-color: #475569; }
         [data-theme="dark"] .user-btn:hover { border-color: #60a5fa; }
         
+        /* Theme Toggle Button */
+        .theme-toggle-btn {
+            display: flex; align-items: center; justify-content: center;
+            width: 40px; height: 40px;
+            background: #f1f5f9; border: none; border-radius: 10px;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .theme-toggle-btn:hover { background: #e2e8f0; }
+        .theme-toggle-btn svg { color: #64748b; }
+        [data-theme="dark"] .theme-toggle-btn { background: #334155; }
+        [data-theme="dark"] .theme-toggle-btn:hover { background: #475569; }
+        [data-theme="dark"] .theme-toggle-btn svg { color: #fbbf24; }
+        
         /* FOOTER */
         .site-footer {
             background: #fff; padding: 40px 0 20px;
@@ -325,35 +338,63 @@
 @include('partials.footer')
 
 <script>
-// Dark Mode Toggle
-(function() {
-    const toggle = document.getElementById('theme-toggle');
-    const icon = document.getElementById('theme-icon');
+// Desktop Theme Toggle Function
+function toggleDesktopTheme() {
     const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
     
-    // Check saved preference or system preference
+    if (isDark) {
+        html.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+    }
+    updateThemeIcons(!isDark);
+}
+
+function updateThemeIcons(isDark) {
+    // Desktop theme toggle
+    const desktopBtn = document.getElementById('desktopThemeToggle');
+    if (desktopBtn) {
+        const sunIcon = desktopBtn.querySelector('.theme-icon-sun');
+        const moonIcon = desktopBtn.querySelector('.theme-icon-moon');
+        if (sunIcon && moonIcon) {
+            sunIcon.style.display = isDark ? 'block' : 'none';
+            moonIcon.style.display = isDark ? 'none' : 'block';
+        }
+    }
+    // Mobile theme toggle (if exists)
+    const mobileBtn = document.getElementById('mobileThemeToggle');
+    if (mobileBtn) {
+        const sunIcon = mobileBtn.querySelector('.theme-icon-sun');
+        const moonIcon = mobileBtn.querySelector('.theme-icon-moon');
+        const textEl = mobileBtn.querySelector('.theme-text');
+        if (sunIcon && moonIcon) {
+            sunIcon.style.display = isDark ? 'block' : 'none';
+            moonIcon.style.display = isDark ? 'none' : 'block';
+        }
+        if (textEl) {
+            textEl.textContent = isDark ? 'Chế độ sáng' : 'Chế độ tối';
+        }
+    }
+}
+
+// Initialize theme on load
+(function() {
+    const html = document.documentElement;
     const savedTheme = localStorage.getItem('theme');
     const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
     if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
         html.setAttribute('data-theme', 'dark');
-        icon.textContent = '☀️';
-    } else {
-        icon.textContent = '🌙';
-    }
-    
-    toggle.addEventListener('click', function() {
-        const isDark = html.getAttribute('data-theme') === 'dark';
-        if (isDark) {
-            html.removeAttribute('data-theme');
-            icon.textContent = '🌙';
-            localStorage.setItem('theme', 'light');
+        // Update icons after DOM ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() { updateThemeIcons(true); });
         } else {
-            html.setAttribute('data-theme', 'dark');
-            icon.textContent = '☀️';
-            localStorage.setItem('theme', 'dark');
+            updateThemeIcons(true);
         }
-    });
+    }
 })();
 </script>
 
