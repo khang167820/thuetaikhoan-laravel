@@ -1556,14 +1556,14 @@
 .mobile-menu {
     position: fixed;
     top: 0;
-    right: -300px;
-    width: 280px;
+    right: -100%;
+    width: 100%;
     height: 100%;
     background: #fff;
     z-index: 9999;
     transition: right 0.3s ease;
     overflow-y: auto;
-    box-shadow: -4px 0 20px rgba(0,0,0,0.1);
+    box-shadow: none;
 }
 .mobile-menu.active {
     right: 0;
