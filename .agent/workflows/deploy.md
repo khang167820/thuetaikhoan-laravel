@@ -4,7 +4,9 @@ description: Deploy code to staging.thuetaikhoan.net
 
 # Deploy to Staging
 
-## Quick Deploy (2 minutes)
+## 🚀 Quick Deploy (Auto - 30 giây)
+
+Auto-deploy đã bật! Chỉ cần push là xong.
 
 // turbo-all
 
@@ -18,22 +20,38 @@ git add .
 git commit -m "Your commit message"
 ```
 
-3. Push to GitHub:
+3. Push to GitHub (auto deploy):
 ```bash
 git push origin main
 ```
 
-4. **Manual step:** Go to hPanel → Advanced → GIT → Click **Deploy**
+4. **Done!** Hostinger sẽ tự động deploy trong 30 giây.
 
 5. Test: https://staging.thuetaikhoan.net
 
-## If Something Breaks
+---
 
-1. Check error at: https://staging.thuetaikhoan.net/fix-500.php (if exists)
-2. Or check File Manager → `staging/storage/logs/laravel.log`
+## 📋 Thông Tin Quan Trọng
 
-## Important Paths
+| Mục | Giá trị |
+|-----|---------|
+| **Staging URL** | https://staging.thuetaikhoan.net |
+| **Admin URL** | https://staging.thuetaikhoan.net/admin/login |
+| **Admin Login** | admin / Tkk123@ |
+| **Git Directory** | `staging` |
+| **Database** | `u620980434_thuetaikhoan` (chung với production) |
 
-- **Git Directory:** `staging` (in hPanel)
-- **Subdomain points to:** `staging/public`
-- **Database:** `u620980434_thuetaikhoan` (shared with production)
+---
+
+## 🔧 Nếu Gặp Lỗi
+
+1. Check error: https://staging.thuetaikhoan.net/fix-500.php
+2. Check log: File Manager → `staging/storage/logs/laravel.log`
+3. Reset admin: https://staging.thuetaikhoan.net/fix-admin.php
+
+---
+
+## ⚠️ Lưu Ý
+
+- Database dùng chung với Production!
+- Timezone: Asia/Ho_Chi_Minh (UTC+7)

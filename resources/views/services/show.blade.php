@@ -186,34 +186,77 @@
 </section>
 @endif
 
-{{-- Modal Popup --}}
+{{-- Modal Popup - Redesigned --}}
 <div class="pkg-modal-overlay" id="pkg-modal">
     <div class="pkg-modal">
         <div class="pkg-modal-header">
             <div>
                 <div class="pkg-modal-title">Chọn gói thuê</div>
-                <div class="pkg-modal-sub">Chọn gói thuê cho: <strong>{{ strtoupper($service['name']) }}</strong></div>
+                <div class="pkg-modal-sub">Chọn gói thuê cho: <strong style="color: {{ $service['color'] }}">{{ strtoupper($service['name']) }}</strong></div>
             </div>
             <button class="pkg-modal-close" onclick="closePackageModal()">&times;</button>
         </div>
         
         <div class="pkg-modal-body">
+            {{-- Info Banner --}}
+            <div style="margin: 12px 0; padding: 10px 12px; background: linear-gradient(135deg, #fef3c7, #fef9c3); border: 1px solid #fcd34d; border-radius: 10px; display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 16px;">💡</span>
+                <span style="font-size: 12px; color: #92400e;">Tích lũy điểm, khuyến mại và mã giảm giá sẽ được áp dụng ở bước thanh toán.</span>
+            </div>
+            
             <div class="pkg-options">
                 @foreach($info['packages'] as $idx => $pkg)
+                @php
+                    $pkgPrice = (int)$pkg->price;
+                    $pkgOld = (int)($pkg->original_price ?? $pkgPrice);
+                    $pkgDisc = $pkg->discount_percent ?? 0;
+                    $isHot = $idx === 0;
+                    $isFlashSale = $pkgDisc >= 30;
+                @endphp
                 <label class="pkg-item">
-                    <input type="radio" name="package_select" value="{{ $pkg->id }}"{{ $idx === 0 ? ' checked' : '' }}>
-                    <div style="flex:1;padding:12px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;">
-                        <div style="font-weight:600;color:#1e293b;">{{ $service['name'] }} {{ $pkg->hours_label }}</div>
-                        <div style="margin-top:8px;font-size:18px;font-weight:800;color:{{ $service['color'] }};">
-                            {{ number_format($pkg->price) }} VND
+                    <input type="radio" name="package_select" value="{{ $pkg->id }}" class="pkg-radio"{{ $idx === 0 ? ' checked' : '' }}>
+                    <div class="pkg-card">
+                        {{-- Tags --}}
+                        <div class="pkg-tags">
+                            @if($isHot)
+                            <span class="pkg-tag pink">🔥 HOT</span>
+                            @endif
+                            @if($isFlashSale)
+                            <span class="pkg-tag green">⚡ FLASH SALE</span>
+                            @elseif($pkgDisc > 0)
+                            <span class="pkg-tag blue">🎁 KHUYẾN MÃI</span>
+                            @endif
+                            <span class="pkg-tag" style="background: #f1f5f9; color: #475569; border-color: #e2e8f0;">{{ $pkg->hours_label }}</span>
+                        </div>
+                        
+                        <div class="pkg-card-main">
+                            <div class="pkg-left">
+                                <div class="pkg-name">{{ $service['name'] }} {{ $pkg->hours_label }}</div>
+                                <div class="pkg-duration">Thời hạn: {{ $pkg->hours }} giờ</div>
+                            </div>
+                            <div class="pkg-right">
+                                <div class="pkg-price-line">
+                                    <span class="pkg-price" style="color: {{ $service['color'] }}; font-size: 16px;">{{ number_format($pkgPrice) }} VND</span>
+                                </div>
+                                @if($pkgOld > $pkgPrice)
+                                <span class="pkg-price-old">{{ number_format($pkgOld) }} VND</span>
+                                @endif
+                                @if($pkgDisc > 0)
+                                <span class="pkg-discount">Tiết kiệm {{ $pkgDisc }}%</span>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </label>
                 @endforeach
             </div>
             
+            {{-- Voucher Section --}}
             <div class="pkg-coupon">
                 <div class="pkg-voucher-box" style="display: block;">
+                    <div style="font-size: 12px; color: #6b7280; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                        <span>🎟️</span> Sử dụng mã giảm giá
+                    </div>
                     <div class="pkg-voucher-row">
                         <input type="text" class="pkg-voucher-input" id="voucher-code" placeholder="Nhập mã giảm giá">
                         <button type="button" class="pkg-voucher-btn" onclick="applyVoucher()">Áp dụng</button>
@@ -222,9 +265,12 @@
             </div>
         </div>
         
-        <div style="padding: 12px 16px; border-top: 1px solid #e5e7eb; display: flex; gap: 10px;">
-            <button style="flex:1;padding:12px;border:1px solid #e5e7eb;background:#fff;border-radius:10px;font-weight:600;cursor:pointer;" onclick="closePackageModal()">Hủy</button>
-            <button style="flex:1;padding:12px;border:none;background:{{ $service['color'] }};color:#fff;border-radius:10px;font-weight:600;cursor:pointer;" onclick="confirmPackage()">Xác nhận thuê</button>
+        {{-- Footer --}}
+        <div class="pkg-modal-footer">
+            <button class="pkg-btn" onclick="closePackageModal()">Hủy</button>
+            <button class="pkg-btn pkg-btn-primary" onclick="confirmPackage()" style="background: {{ $service['color'] }}; border-color: {{ $service['color'] }};">
+                Xác nhận thuê
+            </button>
         </div>
     </div>
 </div>
