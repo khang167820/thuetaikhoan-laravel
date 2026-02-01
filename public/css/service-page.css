@@ -6,6 +6,272 @@
  */
 
 /* =========================================
+   FO-CARD - Service Card (synced with homepage)
+   ========================================= */
+.fo-card {
+  position: relative;
+  background: #ffffff;
+  border-radius: 24px;
+  border: 3px solid #f97316;
+  padding: 20px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  box-shadow: 0 8px 20px rgba(249, 115, 22, 0.15), 0 4px 8px rgba(0, 0, 0, .1);
+  transition: transform .18s ease-out, box-shadow .18s ease-out, border-color .18s ease-out;
+  height: 100%;
+}
+
+.fo-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: #ea580c;
+  box-shadow: 0 14px 32px rgba(249, 115, 22, 0.25), 0 6px 12px rgba(0, 0, 0, .15);
+}
+
+.fo-ribbon {
+  position: absolute;
+  top: -13px;
+  left: 18px;
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #ff4b4b;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, .12);
+}
+
+.fo-coupon-pill {
+  position: absolute;
+  top: -13px;
+  right: 18px;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: #2563eb;
+  border: 1px solid #1d4ed8;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, .12);
+}
+
+.fo-coupon-pill:hover {
+  background: #1d4ed8;
+}
+
+.fo-logo-wrap {
+  margin: 8px 0 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.fo-logo-circle {
+  width: 90px;
+  height: 90px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 2px solid #fed7aa;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, .10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.fo-logo-circle img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.fo-title {
+  text-align: center;
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 2px;
+  color: #1e293b;
+}
+
+.fo-subline {
+  text-align: center;
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 6px;
+}
+
+/* Event/Discount Banner */
+.fo-event {
+  background: linear-gradient(135deg, #fef3c7, #fef9c3);
+  border: 1px solid #fcd34d;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin: 0 0 10px;
+}
+
+.fo-event-line1 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #b45309;
+}
+
+.fo-event-line2 {
+  font-size: 11px;
+  color: #d97706;
+}
+
+/* Features List */
+.fo-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px;
+  font-size: 13px;
+}
+
+.fo-features li {
+  margin-bottom: 4px;
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+}
+
+.fo-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.fo-dot.yellow {
+  background: #facc15;
+}
+
+.fo-dot.blue {
+  background: #2563eb;
+}
+
+.fo-dot.orange {
+  background: #fb923c;
+}
+
+.fo-dot.green {
+  background: #16a34a;
+}
+
+.fo-dot.red {
+  background: #ef4444;
+}
+
+.fo-dot.purple {
+  background: #a855f7;
+}
+
+.fo-feature-text {
+  flex: 1;
+  color: #374151;
+}
+
+/* Divider */
+.fo-divider {
+  height: 1px;
+  background: #e5e7eb;
+  margin: 10px 0;
+}
+
+/* Price Row */
+.fo-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.fo-price-left {}
+
+.fo-price-label {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.fo-price-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fo-price-from {
+  font-size: 20px;
+  font-weight: 800;
+  color: #dc2626;
+}
+
+.fo-price-badge {
+  background: #dc2626;
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.fo-price-right {}
+
+.fo-package-pill {
+  background: #f1f5f9;
+  color: #64748b;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* Bottom Button */
+.fo-bottom-btn {
+  margin-top: auto;
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  background: #dc2626;
+  box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all .3s;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.fo-bottom-btn:hover {
+  background: #b91c1c;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(220, 38, 38, 0.5);
+}
+
+.fo-bottom-btn--disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.fo-bottom-btn--disabled:hover {
+  background: #9ca3af;
+  transform: none;
+  box-shadow: none;
+}
+
+/* =========================================
    SERVICE HERO SECTION
    ========================================= */
 .service-hero {
