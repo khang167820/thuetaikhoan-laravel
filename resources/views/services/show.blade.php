@@ -64,8 +64,8 @@
             @if($info['available'])
             <button type="button" onclick="openPackageModal()" class="fo-cta-compact">
                 <span class="fo-price-compact">{{ number_format($info['min']) }} VND</span>
-                @if($info['maxOld'] > $info['min'])
-                <span class="fo-price-old-compact">{{ number_format($info['maxOld']) }}₫</span>
+                @if($info['discMax'] > 0)
+                <span class="fo-price-old-compact">-{{ $info['discMax'] }}%</span>
                 @endif
             </button>
             @else
