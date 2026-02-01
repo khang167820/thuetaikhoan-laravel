@@ -71,7 +71,7 @@
 
         /* HERO SECTION - Modern */
         .hero-modern {
-            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3b82f6 100%);
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #020617 100%);
             padding: 60px 20px;
             text-align: center;
             color: #fff;
