@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -12,6 +12,9 @@
     
     <!-- Modern UI Enhancement -->
     <link rel="stylesheet" href="/css/modern-ui.css?v=6">
+    
+    <!-- Mobile Menu Styles -->
+    <link rel="stylesheet" href="/css/mobile-menu.css?v=1">
     
     <style>
         /* ============================================
