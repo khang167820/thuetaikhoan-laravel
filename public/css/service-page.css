@@ -1103,3 +1103,52 @@ body.modal-open {
     margin: auto;
   }
 }
+
+/* =========================================
+   DARK MODE SUPPORT
+   ========================================= */
+[data-theme="dark"] .fo-card {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+[data-theme="dark"] .fo-card:hover {
+  border-color: #fca567;
+}
+
+[data-theme="dark"] .fo-title {
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .fo-subline {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .fo-feature-text {
+  color: #cbd5e1;
+}
+
+[data-theme="dark"] .fo-features.collapsed::after {
+  background: linear-gradient(to bottom, rgba(30, 41, 59, 0), #1e293b);
+}
+
+[data-theme="dark"] .fo-divider {
+  background: #334155;
+}
+
+[data-theme="dark"] .fo-price-main {
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .fo-price-old {
+  color: #64748b;
+}
+
+[data-theme="dark"] .fo-package-pill {
+  background: #334155;
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .fo-more {
+  color: #60a5fa;
+}
