@@ -1382,58 +1382,65 @@
             <span>Trang chủ</span>
         </a>
         
-        <!-- Services Section -->
-        <div class="mobile-menu-section">Dịch vụ GSM</div>
-        
-        <a href="/thue-unlocktool" class="mobile-menu-link">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        <!-- Services Section (Collapsible) -->
+        <button type="button" class="mobile-menu-section-toggle" onclick="toggleServicesMenu()">
+            <span>Dịch vụ GSM</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="toggle-icon">
+                <polyline points="6 9 12 15 18 9"/>
             </svg>
-            <span>Unlocktool</span>
-        </a>
+        </button>
         
-        <a href="/thue-vietmap" class="mobile-menu-link">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/>
-            </svg>
-            <span>Vietmap Live</span>
-        </a>
-        
-        <a href="/thue-tsm" class="mobile-menu-link">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>
-            </svg>
-            <span>TSM Tool</span>
-        </a>
-        
-        <a href="/thue-griffin" class="mobile-menu-link">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-            </svg>
-            <span>Griffin-Unlocker</span>
-        </a>
-        
-        <a href="/thue-amt" class="mobile-menu-link">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2z"/>
-                <path d="M12 8v8"/><path d="M8 12h8"/>
-            </svg>
-            <span>Android Multitool</span>
-        </a>
-        
-        <a href="/thue-kg-killer" class="mobile-menu-link">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-            </svg>
-            <span>KG Killer Tool</span>
-        </a>
-        
-        <a href="/thue-samsung-tool" class="mobile-menu-link">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-            <span>Samsung Tool</span>
-        </a>
+        <div class="mobile-services-list" id="mobileServicesList">
+            <a href="/thue-unlocktool" class="mobile-menu-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                <span>Unlocktool</span>
+            </a>
+            
+            <a href="/thue-vietmap" class="mobile-menu-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/>
+                </svg>
+                <span>Vietmap Live</span>
+            </a>
+            
+            <a href="/thue-tsm" class="mobile-menu-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>
+                </svg>
+                <span>TSM Tool</span>
+            </a>
+            
+            <a href="/thue-griffin" class="mobile-menu-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                <span>Griffin-Unlocker</span>
+            </a>
+            
+            <a href="/thue-amt" class="mobile-menu-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2z"/>
+                    <path d="M12 8v8"/><path d="M8 12h8"/>
+                </svg>
+                <span>Android Multitool</span>
+            </a>
+            
+            <a href="/thue-kg-killer" class="mobile-menu-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                </svg>
+                <span>KG Killer Tool</span>
+            </a>
+            
+            <a href="/thue-samsung-tool" class="mobile-menu-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                <span>Samsung Tool</span>
+            </a>
+        </div>
         
         <!-- Other Section -->
         <div class="mobile-menu-section">Khác</div>
@@ -1670,6 +1677,42 @@
     flex-shrink: 0;
 }
 
+/* Collapsible Section */
+.mobile-menu-section-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 12px;
+    margin: 16px 0 8px;
+    background: none;
+    border: none;
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.mobile-menu-section-toggle:hover {
+    color: #64748b;
+}
+.mobile-menu-section-toggle .toggle-icon {
+    transition: transform 0.3s;
+}
+.mobile-menu-section-toggle.collapsed .toggle-icon {
+    transform: rotate(-90deg);
+}
+.mobile-services-list {
+    overflow: hidden;
+    max-height: 500px;
+    transition: max-height 0.3s ease-out;
+}
+.mobile-services-list.collapsed {
+    max-height: 0;
+}
+
 /* Dark mode for mobile menu */
 [data-theme="dark"] .mobile-menu {
     background: #1e293b;
@@ -1825,6 +1868,17 @@
         initMobileMenu();
     }
 })();
+
+// Toggle Services Menu
+function toggleServicesMenu() {
+    const btn = document.querySelector('.mobile-menu-section-toggle');
+    const list = document.getElementById('mobileServicesList');
+    
+    if (btn && list) {
+        btn.classList.toggle('collapsed');
+        list.classList.toggle('collapsed');
+    }
+}
 
 // Theme Toggle Function
 function toggleMobileTheme() {
