@@ -1371,6 +1371,12 @@
                 </svg>
             </button>
         </form>
+        <a href="/order-history-ip" class="mobile-search-history-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <span>Lịch sử thuê 30 ngày</span>
+        </a>
     </div>
     
     <div class="mobile-menu-body">
@@ -1467,13 +1473,6 @@
                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
             </svg>
             <span>Thuê Dịch Vụ Khác</span>
-        </a>
-        
-        <a href="/order-history-ip" class="mobile-menu-link">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-            </svg>
-            <span>Lịch sử thuê 30 ngày</span>
         </a>
         
         <a href="/ma-giam-gia" class="mobile-menu-link">
@@ -1641,6 +1640,22 @@
 }
 .mobile-search-form button:hover {
     background: #1e3a8a;
+}
+.mobile-search-history-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    padding: 8px 12px;
+    color: #64748b;
+    font-size: 13px;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+.mobile-search-history-link:hover {
+    color: #1e40af;
+    background: #f1f5f9;
 }
 
 .mobile-menu-body {
