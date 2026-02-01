@@ -1831,7 +1831,7 @@
                     </div>
                     <div class="guide-step-content">
                         <div class="guide-step-title">Bước 5: Nhận tài khoản</div>
-                        <div class="guide-step-text">Tại trang thanh toán, hệ thống sẽ tự động chuyển tới trang hiển thị thông tin tài khoản. Đăng ký tài khoản để kiểm tra được thông tin đơn cũng như nhận nhiều đặc quyền khuyến mãi của ThueVIP.</div>
+                        <div class="guide-step-text">Tại trang thanh toán, hệ thống sẽ tự động chuyển tới trang hiển thị thông tin tài khoản. Đăng ký tài khoản để kiểm tra được thông tin đơn cũng như nhận nhiều đặc quyền khuyến mãi của Thuetaikhoan.net.</div>
                     </div>
                 </div>
             </div>
