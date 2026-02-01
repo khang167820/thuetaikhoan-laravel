@@ -340,7 +340,7 @@
     position: relative;
 }
 
-.fo-card-compact:not(.expanded) .fo-desc-compact::after {
+:root:not([data-theme="dark"]) .fo-card-compact:not(.expanded) .fo-desc-compact::after {
     content: '';
     position: absolute;
     bottom: 0;
