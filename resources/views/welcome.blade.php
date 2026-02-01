@@ -110,6 +110,11 @@
             border: none;
             font-size: 15px;
             outline: none;
+            color: #333;
+        }
+        .search-modern input::placeholder {
+            color: #9ca3af;
+            opacity: 1;
         }
         .search-modern button {
             padding: 16px 28px;
