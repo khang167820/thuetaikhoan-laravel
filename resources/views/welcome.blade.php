@@ -2832,6 +2832,67 @@ document.addEventListener('keydown', function(e) {
 });
 </script>
 
+<!-- Theme Toggle Script -->
+<script>
+// Desktop Theme Toggle Function
+function toggleDesktopTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    
+    if (isDark) {
+        html.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+    }
+    updateThemeIcons(!isDark);
+}
+
+function updateThemeIcons(isDark) {
+    // Desktop theme toggle
+    const desktopBtn = document.getElementById('desktopThemeToggle');
+    if (desktopBtn) {
+        const sunIcon = desktopBtn.querySelector('.theme-icon-sun');
+        const moonIcon = desktopBtn.querySelector('.theme-icon-moon');
+        if (sunIcon && moonIcon) {
+            sunIcon.style.display = isDark ? 'block' : 'none';
+            moonIcon.style.display = isDark ? 'none' : 'block';
+        }
+    }
+    // Mobile theme toggle (if exists)
+    const mobileBtn = document.getElementById('mobileThemeToggle');
+    if (mobileBtn) {
+        const sunIcon = mobileBtn.querySelector('.theme-icon-sun');
+        const moonIcon = mobileBtn.querySelector('.theme-icon-moon');
+        const textEl = mobileBtn.querySelector('.theme-text');
+        if (sunIcon && moonIcon) {
+            sunIcon.style.display = isDark ? 'block' : 'none';
+            moonIcon.style.display = isDark ? 'none' : 'block';
+        }
+        if (textEl) {
+            textEl.textContent = isDark ? 'Chế độ sáng' : 'Chế độ tối';
+        }
+    }
+}
+
+// Initialize theme on load
+(function() {
+    const html = document.documentElement;
+    const savedTheme = localStorage.getItem('theme');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
+        html.setAttribute('data-theme', 'dark');
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() { updateThemeIcons(true); });
+        } else {
+            updateThemeIcons(true);
+        }
+    }
+})();
+</script>
+
 
 </body>
 </html>
