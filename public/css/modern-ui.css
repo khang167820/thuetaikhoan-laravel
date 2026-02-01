@@ -566,7 +566,7 @@
 }
 
 [data-theme="dark"] .fo-card-compact:not(.expanded) .fo-desc-compact::after {
-    background: linear-gradient(to right, transparent, #1e293b 70%);
+    display: none;
 }
 
 [data-theme="dark"] .fo-logo-compact {
