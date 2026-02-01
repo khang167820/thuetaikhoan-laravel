@@ -2835,9 +2835,10 @@ function toggleFeatures(cardId) {
 .pm-footer {
     display: flex;
     gap: 12px;
-    padding: 16px 24px;
+    padding: 16px 24px 20px;
     border-top: 1px solid #e5e7eb;
     background: #fff;
+    border-radius: 0 0 20px 20px;
 }
 .pm-btn-cancel {
     flex: 1;
