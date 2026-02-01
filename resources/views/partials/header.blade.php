@@ -204,7 +204,7 @@
             </div>
 
             <!-- Mobile menu button -->
-            <button class="btn-mobile-menu" id="mobileMenuBtn">
+            <button class="btn-mobile-menu" id="mobileMenuBtn" aria-label="Menu">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -212,3 +212,214 @@
         </div>
     </div>
 </header>
+
+<!-- Mobile Menu Overlay -->
+<div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+<!-- Mobile Menu Panel -->
+<nav class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+        <a href="/" class="mobile-menu-logo">
+            <img src="/assets/images/logo.png" alt="logo" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 36 36%22><rect fill=%22%231e40af%22 width=%2236%22 height=%2236%22 rx=%228%22/><text x=%2218%22 y=%2224%22 fill=%22white%22 font-size=%2218%22 text-anchor=%22middle%22>T</text></svg>'">
+            <span>thuetaikhoan.net</span>
+        </a>
+        <button class="mobile-menu-close" id="mobileMenuClose">&times;</button>
+    </div>
+    
+    <div class="mobile-menu-body">
+        <a href="/" class="mobile-menu-link {{ request()->is('/') ? 'active' : '' }}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Trang chủ
+        </a>
+        
+        <div class="mobile-menu-section">Dịch vụ</div>
+        <a href="/thue-unlocktool" class="mobile-menu-link">🔓 Unlocktool</a>
+        <a href="/thue-vietmap" class="mobile-menu-link">🗺️ Vietmap Live</a>
+        <a href="/thue-tsm" class="mobile-menu-link">📱 TSM Tool</a>
+        <a href="/thue-griffin" class="mobile-menu-link">🦅 Griffin-Unlocker</a>
+        <a href="/thue-amt" class="mobile-menu-link">🤖 Android Multitool</a>
+        <a href="/thue-kg-killer" class="mobile-menu-link">⚡ KG Killer Tool</a>
+        <a href="/thue-samsung-tool" class="mobile-menu-link">🛡️ Samsung Tool</a>
+        <a href="/ord-services" class="mobile-menu-link" style="color: var(--primary); font-weight: 600;">📦 Thuê Dịch Vụ Khác</a>
+        
+        <div class="mobile-menu-section">Khác</div>
+        <a href="#huong-dan" class="mobile-menu-link">📖 Hướng dẫn</a>
+        <a href="/blog" class="mobile-menu-link">📝 Blog</a>
+        <a href="/order-history-ip" class="mobile-menu-link">📋 Lịch sử thuê</a>
+        <a href="/ma-giam-gia" class="mobile-menu-link">🎁 Mã giảm giá</a>
+        
+        <div class="mobile-menu-section">Tài khoản</div>
+        @auth
+        <a href="/account" class="mobile-menu-link">👤 Tài khoản</a>
+        <a href="/deposit" class="mobile-menu-link">💳 Nạp tiền</a>
+        <form action="/logout" method="POST" style="margin: 0;">
+            @csrf
+            <button type="submit" class="mobile-menu-link" style="width: 100%; text-align: left; background: none; border: none; font: inherit; cursor: pointer;">🚪 Đăng xuất</button>
+        </form>
+        @else
+        <a href="/login" class="mobile-menu-link">🔐 Đăng nhập</a>
+        <a href="/register" class="mobile-menu-link">📝 Đăng ký</a>
+        @endauth
+    </div>
+</nav>
+
+<style>
+/* Mobile Menu Styles */
+.mobile-menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+}
+.mobile-menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -300px;
+    width: 280px;
+    height: 100%;
+    background: #fff;
+    z-index: 9999;
+    transition: right 0.3s ease;
+    overflow-y: auto;
+    box-shadow: -4px 0 20px rgba(0,0,0,0.1);
+}
+.mobile-menu.active {
+    right: 0;
+}
+
+.mobile-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #e5e7eb;
+}
+.mobile-menu-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #1e293b;
+    font-weight: 700;
+}
+.mobile-menu-logo img {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+}
+.mobile-menu-close {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: #f1f5f9;
+    border-radius: 8px;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mobile-menu-body {
+    padding: 16px;
+}
+.mobile-menu-section {
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 20px 0 10px;
+    padding-left: 12px;
+}
+.mobile-menu-section:first-child {
+    margin-top: 0;
+}
+.mobile-menu-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    color: #334155;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+.mobile-menu-link:hover, .mobile-menu-link.active {
+    background: #f1f5f9;
+    color: var(--primary, #1e40af);
+}
+.mobile-menu-link svg {
+    flex-shrink: 0;
+}
+
+/* Dark mode */
+[data-theme="dark"] .mobile-menu {
+    background: #1e293b;
+}
+[data-theme="dark"] .mobile-menu-header {
+    border-color: #334155;
+}
+[data-theme="dark"] .mobile-menu-logo {
+    color: #f1f5f9;
+}
+[data-theme="dark"] .mobile-menu-close {
+    background: #334155;
+    color: #f1f5f9;
+}
+[data-theme="dark"] .mobile-menu-link {
+    color: #cbd5e1;
+}
+[data-theme="dark"] .mobile-menu-link:hover {
+    background: #334155;
+}
+</style>
+
+<script>
+// Mobile Menu Toggle
+document.addEventListener('DOMContentLoaded', function() {
+    const menuBtn = document.getElementById('mobileMenuBtn');
+    const menuClose = document.getElementById('mobileMenuClose');
+    const menu = document.getElementById('mobileMenu');
+    const overlay = document.getElementById('mobileMenuOverlay');
+    
+    function openMenu() {
+        menu.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeMenu() {
+        menu.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    
+    if (menuBtn) menuBtn.addEventListener('click', openMenu);
+    if (menuClose) menuClose.addEventListener('click', closeMenu);
+    if (overlay) overlay.addEventListener('click', closeMenu);
+    
+    // Close on ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeMenu();
+    });
+    
+    // Close menu when clicking links
+    document.querySelectorAll('.mobile-menu-link').forEach(function(link) {
+        link.addEventListener('click', function() {
+            if (!this.getAttribute('href')?.startsWith('#')) {
+                closeMenu();
+            }
+        });
+    });
+});
+</script>
