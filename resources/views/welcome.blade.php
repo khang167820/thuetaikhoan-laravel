@@ -2319,6 +2319,7 @@ function toggleFeatures(cardId) {
 .pm-options-scroll {
     flex: 1;
     overflow-y: auto;
+    min-height: 320px;
     max-height: 450px;
     padding: 6px 16px;
 }
