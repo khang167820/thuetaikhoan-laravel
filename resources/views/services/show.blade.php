@@ -253,8 +253,14 @@
                 @endforeach
             </div>
             
-            {{-- Voucher Section --}}
+            {{-- Points & Voucher Section --}}
             <div class="pkg-coupon">
+                {{-- Loyalty Points Checkbox --}}
+                <label style="display: flex; align-items: center; gap: 8px; padding: 10px 0; cursor: pointer; font-size: 13px; color: #1f2937;">
+                    <input type="checkbox" id="use-points-checkbox" onchange="updateServicePriceDisplay()" style="width: 16px; height: 16px; accent-color: #2563eb;">
+                    <span>💰 Sử dụng điểm tích lũy (3.000 VND)</span>
+                </label>
+                
                 <div class="pkg-voucher-box" style="display: block;">
                     <div style="font-size: 12px; color: #6b7280; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
                         <span>🎟️</span> Sử dụng mã giảm giá
@@ -372,19 +378,15 @@ function applyVoucher() {
             btn.disabled = false;
             
             if (data.success) {
-                // Show result
-                document.getElementById('coupon-code-display').textContent = data.coupon.code;
-                document.getElementById('original-price-display').textContent = formatVND(price);
-                document.getElementById('discount-amount-display').textContent = '-' + formatVND(data.discount_amount);
-                document.getElementById('final-price-display').textContent = formatVND(data.final_price);
-                resultBox.style.display = 'block';
-                
-                // Store for later use
+                // Store for combined calculation
                 window.appliedCoupon = {
                     code: data.coupon.code,
                     discount: data.discount_amount,
                     finalPrice: data.final_price
                 };
+                
+                // Use updateServicePriceDisplay for combined points + coupon calculation
+                updateServicePriceDisplay();
             } else {
                 errorBox.textContent = data.message || 'Mã giảm giá không hợp lệ.';
                 errorBox.style.display = 'block';
@@ -403,10 +405,58 @@ function removeCoupon() {
     document.getElementById('coupon-result').style.display = 'none';
     document.getElementById('coupon-error').style.display = 'none';
     window.appliedCoupon = null;
+    updateServicePriceDisplay();
 }
 
 function formatVND(amount) {
     return new Intl.NumberFormat('vi-VN').format(amount) + ' VND';
+}
+
+// Fixed loyalty points value
+const SERVICE_LOYALTY_POINTS = 3000;
+
+// Get current package price
+function getCurrentPackagePrice() {
+    const selected = document.querySelector('input[name="package_select"]:checked');
+    if (!selected) return 0;
+    const priceElement = selected.closest('.pkg-item').querySelector('.pkg-price');
+    const priceText = priceElement ? priceElement.textContent : '0';
+    return parseInt(priceText.replace(/[^\d]/g, '')) || 0;
+}
+
+// Update price display with combined points + coupon
+function updateServicePriceDisplay() {
+    const resultBox = document.getElementById('coupon-result');
+    const usePoints = document.getElementById('use-points-checkbox')?.checked || false;
+    const price = getCurrentPackagePrice();
+    
+    if (price === 0) return;
+    
+    let totalDiscount = 0;
+    let discountLabel = '';
+    
+    // Add loyalty points
+    if (usePoints) {
+        totalDiscount += SERVICE_LOYALTY_POINTS;
+        discountLabel = 'Điểm tích lũy';
+    }
+    
+    // Add coupon
+    if (window.appliedCoupon && window.appliedCoupon.discount > 0) {
+        totalDiscount += window.appliedCoupon.discount;
+        discountLabel = usePoints ? 'Điểm + Mã' : window.appliedCoupon.code;
+    }
+    
+    if (totalDiscount > 0) {
+        const finalPrice = Math.max(0, price - totalDiscount);
+        document.getElementById('coupon-code-display').textContent = discountLabel;
+        document.getElementById('original-price-display').textContent = formatVND(price);
+        document.getElementById('discount-amount-display').textContent = '-' + formatVND(totalDiscount);
+        document.getElementById('final-price-display').textContent = formatVND(finalPrice);
+        resultBox.style.display = 'block';
+    } else {
+        resultBox.style.display = 'none';
+    }
 }
 
 // Recalculate when package changes
