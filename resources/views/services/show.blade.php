@@ -261,20 +261,44 @@
                     <span>💰 Sử dụng điểm tích lũy (3.000 VND)</span>
                 </label>
                 
-                <div class="pkg-voucher-box" style="display: block;">
-                    <div style="font-size: 12px; color: #6b7280; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-                        <span>🎟️</span> Sử dụng mã giảm giá
+                {{-- Use Coupon Checkbox --}}
+                <label style="display: flex; align-items: center; gap: 8px; padding: 10px 0; cursor: pointer; font-size: 13px; color: #1f2937;">
+                    <input type="checkbox" id="use-coupon-checkbox" onchange="toggleServiceCouponSection()" style="width: 16px; height: 16px; accent-color: #2563eb;">
+                    <span>🎟️ Sử dụng mã giảm giá</span>
+                </label>
+                
+                {{-- Coupon Selection --}}
+                <div id="service-coupon-section" style="display:none; margin-top: 10px;">
+                    <div style="font-size: 12px; color: #6b7280; margin-bottom: 8px;">🎫 Chọn mã giảm giá:</div>
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <div class="service-coupon-item" data-code="THUE2000" onclick="selectServiceCoupon('THUE2000')" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: #fff; border: 2px solid #e5e7eb; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+                            <div style="flex: 1;">
+                                <div style="font-size: 13px; font-weight: 700; color: #1f2937; margin-bottom: 2px;">THUE2000</div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div style="font-size: 12px; color: #059669; font-weight: 600;">Giảm 2,000đ</div>
+                                    <div style="font-size: 11px; color: #6b7280;">Không giới hạn</div>
+                                </div>
+                            </div>
+                            <span style="font-size: 12px; color: #3b82f6; font-weight: 600;">Dùng</span>
+                        </div>
+                        <div class="service-coupon-item" data-code="GIAM10" onclick="selectServiceCoupon('GIAM10')" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: #fff; border: 2px solid #e5e7eb; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+                            <div style="flex: 1;">
+                                <div style="font-size: 13px; font-weight: 700; color: #1f2937; margin-bottom: 2px;">GIAM10</div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div style="font-size: 12px; color: #059669; font-weight: 600;">Giảm 10%</div>
+                                    <div style="font-size: 11px; color: #6b7280;">Không giới hạn</div>
+                                </div>
+                            </div>
+                            <span style="font-size: 12px; color: #3b82f6; font-weight: 600;">Dùng</span>
+                        </div>
                     </div>
-                    <div class="pkg-voucher-row">
-                        <input type="text" class="pkg-voucher-input" id="voucher-code" placeholder="Nhập mã giảm giá">
-                        <button type="button" class="pkg-voucher-btn" id="apply-voucher-btn" onclick="applyVoucher()">Áp dụng</button>
-                    </div>
+                </div>
                     
                     {{-- Coupon Result --}}
                     <div id="coupon-result" style="display: none; margin-top: 12px; padding: 12px; background: #f0fdf4; border: 1px solid #86efac; border-radius: 10px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                             <span style="font-size: 12px; color: #15803d; font-weight: 600;">✓ Mã <span id="coupon-code-display"></span></span>
-                            <button type="button" onclick="removeCoupon()" style="background: none; border: none; color: #dc2626; font-size: 11px; cursor: pointer;">Xóa</button>
+                            <button type="button" onclick="removeServiceCoupon()" style="background: none; border: none; color: #dc2626; font-size: 11px; cursor: pointer;">Xóa</button>
                         </div>
                         <div style="display: flex; justify-content: space-between; font-size: 13px;">
                             <span style="color: #64748b;">Giá gốc:</span>
@@ -338,72 +362,63 @@ function selectPackage(id) {
     openPackageModal();
 }
 
-function applyVoucher() {
-    const code = document.getElementById('voucher-code').value.trim();
-    const btn = document.getElementById('apply-voucher-btn');
-    const resultBox = document.getElementById('coupon-result');
-    const errorBox = document.getElementById('coupon-error');
+function toggleServiceCouponSection() {
+    const checkbox = document.getElementById('use-coupon-checkbox');
+    const section = document.getElementById('service-coupon-section');
+    section.style.display = checkbox.checked ? 'block' : 'none';
+    if (!checkbox.checked) {
+        removeServiceCoupon();
+    }
+}
+
+function selectServiceCoupon(code) {
+    // Remove previous selection
+    document.querySelectorAll('.service-coupon-item').forEach(item => {
+        item.style.borderColor = '#e5e7eb';
+        item.style.background = '#fff';
+    });
     
-    // Hide previous results
-    resultBox.style.display = 'none';
-    errorBox.style.display = 'none';
+    // Highlight selected
+    const selectedItem = document.querySelector(`.service-coupon-item[data-code="${code}"]`);
+    if (selectedItem) {
+        selectedItem.style.borderColor = '#3b82f6';
+        selectedItem.style.background = '#eff6ff';
+    }
     
-    if (!code) {
-        errorBox.textContent = 'Vui lòng nhập mã giảm giá.';
-        errorBox.style.display = 'block';
+    // Get price and call API
+    const price = getCurrentPackagePrice();
+    if (price === 0) {
+        alert('Vui lòng chọn gói thuê trước.');
         return;
     }
     
-    // Get selected package price
-    const selected = document.querySelector('input[name="package_select"]:checked');
-    if (!selected) {
-        errorBox.textContent = 'Vui lòng chọn gói thuê trước.';
-        errorBox.style.display = 'block';
-        return;
-    }
-    
-    const priceElement = selected.closest('.pkg-item').querySelector('.pkg-price');
-    const priceText = priceElement ? priceElement.textContent : '0';
-    const price = parseInt(priceText.replace(/[^\d]/g, '')) || 0;
-    
-    // Show loading
-    btn.textContent = 'Đang kiểm tra...';
-    btn.disabled = true;
-    
-    // Call API
+    // Call coupon validation API
     fetch('/api/coupons/validate?code=' + encodeURIComponent(code) + '&price=' + price)
         .then(res => res.json())
         .then(data => {
-            btn.textContent = 'Áp dụng';
-            btn.disabled = false;
-            
             if (data.success) {
-                // Store for combined calculation
                 window.appliedCoupon = {
                     code: data.coupon.code,
                     discount: data.discount_amount,
                     finalPrice: data.final_price
                 };
-                
-                // Use updateServicePriceDisplay for combined points + coupon calculation
                 updateServicePriceDisplay();
             } else {
-                errorBox.textContent = data.message || 'Mã giảm giá không hợp lệ.';
-                errorBox.style.display = 'block';
+                alert(data.message || 'Mã giảm giá không hợp lệ.');
+                removeServiceCoupon();
             }
         })
         .catch(err => {
-            btn.textContent = 'Áp dụng';
-            btn.disabled = false;
-            errorBox.textContent = 'Có lỗi xảy ra. Vui lòng thử lại.';
-            errorBox.style.display = 'block';
+            alert('Có lỗi xảy ra. Vui lòng thử lại.');
         });
 }
 
-function removeCoupon() {
-    document.getElementById('voucher-code').value = '';
+function removeServiceCoupon() {
+    document.querySelectorAll('.service-coupon-item').forEach(item => {
+        item.style.borderColor = '#e5e7eb';
+        item.style.background = '#fff';
+    });
     document.getElementById('coupon-result').style.display = 'none';
-    document.getElementById('coupon-error').style.display = 'none';
     window.appliedCoupon = null;
     updateServicePriceDisplay();
 }
