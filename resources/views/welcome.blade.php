@@ -2960,13 +2960,18 @@ function updatePriceDisplay() {
     // Show combined result if there's any discount
     if (totalDiscount > 0) {
         const finalPrice = Math.max(0, originalPrice - totalDiscount);
-        document.getElementById('pm-coupon-code-display').textContent = discountDetails.length > 1 ? 'Điểm + Mã' : (usePoints ? 'Điểm tích lũy' : selectedCoupon?.code || '');
-        document.getElementById('pm-original-price').textContent = formatVNDWelcome(originalPrice);
-        document.getElementById('pm-discount-amount').textContent = '-' + formatVNDWelcome(totalDiscount);
-        document.getElementById('pm-final-price').textContent = formatVNDWelcome(finalPrice);
-        resultBox.style.display = 'block';
+        const codeDisplay = document.getElementById('pm-coupon-code-display');
+        const originalPriceEl = document.getElementById('pm-original-price');
+        const discountAmount = document.getElementById('pm-discount-amount');
+        const finalPriceEl = document.getElementById('pm-final-price');
+        
+        if (codeDisplay) codeDisplay.textContent = discountDetails.length > 1 ? 'Điểm + Mã' : (usePoints ? 'Điểm tích lũy' : selectedCoupon?.code || '');
+        if (originalPriceEl) originalPriceEl.textContent = formatVNDWelcome(originalPrice);
+        if (discountAmount) discountAmount.textContent = '-' + formatVNDWelcome(totalDiscount);
+        if (finalPriceEl) finalPriceEl.textContent = formatVNDWelcome(finalPrice);
+        if (resultBox) resultBox.style.display = 'block';
     } else if (!selectedCoupon) {
-        resultBox.style.display = 'none';
+        if (resultBox) resultBox.style.display = 'none';
     }
 }
 

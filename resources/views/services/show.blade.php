@@ -467,13 +467,18 @@ function updatePriceDisplay() {
     
     if (totalDiscount > 0) {
         const finalPrice = Math.max(0, price - totalDiscount);
-        document.getElementById('pm-coupon-code-display').textContent = discountLabel;
-        document.getElementById('pm-original-price').textContent = formatVND(price);
-        document.getElementById('pm-discount-amount').textContent = '-' + formatVND(totalDiscount);
-        document.getElementById('pm-final-price').textContent = formatVND(finalPrice);
-        resultBox.style.display = 'block';
+        const codeDisplay = document.getElementById('pm-coupon-code-display');
+        const originalPrice = document.getElementById('pm-original-price');
+        const discountAmount = document.getElementById('pm-discount-amount');
+        const finalPriceEl = document.getElementById('pm-final-price');
+        
+        if (codeDisplay) codeDisplay.textContent = discountLabel;
+        if (originalPrice) originalPrice.textContent = formatVND(price);
+        if (discountAmount) discountAmount.textContent = '-' + formatVND(totalDiscount);
+        if (finalPriceEl) finalPriceEl.textContent = formatVND(finalPrice);
+        if (resultBox) resultBox.style.display = 'block';
     } else {
-        resultBox.style.display = 'none';
+        if (resultBox) resultBox.style.display = 'none';
     }
 }
 
