@@ -2895,12 +2895,8 @@ function calculateCouponDiscount(code) {
             if (data.success) {
                 selectedCoupon = { code: data.coupon.code, value: data.discount_amount, type: data.coupon.discount_type };
                 
-                // Show result
-                document.getElementById('pm-coupon-code-display').textContent = data.coupon.code;
-                document.getElementById('pm-original-price').textContent = formatVNDWelcome(price);
-                document.getElementById('pm-discount-amount').textContent = '-' + formatVNDWelcome(data.discount_amount);
-                document.getElementById('pm-final-price').textContent = formatVNDWelcome(data.final_price);
-                resultBox.style.display = 'block';
+                // Use updatePriceDisplay for combined calculation with points
+                updatePriceDisplay();
             } else {
                 showCouponError(data.message || 'Mã giảm giá không hợp lệ.');
             }
@@ -2926,11 +2922,57 @@ function removeCouponWelcome() {
     document.getElementById('pm-coupon-error').style.display = 'none';
     document.querySelectorAll('.pm-coupon-item').forEach(item => item.classList.remove('selected'));
     selectedCoupon = null;
+    updatePriceDisplay();
 }
 
 function formatVNDWelcome(amount) {
     return new Intl.NumberFormat('vi-VN').format(amount) + ' VND';
 }
+
+// Fixed loyalty points value
+const LOYALTY_POINTS_VALUE = 3000;
+
+// Update price display when points checkbox changes
+function updatePriceDisplay() {
+    const resultBox = document.getElementById('pm-coupon-result');
+    const usePoints = document.getElementById('pm-use-points')?.checked || false;
+    
+    // Get current package price
+    const service = servicePricesV2[currentServiceId];
+    if (!service) return;
+    const pkg = service.packages[selectedPackageIndex];
+    const originalPrice = pkg.price;
+    
+    let totalDiscount = 0;
+    let discountDetails = [];
+    
+    // Add loyalty points discount
+    if (usePoints) {
+        totalDiscount += LOYALTY_POINTS_VALUE;
+        discountDetails.push('Điểm: -' + formatVNDWelcome(LOYALTY_POINTS_VALUE));
+    }
+    
+    // Add coupon discount
+    if (selectedCoupon && selectedCoupon.value > 0) {
+        totalDiscount += selectedCoupon.value;
+        discountDetails.push('Mã ' + selectedCoupon.code + ': -' + formatVNDWelcome(selectedCoupon.value));
+    }
+    
+    // Show combined result if there's any discount
+    if (totalDiscount > 0) {
+        const finalPrice = Math.max(0, originalPrice - totalDiscount);
+        document.getElementById('pm-coupon-code-display').textContent = discountDetails.length > 1 ? 'Điểm + Mã' : (usePoints ? 'Điểm tích lũy' : selectedCoupon?.code || '');
+        document.getElementById('pm-original-price').textContent = formatVNDWelcome(originalPrice);
+        document.getElementById('pm-discount-amount').textContent = '-' + formatVNDWelcome(totalDiscount);
+        document.getElementById('pm-final-price').textContent = formatVNDWelcome(finalPrice);
+        resultBox.style.display = 'block';
+    } else if (!selectedCoupon) {
+        resultBox.style.display = 'none';
+    }
+}
+
+// Add event listener for points checkbox
+document.getElementById('pm-use-points')?.addEventListener('change', updatePriceDisplay);
 
 function confirmRental() {
     const service = servicePricesV2[currentServiceId];
