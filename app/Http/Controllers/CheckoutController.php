@@ -15,15 +15,21 @@ class CheckoutController extends Controller
      */
     public function show(Request $request)
     {
-        // Get price_id from request
+        // Get price_id from request OR find by service+hours
         $priceId = $request->input('price_id');
+        $serviceType = $request->input('service');
+        $hours = $request->input('hours');
         
-        if (!$priceId) {
+        // If no price_id but have service+hours, find the price
+        if (!$priceId && $serviceType && $hours) {
+            $price = Price::where('type', $serviceType)
+                ->where('hours', (int)$hours)
+                ->first();
+        } else if ($priceId) {
+            $price = Price::find($priceId);
+        } else {
             return redirect('/')->with('error', 'Vui lòng chọn gói dịch vụ');
         }
-
-        // Get price from database
-        $price = Price::find($priceId);
         
         if (!$price) {
             return redirect('/')->with('error', 'Gói dịch vụ không tồn tại');
