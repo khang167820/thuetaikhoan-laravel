@@ -2761,20 +2761,26 @@ function openPriceModal(serviceId) {
     selectedCoupon = null;
     
     // Set service name
-    document.getElementById('pm-service-name').textContent = service.name;
+    const serviceNameEl = document.getElementById('pm-service-name');
+    if (serviceNameEl) serviceNameEl.textContent = service.name;
     
     // Check if user is logged in and has points
     const userPoints = {{ Auth::check() ? (Auth::user()->balance ?? 0) : 0 }};
+    const pointsSection = document.getElementById('pm-points-section');
+    const userPointsEl = document.getElementById('pm-user-points');
+    const pointsVndEl = document.getElementById('pm-points-vnd');
+    const usePointsWrapper = document.getElementById('pm-use-points-wrapper');
+    
     if (userPoints > 0) {
-        document.getElementById('pm-points-section').style.display = 'flex';
-        document.getElementById('pm-user-points').textContent = userPoints.toLocaleString('vi-VN') + ' điểm';
-        document.getElementById('pm-points-vnd').textContent = userPoints.toLocaleString('vi-VN');
+        if (pointsSection) pointsSection.style.display = 'flex';
+        if (userPointsEl) userPointsEl.textContent = userPoints.toLocaleString('vi-VN') + ' điểm';
+        if (pointsVndEl) pointsVndEl.textContent = userPoints.toLocaleString('vi-VN');
     } else {
-        document.getElementById('pm-points-section').style.display = 'none';
+        if (pointsSection) pointsSection.style.display = 'none';
     }
     
     // Always show points deduction checkbox with fixed 3000 VND
-    document.getElementById('pm-use-points-wrapper').style.display = 'flex';
+    if (usePointsWrapper) usePointsWrapper.style.display = 'flex';
     
     // Build package options
     const optionsContainer = document.getElementById('pm-options');
