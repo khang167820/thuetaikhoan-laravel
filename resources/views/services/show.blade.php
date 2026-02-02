@@ -52,10 +52,10 @@
 
 @section('content')
 {{-- Section 1: Service Card --}}
-<div style="max-width: 1200px; margin: 40px auto; padding: 0 20px;">
-    <div style="text-align: center; margin-bottom: 30px;">
-        <h1 style="font-size: 28px; font-weight: 700; color: #1e293b; margin-bottom: 10px;">Thuê nhanh {{ $service['name'] }}</h1>
-        <p style="color: #64748b; font-size: 16px;">Sau khi thanh toán, chỉ cần quay lại trang thanh toán — hệ thống sẽ tự chuyển bạn đến trang nhận tài khoản.</p>
+<div style="max-width: 1200px; margin: 20px auto; padding: 0 20px;">
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h1 style="font-size: 26px; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Thuê nhanh {{ $service['name'] }}</h1>
+        <p style="color: #64748b; font-size: 15px;">Sau khi thanh toán, chỉ cần quay lại trang thanh toán — hệ thống sẽ tự chuyển bạn đến trang nhận tài khoản.</p>
     </div>
     
     <div style="display: flex; justify-content: center;">
