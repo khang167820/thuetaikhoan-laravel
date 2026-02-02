@@ -2320,23 +2320,23 @@ function toggleFeatures(cardId) {
     flex: 1;
     overflow-y: auto;
     max-height: 450px;
-    padding: 8px 20px;
+    padding: 6px 16px;
 }
 .pm-options {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 3px;
 }
 
 /* Single Price Option */
 .pm-option {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 12px;
+    gap: 8px;
+    padding: 6px 10px;
     background: #fff;
     border: 2px solid #e5e7eb;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s;
 }
