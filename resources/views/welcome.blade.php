@@ -2985,17 +2985,25 @@ function updatePriceDisplay() {
 document.getElementById('pm-use-points')?.addEventListener('change', updatePriceDisplay);
 
 function confirmRental() {
+    console.log('confirmRental called');
     const service = servicePricesV2[currentServiceId];
-    if (!service) return;
+    if (!service) {
+        console.log('No service found');
+        return;
+    }
     
     const pkg = service.packages[selectedPackageIndex];
+    console.log('Package:', pkg);
+    
     const usePoints = document.getElementById('pm-use-points')?.checked || false;
-    const useCoupon = document.getElementById('pm-use-coupon').checked;
+    const useCouponEl = document.getElementById('pm-use-coupon');
+    const useCoupon = useCouponEl ? useCouponEl.checked : false;
     
     let url = `/thanh-toan?service=${currentServiceId}&hours=${pkg.hours}`;
     if (usePoints) url += '&use_points=1';
     if (useCoupon && selectedCoupon) url += `&coupon=${selectedCoupon.code}`;
     
+    console.log('Redirecting to:', url);
     window.location.href = url;
 }
 
