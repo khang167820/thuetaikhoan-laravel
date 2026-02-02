@@ -1125,7 +1125,7 @@ body.modal-open {
 .pkg-options {
   border-top: 1px solid #e5e7eb;
   padding-top: 6px;
-  max-height: 550px;
+  height: 380px;
   overflow-y: auto;
 }
 
