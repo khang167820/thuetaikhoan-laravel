@@ -2166,10 +2166,8 @@ function toggleFeatures(cardId) {
                         <span class="pm-coupon-use">Dùng</span>
                     </div>
                 </div>
-                <div class="pm-coupon-input">
-                    <input type="text" id="pm-coupon-code" placeholder="Hoặc nhập mã khác...">
-                    <button type="button" id="pm-apply-coupon-btn" onclick="applyCouponCode()">ÁP DỤNG</button>
-                </div>
+                <!-- Hidden input to store coupon code -->
+                <input type="hidden" id="pm-coupon-code" value="">
                 
                 <!-- Coupon Result Display -->
                 <div id="pm-coupon-result" style="display: none; margin-top: 12px; padding: 12px; background: #f0fdf4; border: 1px solid #86efac; border-radius: 10px;">
