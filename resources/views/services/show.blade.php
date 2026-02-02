@@ -115,10 +115,13 @@
             <div class="package-badge">Giảm {{ $pkgDisc }}%</div>
             @endif
             
-            <div class="package-duration">{{ $service['name'] }} {{ $pkg->hours_label }}</div>
+            <div class="package-header">
+                <div class="package-duration">{{ $service['name'] }} {{ $pkg->hours_label }}</div>
+            </div>
             
-            <div class="package-price">
-                {{ number_format($pkgPrice) }} VND
+            <div class="package-pricing">
+                <span class="package-price-current">{{ number_format($pkgPrice) }}</span>
+                <span class="package-price-currency">VND</span>
                 @if($pkgOld > $pkgPrice)
                 <span class="package-price-old">{{ number_format($pkgOld) }} VND</span>
                 @endif
