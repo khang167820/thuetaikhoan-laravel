@@ -2240,8 +2240,8 @@ function toggleFeatures(cardId) {
     border-radius: 24px !important;
     max-width: 560px;
     width: 92%;
-    max-height: 80vh;
-    margin-bottom: 10vh;
+    max-height: 92vh;
+    margin-bottom: 4vh;
     display: flex;
     flex-direction: column;
     box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25);
