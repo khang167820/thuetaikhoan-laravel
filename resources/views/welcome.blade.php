@@ -2130,10 +2130,10 @@ function toggleFeatures(cardId) {
         <!-- Discount Section -->
         <div class="pm-discount-section">
             <!-- Use Points Checkbox -->
-            <label class="pm-checkbox" id="pm-use-points-wrapper" style="display:none;">
+            <label class="pm-checkbox" id="pm-use-points-wrapper">
                 <input type="checkbox" id="pm-use-points">
                 <span class="pm-checkbox-mark"></span>
-                <span class="pm-checkbox-label">Sử dụng điểm tích lũy (<span id="pm-points-deduct">0</span> VND)</span>
+                <span class="pm-checkbox-label">Sử dụng điểm tích lũy (3.000 VND)</span>
             </label>
             
             <!-- Use Coupon Checkbox -->
