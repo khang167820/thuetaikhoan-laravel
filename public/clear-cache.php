@@ -1,28 +1,39 @@
 <?php
 /**
- * Clear Laravel cache - Access này một lần rồi xóa file
+ * Clear Laravel Cache
+ * Access via: /clear-cache.php
  */
 
-// Đường dẫn đến artisan
-$basePath = __DIR__;
+// Bootstrap Laravel
+require __DIR__.'/vendor/autoload.php';
+$app = require_once __DIR__.'/bootstrap/app.php';
+$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+$kernel->bootstrap();
 
-// Clear các cache
-$commands = [
-    'config:clear',
-    'cache:clear', 
-    'view:clear',
-    'route:clear',
-];
-
-echo "<h2>Clearing Laravel Cache...</h2>";
+echo "<h1>🧹 Clear Cache</h1>";
 echo "<pre>";
 
-foreach ($commands as $cmd) {
-    echo "Running: php artisan $cmd\n";
-    echo shell_exec("cd $basePath && php artisan $cmd 2>&1");
-    echo "\n";
+try {
+    // Clear view cache
+    Illuminate\Support\Facades\Artisan::call('view:clear');
+    echo "✅ View cache cleared\n";
+    
+    // Clear config cache
+    Illuminate\Support\Facades\Artisan::call('config:clear');
+    echo "✅ Config cache cleared\n";
+    
+    // Clear route cache  
+    Illuminate\Support\Facades\Artisan::call('route:clear');
+    echo "✅ Route cache cleared\n";
+    
+    // Clear application cache
+    Illuminate\Support\Facades\Artisan::call('cache:clear');
+    echo "✅ Application cache cleared\n";
+    
+    echo "\n✅ ALL CACHES CLEARED SUCCESSFULLY!\n";
+    echo "\n👉 Refresh your browser (Ctrl + F5) to see changes.";
+} catch (Exception $e) {
+    echo "❌ Error: " . $e->getMessage();
 }
 
 echo "</pre>";
-echo "<h3 style='color:green'>Done! Bây giờ hãy XÓA file này (clear-cache.php) để bảo mật!</h3>";
-echo "<p><a href='/admin/login'>→ Đi đến Admin Login</a></p>";
