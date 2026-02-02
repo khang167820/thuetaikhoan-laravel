@@ -487,13 +487,18 @@ document.querySelectorAll('.pm-option').forEach(opt => {
 });
 
 function confirmPackage() {
+    console.log('confirmPackage called');
     const selected = document.querySelector('.pm-option.selected');
+    console.log('Selected option:', selected);
+    
     if (!selected) {
         alert('Vui lòng chọn một gói thuê.');
         return;
     }
     
     const priceId = selected.dataset.id;
+    console.log('Price ID:', priceId);
+    
     const coupon = window.appliedCoupon?.code || '';
     const usePoints = document.getElementById('pm-use-points')?.checked;
     
@@ -501,6 +506,7 @@ function confirmPackage() {
     if (coupon) url += '&coupon=' + encodeURIComponent(coupon);
     if (usePoints) url += '&use_points=1';
     
+    console.log('Redirecting to:', url);
     window.location.href = url;
 }
 
