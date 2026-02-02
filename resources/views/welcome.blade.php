@@ -2103,6 +2103,7 @@ function toggleFeatures(cardId) {
         <div class="pm-header">
             <h2 class="pm-title">Chọn gói thuê</h2>
             <p class="pm-subtitle">Chọn gói thuê cho tài khoản: <strong id="pm-service-name">UNLOCKTOOL</strong></p>
+            <p style="font-size: 11px; color: #6b7280; margin: 4px 0 0 0;">💡 Tích lũy điểm, khuyến mại và mã giảm giá sẽ được áp dụng ở bước thanh toán.</p>
         </div>
         
         <!-- User Points -->
@@ -2110,14 +2111,6 @@ function toggleFeatures(cardId) {
             <span class="pm-points-label">Điểm hiện có:</span>
             <span class="pm-points-value" id="pm-user-points">0 điểm</span>
             <span class="pm-points-vnd">(≈ <span id="pm-points-vnd">0</span> VND)</span>
-        </div>
-        
-        <!-- Promo Notice -->
-        <div class="pm-promo-notice">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
-            </svg>
-            <span>Tích lũy điểm, khuyến mại và mã giảm giá sẽ được áp dụng ở bước thanh toán. Chọn gói phù hợp nhu cầu của bạn.</span>
         </div>
         
         <!-- Price Options List -->
