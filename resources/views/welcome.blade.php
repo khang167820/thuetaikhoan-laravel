@@ -2103,7 +2103,7 @@ function toggleFeatures(cardId) {
         <div class="pm-header">
             <h2 class="pm-title">Chọn gói thuê</h2>
             <p class="pm-subtitle">Chọn gói thuê cho tài khoản: <strong id="pm-service-name">UNLOCKTOOL</strong></p>
-            <p style="font-size: 11px; color: #6b7280; margin: 4px 0 0 0;">💡 Tích lũy điểm, khuyến mại và mã giảm giá sẽ được áp dụng ở bước thanh toán.</p>
+            <p style="font-size: 12px; color: #92400e; margin: 6px 0 0 0; padding: 8px 10px; background: linear-gradient(135deg, #fef3c7, #fef9c3); border-radius: 8px;">💡 Tích lũy điểm, khuyến mại và mã giảm giá sẽ được áp dụng ở bước thanh toán.</p>
         </div>
         
         <!-- User Points -->
