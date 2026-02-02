@@ -9,14 +9,14 @@
     <!-- Organization Schema -->
     <script type="application/ld+json">
     {
-        "@context": "https://schema.org",
-        "@type": "Organization",
+        "@@context": "https://schema.org",
+        "@@type": "Organization",
         "name": "Thuetaikhoan.net",
-        "url": "{{ url('/') }}",
-        "logo": "{{ asset('images/logo.png') }}",
+        "url": "https://thuetaikhoan.net",
+        "logo": "https://thuetaikhoan.net/images/logo.png",
         "description": "Hệ thống cho thuê tài khoản UnlockTool, Vietmap Live, Griffin, TSM Tool tự động 24/7",
         "contactPoint": {
-            "@type": "ContactPoint",
+            "@@type": "ContactPoint",
             "contactType": "customer service",
             "availableLanguage": "Vietnamese"
         }
@@ -26,15 +26,15 @@
     <!-- WebSite Schema with SearchAction -->
     <script type="application/ld+json">
     {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
+        "@@context": "https://schema.org",
+        "@@type": "WebSite",
         "name": "Thuetaikhoan.net",
-        "url": "{{ url('/') }}",
+        "url": "https://thuetaikhoan.net",
         "potentialAction": {
-            "@type": "SearchAction",
+            "@@type": "SearchAction",
             "target": {
-                "@type": "EntryPoint",
-                "urlTemplate": "{{ url('/tim-kiem') }}?q={search_term_string}"
+                "@@type": "EntryPoint",
+                "urlTemplate": "https://thuetaikhoan.net/tim-kiem?q={search_term_string}"
             },
             "query-input": "required name=search_term_string"
         }
