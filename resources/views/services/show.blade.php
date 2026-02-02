@@ -28,6 +28,7 @@
 
 @section('styles')
 <link rel="stylesheet" href="/css/service-page.css">
+<link rel="stylesheet" href="/css/price-modal.css">
 <link rel="stylesheet" href="/css/modern-ui.css">
 <style>
 /* Dark Mode for Service Page */
@@ -188,25 +189,26 @@
 </section>
 @endif
 
-{{-- Modal Popup - Redesigned --}}
-<div class="pkg-modal-overlay" id="pkg-modal">
-    <div class="pkg-modal">
-        <div class="pkg-modal-header">
-            <div>
-                <div class="pkg-modal-title">Chọn gói thuê</div>
-                <div class="pkg-modal-sub">Chọn gói thuê cho: <strong style="color: {{ $service['color'] }}">{{ strtoupper($service['name']) }}</strong></div>
-            </div>
-            <button class="pkg-modal-close" onclick="closePackageModal()">&times;</button>
+{{-- Modal Popup - Using Homepage Structure --}}
+<div id="price-modal" class="price-modal">
+    <div class="price-modal-backdrop" onclick="closePackageModal()"></div>
+    <div class="price-modal-content">
+        <button class="price-modal-close" onclick="closePackageModal()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+        </button>
+        
+        <!-- Modal Header -->
+        <div class="pm-header">
+            <h2 class="pm-title">Chọn gói thuê</h2>
+            <p class="pm-subtitle">Chọn gói thuê cho tài khoản: <strong style="color: {{ $service['color'] }}">{{ strtoupper($service['name']) }}</strong></p>
+            <p style="font-size: 12px; color: #92400e; margin: 6px 0 0 0; padding: 8px 10px; background: linear-gradient(135deg, #fef3c7, #fef9c3); border-radius: 8px;">💡 Tích lũy điểm, khuyến mại và mã giảm giá sẽ được áp dụng ở bước thanh toán.</p>
         </div>
         
-        <div class="pkg-modal-body">
-            {{-- Info Banner --}}
-            <div style="margin: 12px 0; padding: 10px 12px; background: linear-gradient(135deg, #fef3c7, #fef9c3); border: 1px solid #fcd34d; border-radius: 10px; display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 16px;">💡</span>
-                <span style="font-size: 12px; color: #92400e;">Tích lũy điểm, khuyến mại và mã giảm giá sẽ được áp dụng ở bước thanh toán.</span>
-            </div>
-            
-            <div class="pkg-options">
+        <!-- Price Options List -->
+        <div class="pm-options-scroll">
+            <div class="pm-options" id="pm-options">
                 @foreach($info['packages'] as $idx => $pkg)
                 @php
                     $pkgPrice = (int)$pkg->price;
@@ -215,115 +217,110 @@
                     $isHot = $idx === 0;
                     $isFlashSale = $pkgDisc >= 30;
                 @endphp
-                <label class="pkg-item">
-                    <input type="radio" name="package_select" value="{{ $pkg->id }}" class="pkg-radio"{{ $idx === 0 ? ' checked' : '' }}>
-                    <div class="pkg-card">
-                        {{-- Tags --}}
-                        <div class="pkg-tags">
+                <div class="pm-option{{ $idx === 0 ? ' selected' : '' }}" data-id="{{ $pkg->id }}" data-price="{{ $pkgPrice }}" onclick="selectOption(this)">
+                    <div class="pm-option-radio"></div>
+                    <div class="pm-option-info">
+                        <div class="pm-option-tags">
                             @if($isHot)
-                            <span class="pkg-tag pink">🔥 HOT</span>
+                            <span class="pm-tag hot">HOT</span>
                             @endif
                             @if($isFlashSale)
-                            <span class="pkg-tag green">⚡ FLASH SALE</span>
+                            <span class="pm-tag flash-sale">FLASH SALE</span>
                             @elseif($pkgDisc > 0)
-                            <span class="pkg-tag blue">🎁 KHUYẾN MÃI</span>
+                            <span class="pm-tag promo">KHUYẾN MÃI</span>
                             @endif
-                            <span class="pkg-tag" style="background: #f1f5f9; color: #475569; border-color: #e2e8f0;">{{ $pkg->hours_label }}</span>
+                            <span class="pm-tag duration">{{ $pkg->hours_label }}</span>
                         </div>
-                        
-                        <div class="pkg-card-main">
-                            <div class="pkg-left">
-                                <div class="pkg-name">{{ $service['name'] }} {{ $pkg->hours_label }}</div>
-                                <div class="pkg-duration">Thời hạn: {{ $pkg->hours }} giờ</div>
-                            </div>
-                            <div class="pkg-right">
-                                <div class="pkg-price-line">
-                                    <span class="pkg-price" style="color: {{ $service['color'] }}; font-size: 16px;">{{ number_format($pkgPrice) }} VND</span>
-                                </div>
-                                @if($pkgOld > $pkgPrice)
-                                <span class="pkg-price-old">{{ number_format($pkgOld) }} VND</span>
-                                @endif
-                                @if($pkgDisc > 0)
-                                <span class="pkg-discount">Tiết kiệm {{ $pkgDisc }}%</span>
-                                @endif
-                            </div>
-                        </div>
+                        <div class="pm-option-name">{{ $service['name'] }} {{ $pkg->hours_label }}</div>
+                        <div class="pm-option-duration">Thời hạn: {{ $pkg->hours }} giờ</div>
                     </div>
-                </label>
+                    <div class="pm-option-price">
+                        <div class="pm-option-current" style="color: {{ $service['color'] }}">{{ number_format($pkgPrice) }} VND</div>
+                        @if($pkgOld > $pkgPrice)
+                        <div class="pm-option-old">{{ number_format($pkgOld) }} VND</div>
+                        @endif
+                        @if($pkgDisc > 0)
+                        <div class="pm-option-discount">Giảm {{ $pkgDisc }}%</div>
+                        @endif
+                    </div>
+                </div>
                 @endforeach
-            </div>
-            
-            {{-- Points & Voucher Section --}}
-            <div class="pkg-coupon">
-                {{-- Loyalty Points Checkbox --}}
-                <label style="display: flex; align-items: center; gap: 8px; padding: 10px 0; cursor: pointer; font-size: 13px; color: #1f2937;">
-                    <input type="checkbox" id="use-points-checkbox" onchange="updateServicePriceDisplay()" style="width: 16px; height: 16px; accent-color: #2563eb;">
-                    <span>💰 Sử dụng điểm tích lũy (3.000 VND)</span>
-                </label>
-                
-                {{-- Use Coupon Checkbox --}}
-                <label style="display: flex; align-items: center; gap: 8px; padding: 10px 0; cursor: pointer; font-size: 13px; color: #1f2937;">
-                    <input type="checkbox" id="use-coupon-checkbox" onchange="toggleServiceCouponSection()" style="width: 16px; height: 16px; accent-color: #2563eb;">
-                    <span>🎟️ Sử dụng mã giảm giá</span>
-                </label>
-                
-                {{-- Coupon Selection --}}
-                <div id="service-coupon-section" style="display:none; margin-top: 10px;">
-                    <div style="font-size: 12px; color: #6b7280; margin-bottom: 8px;">🎫 Chọn mã giảm giá:</div>
-                    <div style="display: flex; flex-direction: column; gap: 6px;">
-                        <div class="service-coupon-item" data-code="THUE2000" onclick="selectServiceCoupon('THUE2000')" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: #fff; border: 2px solid #e5e7eb; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
-                            <div style="flex: 1;">
-                                <div style="font-size: 13px; font-weight: 700; color: #1f2937; margin-bottom: 2px;">THUE2000</div>
-                                <div style="display: flex; align-items: center; gap: 8px;">
-                                    <div style="font-size: 12px; color: #059669; font-weight: 600;">Giảm 2,000đ</div>
-                                    <div style="font-size: 11px; color: #6b7280;">Không giới hạn</div>
-                                </div>
-                            </div>
-                            <span style="font-size: 12px; color: #3b82f6; font-weight: 600;">Dùng</span>
-                        </div>
-                        <div class="service-coupon-item" data-code="GIAM10" onclick="selectServiceCoupon('GIAM10')" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: #fff; border: 2px solid #e5e7eb; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
-                            <div style="flex: 1;">
-                                <div style="font-size: 13px; font-weight: 700; color: #1f2937; margin-bottom: 2px;">GIAM10</div>
-                                <div style="display: flex; align-items: center; gap: 8px;">
-                                    <div style="font-size: 12px; color: #059669; font-weight: 600;">Giảm 10%</div>
-                                    <div style="font-size: 11px; color: #6b7280;">Không giới hạn</div>
-                                </div>
-                            </div>
-                            <span style="font-size: 12px; color: #3b82f6; font-weight: 600;">Dùng</span>
-                        </div>
-                    </div>
-                </div>
-                    
-                    {{-- Coupon Result --}}
-                    <div id="coupon-result" style="display: none; margin-top: 12px; padding: 12px; background: #f0fdf4; border: 1px solid #86efac; border-radius: 10px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                            <span style="font-size: 12px; color: #15803d; font-weight: 600;">✓ Mã <span id="coupon-code-display"></span></span>
-                            <button type="button" onclick="removeServiceCoupon()" style="background: none; border: none; color: #dc2626; font-size: 11px; cursor: pointer;">Xóa</button>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 13px;">
-                            <span style="color: #64748b;">Giá gốc:</span>
-                            <span id="original-price-display" style="color: #64748b; text-decoration: line-through;"></span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 13px;">
-                            <span style="color: #16a34a;">Giảm:</span>
-                            <span id="discount-amount-display" style="color: #16a34a; font-weight: 600;"></span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 15px; margin-top: 6px; padding-top: 6px; border-top: 1px dashed #86efac;">
-                            <span style="color: #1e293b; font-weight: 700;">Thành tiền:</span>
-                            <span id="final-price-display" style="color: #dc2626; font-weight: 800;"></span>
-                        </div>
-                    </div>
-                    
-                    {{-- Error Message --}}
-                    <div id="coupon-error" style="display: none; margin-top: 8px; padding: 8px 12px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; color: #dc2626; font-size: 12px;"></div>
-                </div>
             </div>
         </div>
         
-        {{-- Footer --}}
-        <div class="pkg-modal-footer">
-            <button class="pkg-btn" onclick="closePackageModal()">Hủy</button>
-            <button class="pkg-btn pkg-btn-primary" onclick="confirmPackage()" style="background: {{ $service['color'] }}; border-color: {{ $service['color'] }};">
+        <!-- Discount Section -->
+        <div class="pm-discount-section">
+            <!-- Use Points Checkbox -->
+            <label class="pm-checkbox" id="pm-use-points-wrapper">
+                <input type="checkbox" id="pm-use-points" onchange="updatePriceDisplay()">
+                <span class="pm-checkbox-mark"></span>
+                <span class="pm-checkbox-label">Sử dụng điểm tích lũy (3.000 VND)</span>
+            </label>
+            
+            <!-- Use Coupon Checkbox -->
+            <label class="pm-checkbox">
+                <input type="checkbox" id="pm-use-coupon" onchange="toggleCouponSection()">
+                <span class="pm-checkbox-mark"></span>
+                <span class="pm-checkbox-label">Sử dụng mã giảm giá</span>
+            </label>
+            
+            <!-- Coupon Selection -->
+            <div class="pm-coupon-section" id="pm-coupon-section" style="display:none;">
+                <div class="pm-coupon-title">
+                    <span>🎫</span> Chọn mã giảm giá:
+                </div>
+                <div class="pm-coupon-list" id="pm-coupon-list">
+                    <div class="pm-coupon-item" data-code="THUE2000" onclick="selectCoupon('THUE2000')">
+                        <div class="pm-coupon-code">THUE2000</div>
+                        <div class="pm-coupon-info">
+                            <div class="pm-coupon-value">Giảm 2,000đ</div>
+                            <div class="pm-coupon-limit">Không giới hạn</div>
+                        </div>
+                        <span class="pm-coupon-use">Dùng</span>
+                    </div>
+                    <div class="pm-coupon-item" data-code="GIAM10" onclick="selectCoupon('GIAM10')">
+                        <div class="pm-coupon-code">GIAM10</div>
+                        <div class="pm-coupon-info">
+                            <div class="pm-coupon-value">Giảm 10%</div>
+                            <div class="pm-coupon-limit">Không giới hạn</div>
+                        </div>
+                        <span class="pm-coupon-use">Dùng</span>
+                    </div>
+                </div>
+                
+                <!-- Coupon Result Display -->
+                <div id="pm-coupon-result" style="display: none; margin-top: 12px; padding: 12px; background: #f0fdf4; border: 1px solid #86efac; border-radius: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <span style="font-size: 12px; color: #15803d; font-weight: 600;">✓ Mã <span id="pm-coupon-code-display"></span></span>
+                        <button type="button" onclick="removeCoupon()" style="background: none; border: none; color: #dc2626; font-size: 11px; cursor: pointer;">Xóa</button>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                        <span style="color: #64748b;">Giá gốc:</span>
+                        <span id="pm-original-price" style="color: #64748b; text-decoration: line-through;"></span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                        <span style="color: #16a34a;">Giảm:</span>
+                        <span id="pm-discount-amount" style="color: #16a34a; font-weight: 600;"></span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 15px; margin-top: 6px; padding-top: 6px; border-top: 1px dashed #86efac;">
+                        <span style="color: #1e293b; font-weight: 700;">Thành tiền:</span>
+                        <span id="pm-final-price" style="color: #dc2626; font-weight: 800;"></span>
+                    </div>
+                </div>
+                
+                <!-- Error Message -->
+                <div id="pm-coupon-error" style="display: none; margin-top: 8px; padding: 8px 12px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; color: #dc2626; font-size: 12px;"></div>
+            </div>
+        </div>
+        
+        <!-- Modal Footer -->
+        <div class="pm-footer">
+            <button type="button" class="pm-btn-cancel" onclick="closePackageModal()">Hủy</button>
+            <button type="button" class="pm-btn-confirm" onclick="confirmPackage()" style="background: linear-gradient(135deg, {{ $service['color'] }} 0%, {{ $service['color'] }}cc 100%);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                    <line x1="1" y1="10" x2="23" y2="10"/>
+                </svg>
                 Xác nhận thuê
             </button>
         </div>
@@ -348,41 +345,50 @@ function toggleFeatures(id) {
 }
 
 function openPackageModal() {
-    document.getElementById('pkg-modal').classList.add('active');
+    document.getElementById('price-modal').classList.add('open');
     document.body.classList.add('modal-open');
 }
 
 function closePackageModal() {
-    document.getElementById('pkg-modal').classList.remove('active');
+    document.getElementById('price-modal').classList.remove('open');
     document.body.classList.remove('modal-open');
 }
 
 function selectPackage(id) {
-    document.querySelector('input[value="'+id+'"]').checked = true;
+    // Find and select the option
+    document.querySelectorAll('.pm-option').forEach(opt => {
+        opt.classList.remove('selected');
+        if (opt.dataset.id == id) {
+            opt.classList.add('selected');
+        }
+    });
     openPackageModal();
 }
 
-function toggleServiceCouponSection() {
-    const checkbox = document.getElementById('use-coupon-checkbox');
-    const section = document.getElementById('service-coupon-section');
+function selectOption(el) {
+    document.querySelectorAll('.pm-option').forEach(opt => opt.classList.remove('selected'));
+    el.classList.add('selected');
+}
+
+function toggleCouponSection() {
+    const checkbox = document.getElementById('pm-use-coupon');
+    const section = document.getElementById('pm-coupon-section');
     section.style.display = checkbox.checked ? 'block' : 'none';
     if (!checkbox.checked) {
-        removeServiceCoupon();
+        removeCoupon();
     }
 }
 
-function selectServiceCoupon(code) {
+function selectCoupon(code) {
     // Remove previous selection
-    document.querySelectorAll('.service-coupon-item').forEach(item => {
-        item.style.borderColor = '#e5e7eb';
-        item.style.background = '#fff';
+    document.querySelectorAll('.pm-coupon-item').forEach(item => {
+        item.classList.remove('selected');
     });
     
     // Highlight selected
-    const selectedItem = document.querySelector(`.service-coupon-item[data-code="${code}"]`);
+    const selectedItem = document.querySelector(`.pm-coupon-item[data-code="${code}"]`);
     if (selectedItem) {
-        selectedItem.style.borderColor = '#3b82f6';
-        selectedItem.style.background = '#eff6ff';
+        selectedItem.classList.add('selected');
     }
     
     // Get price and call API
@@ -402,10 +408,10 @@ function selectServiceCoupon(code) {
                     discount: data.discount_amount,
                     finalPrice: data.final_price
                 };
-                updateServicePriceDisplay();
+                updatePriceDisplay();
             } else {
                 alert(data.message || 'Mã giảm giá không hợp lệ.');
-                removeServiceCoupon();
+                removeCoupon();
             }
         })
         .catch(err => {
@@ -413,14 +419,13 @@ function selectServiceCoupon(code) {
         });
 }
 
-function removeServiceCoupon() {
-    document.querySelectorAll('.service-coupon-item').forEach(item => {
-        item.style.borderColor = '#e5e7eb';
-        item.style.background = '#fff';
+function removeCoupon() {
+    document.querySelectorAll('.pm-coupon-item').forEach(item => {
+        item.classList.remove('selected');
     });
-    document.getElementById('coupon-result').style.display = 'none';
+    document.getElementById('pm-coupon-result').style.display = 'none';
     window.appliedCoupon = null;
-    updateServicePriceDisplay();
+    updatePriceDisplay();
 }
 
 function formatVND(amount) {
@@ -430,19 +435,17 @@ function formatVND(amount) {
 // Fixed loyalty points value
 const SERVICE_LOYALTY_POINTS = 3000;
 
-// Get current package price
+// Get current package price from selected option
 function getCurrentPackagePrice() {
-    const selected = document.querySelector('input[name="package_select"]:checked');
+    const selected = document.querySelector('.pm-option.selected');
     if (!selected) return 0;
-    const priceElement = selected.closest('.pkg-item').querySelector('.pkg-price');
-    const priceText = priceElement ? priceElement.textContent : '0';
-    return parseInt(priceText.replace(/[^\d]/g, '')) || 0;
+    return parseInt(selected.dataset.price) || 0;
 }
 
 // Update price display with combined points + coupon
-function updateServicePriceDisplay() {
-    const resultBox = document.getElementById('coupon-result');
-    const usePoints = document.getElementById('use-points-checkbox')?.checked || false;
+function updatePriceDisplay() {
+    const resultBox = document.getElementById('pm-coupon-result');
+    const usePoints = document.getElementById('pm-use-points')?.checked || false;
     const price = getCurrentPackagePrice();
     
     if (price === 0) return;
@@ -464,10 +467,10 @@ function updateServicePriceDisplay() {
     
     if (totalDiscount > 0) {
         const finalPrice = Math.max(0, price - totalDiscount);
-        document.getElementById('coupon-code-display').textContent = discountLabel;
-        document.getElementById('original-price-display').textContent = formatVND(price);
-        document.getElementById('discount-amount-display').textContent = '-' + formatVND(totalDiscount);
-        document.getElementById('final-price-display').textContent = formatVND(finalPrice);
+        document.getElementById('pm-coupon-code-display').textContent = discountLabel;
+        document.getElementById('pm-original-price').textContent = formatVND(price);
+        document.getElementById('pm-discount-amount').textContent = '-' + formatVND(totalDiscount);
+        document.getElementById('pm-final-price').textContent = formatVND(finalPrice);
         resultBox.style.display = 'block';
     } else {
         resultBox.style.display = 'none';
@@ -475,8 +478,8 @@ function updateServicePriceDisplay() {
 }
 
 // Recalculate when package changes
-document.querySelectorAll('input[name="package_select"]').forEach(radio => {
-    radio.addEventListener('change', function() {
+document.querySelectorAll('.pm-option').forEach(opt => {
+    opt.addEventListener('click', function() {
         if (window.appliedCoupon) {
             removeCoupon();
         }
@@ -484,22 +487,24 @@ document.querySelectorAll('input[name="package_select"]').forEach(radio => {
 });
 
 function confirmPackage() {
-    const selected = document.querySelector('input[name="package_select"]:checked');
+    const selected = document.querySelector('.pm-option.selected');
     if (!selected) {
         alert('Vui lòng chọn một gói thuê.');
         return;
     }
     
-    const priceId = selected.value;
-    const voucher = document.getElementById('voucher-code').value.trim();
+    const priceId = selected.dataset.id;
+    const coupon = window.appliedCoupon?.code || '';
+    const usePoints = document.getElementById('pm-use-points')?.checked;
     
     let url = '/thanh-toan?price_id=' + priceId + '&service=' + SERVICE_TYPE;
-    if (voucher) url += '&coupon=' + encodeURIComponent(voucher);
+    if (coupon) url += '&coupon=' + encodeURIComponent(coupon);
+    if (usePoints) url += '&use_points=1';
     
     window.location.href = url;
 }
 
-document.getElementById('pkg-modal').addEventListener('click', function(e) {
+document.getElementById('price-modal').addEventListener('click', function(e) {
     if (e.target === this) closePackageModal();
 });
 
