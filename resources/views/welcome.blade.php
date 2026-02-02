@@ -2168,8 +2168,31 @@ function toggleFeatures(cardId) {
                 </div>
                 <div class="pm-coupon-input">
                     <input type="text" id="pm-coupon-code" placeholder="Hoặc nhập mã khác...">
-                    <button type="button" onclick="applyCouponCode()">ÁP DỤNG</button>
+                    <button type="button" id="pm-apply-coupon-btn" onclick="applyCouponCode()">ÁP DỤNG</button>
                 </div>
+                
+                <!-- Coupon Result Display -->
+                <div id="pm-coupon-result" style="display: none; margin-top: 12px; padding: 12px; background: #f0fdf4; border: 1px solid #86efac; border-radius: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <span style="font-size: 12px; color: #15803d; font-weight: 600;">✓ Mã <span id="pm-coupon-code-display"></span></span>
+                        <button type="button" onclick="removeCouponWelcome()" style="background: none; border: none; color: #dc2626; font-size: 11px; cursor: pointer;">Xóa</button>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                        <span style="color: #64748b;">Giá gốc:</span>
+                        <span id="pm-original-price" style="color: #64748b; text-decoration: line-through;"></span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                        <span style="color: #16a34a;">Giảm:</span>
+                        <span id="pm-discount-amount" style="color: #16a34a; font-weight: 600;"></span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 15px; margin-top: 6px; padding-top: 6px; border-top: 1px dashed #86efac;">
+                        <span style="color: #1e293b; font-weight: 700;">Thành tiền:</span>
+                        <span id="pm-final-price" style="color: #dc2626; font-weight: 800;"></span>
+                    </div>
+                </div>
+                
+                <!-- Error Message -->
+                <div id="pm-coupon-error" style="display: none; margin-top: 8px; padding: 8px 12px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; color: #dc2626; font-size: 12px;"></div>
             </div>
         </div>
         
@@ -2831,14 +2854,91 @@ function selectCoupon(code, value, type) {
         item.classList.toggle('selected', item.dataset.code === code);
     });
     document.getElementById('pm-coupon-code').value = code;
+    
+    // Automatically apply and calculate
+    calculateCouponDiscount(code);
 }
 
 function applyCouponCode() {
     const code = document.getElementById('pm-coupon-code').value.trim();
-    if (code) {
-        selectedCoupon = { code, value: 0, type: 'custom' };
-        alert('Mã giảm giá "' + code + '" sẽ được áp dụng khi thanh toán!');
+    if (!code) {
+        showCouponError('Vui lòng nhập mã giảm giá.');
+        return;
     }
+    calculateCouponDiscount(code);
+}
+
+function calculateCouponDiscount(code) {
+    const btn = document.getElementById('pm-apply-coupon-btn');
+    const resultBox = document.getElementById('pm-coupon-result');
+    const errorBox = document.getElementById('pm-coupon-error');
+    
+    // Hide previous results
+    resultBox.style.display = 'none';
+    errorBox.style.display = 'none';
+    
+    // Get current package price
+    const service = servicePricesV2[currentServiceId];
+    if (!service) {
+        showCouponError('Vui lòng chọn dịch vụ trước.');
+        return;
+    }
+    const pkg = service.packages[selectedPackageIndex];
+    const price = pkg.price;
+    
+    // Show loading
+    if (btn) {
+        btn.textContent = 'Đang kiểm tra...';
+        btn.disabled = true;
+    }
+    
+    // Call API
+    fetch('/api/coupons/validate?code=' + encodeURIComponent(code) + '&price=' + price)
+        .then(res => res.json())
+        .then(data => {
+            if (btn) {
+                btn.textContent = 'ÁP DỤNG';
+                btn.disabled = false;
+            }
+            
+            if (data.success) {
+                selectedCoupon = { code: data.coupon.code, value: data.discount_amount, type: data.coupon.discount_type };
+                
+                // Show result
+                document.getElementById('pm-coupon-code-display').textContent = data.coupon.code;
+                document.getElementById('pm-original-price').textContent = formatVNDWelcome(price);
+                document.getElementById('pm-discount-amount').textContent = '-' + formatVNDWelcome(data.discount_amount);
+                document.getElementById('pm-final-price').textContent = formatVNDWelcome(data.final_price);
+                resultBox.style.display = 'block';
+            } else {
+                showCouponError(data.message || 'Mã giảm giá không hợp lệ.');
+            }
+        })
+        .catch(err => {
+            if (btn) {
+                btn.textContent = 'ÁP DỤNG';
+                btn.disabled = false;
+            }
+            showCouponError('Có lỗi xảy ra. Vui lòng thử lại.');
+        });
+}
+
+function showCouponError(message) {
+    const errorBox = document.getElementById('pm-coupon-error');
+    errorBox.textContent = message;
+    errorBox.style.display = 'block';
+}
+
+function removeCouponWelcome() {
+    document.getElementById('pm-coupon-code').value = '';
+    document.getElementById('pm-coupon-result').style.display = 'none';
+    document.getElementById('pm-coupon-error').style.display = 'none';
+    document.querySelectorAll('.pm-coupon-item').forEach(item => item.classList.remove('selected'));
+    selectedCoupon = null;
+}
+
+function formatVNDWelcome(amount) {
+    return new Intl.NumberFormat('vi-VN').format(amount) + ' VND';
 }
 
 function confirmRental() {
