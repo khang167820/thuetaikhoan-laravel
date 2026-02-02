@@ -261,8 +261,31 @@
                     </div>
                     <div class="pkg-voucher-row">
                         <input type="text" class="pkg-voucher-input" id="voucher-code" placeholder="Nhập mã giảm giá">
-                        <button type="button" class="pkg-voucher-btn" onclick="applyVoucher()">Áp dụng</button>
+                        <button type="button" class="pkg-voucher-btn" id="apply-voucher-btn" onclick="applyVoucher()">Áp dụng</button>
                     </div>
+                    
+                    {{-- Coupon Result --}}
+                    <div id="coupon-result" style="display: none; margin-top: 12px; padding: 12px; background: #f0fdf4; border: 1px solid #86efac; border-radius: 10px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <span style="font-size: 12px; color: #15803d; font-weight: 600;">✓ Mã <span id="coupon-code-display"></span></span>
+                            <button type="button" onclick="removeCoupon()" style="background: none; border: none; color: #dc2626; font-size: 11px; cursor: pointer;">Xóa</button>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                            <span style="color: #64748b;">Giá gốc:</span>
+                            <span id="original-price-display" style="color: #64748b; text-decoration: line-through;"></span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                            <span style="color: #16a34a;">Giảm:</span>
+                            <span id="discount-amount-display" style="color: #16a34a; font-weight: 600;"></span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 15px; margin-top: 6px; padding-top: 6px; border-top: 1px dashed #86efac;">
+                            <span style="color: #1e293b; font-weight: 700;">Thành tiền:</span>
+                            <span id="final-price-display" style="color: #dc2626; font-weight: 800;"></span>
+                        </div>
+                    </div>
+                    
+                    {{-- Error Message --}}
+                    <div id="coupon-error" style="display: none; margin-top: 8px; padding: 8px 12px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; color: #dc2626; font-size: 12px;"></div>
                 </div>
             </div>
         </div>
@@ -311,12 +334,89 @@ function selectPackage(id) {
 
 function applyVoucher() {
     const code = document.getElementById('voucher-code').value.trim();
+    const btn = document.getElementById('apply-voucher-btn');
+    const resultBox = document.getElementById('coupon-result');
+    const errorBox = document.getElementById('coupon-error');
+    
+    // Hide previous results
+    resultBox.style.display = 'none';
+    errorBox.style.display = 'none';
+    
     if (!code) {
-        alert('Vui lòng nhập mã giảm giá.');
+        errorBox.textContent = 'Vui lòng nhập mã giảm giá.';
+        errorBox.style.display = 'block';
         return;
     }
-    alert('Mã giảm giá sẽ được áp dụng tại bước thanh toán.');
+    
+    // Get selected package price
+    const selected = document.querySelector('input[name="package_select"]:checked');
+    if (!selected) {
+        errorBox.textContent = 'Vui lòng chọn gói thuê trước.';
+        errorBox.style.display = 'block';
+        return;
+    }
+    
+    const priceElement = selected.closest('.pkg-item').querySelector('.pkg-price');
+    const priceText = priceElement ? priceElement.textContent : '0';
+    const price = parseInt(priceText.replace(/[^\d]/g, '')) || 0;
+    
+    // Show loading
+    btn.textContent = 'Đang kiểm tra...';
+    btn.disabled = true;
+    
+    // Call API
+    fetch('/api/coupons/validate?code=' + encodeURIComponent(code) + '&price=' + price)
+        .then(res => res.json())
+        .then(data => {
+            btn.textContent = 'Áp dụng';
+            btn.disabled = false;
+            
+            if (data.success) {
+                // Show result
+                document.getElementById('coupon-code-display').textContent = data.coupon.code;
+                document.getElementById('original-price-display').textContent = formatVND(price);
+                document.getElementById('discount-amount-display').textContent = '-' + formatVND(data.discount_amount);
+                document.getElementById('final-price-display').textContent = formatVND(data.final_price);
+                resultBox.style.display = 'block';
+                
+                // Store for later use
+                window.appliedCoupon = {
+                    code: data.coupon.code,
+                    discount: data.discount_amount,
+                    finalPrice: data.final_price
+                };
+            } else {
+                errorBox.textContent = data.message || 'Mã giảm giá không hợp lệ.';
+                errorBox.style.display = 'block';
+            }
+        })
+        .catch(err => {
+            btn.textContent = 'Áp dụng';
+            btn.disabled = false;
+            errorBox.textContent = 'Có lỗi xảy ra. Vui lòng thử lại.';
+            errorBox.style.display = 'block';
+        });
 }
+
+function removeCoupon() {
+    document.getElementById('voucher-code').value = '';
+    document.getElementById('coupon-result').style.display = 'none';
+    document.getElementById('coupon-error').style.display = 'none';
+    window.appliedCoupon = null;
+}
+
+function formatVND(amount) {
+    return new Intl.NumberFormat('vi-VN').format(amount) + ' VND';
+}
+
+// Recalculate when package changes
+document.querySelectorAll('input[name="package_select"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        if (window.appliedCoupon) {
+            removeCoupon();
+        }
+    });
+});
 
 function confirmPackage() {
     const selected = document.querySelector('input[name="package_select"]:checked');
