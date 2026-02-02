@@ -6,6 +6,41 @@
     <title>Thuê GSM Tool & Unlock Services – Unlocktool, TSM Tool, Vietmap Live, Griffin, AMT | ThueTaiKhoan.net</title>
     <meta name="description" content="ThueTaiKhoan.net cung cấp dịch vụ thuê tài khoản UnlockTool, Vietmap Live, TSM Tool, Griffin-Unlocker và nhiều phần mềm kỹ thuật số khác. Hệ thống tự động, giá cạnh tranh, hỗ trợ nhanh chóng 24/7.">
     
+    <!-- Organization Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Thuetaikhoan.net",
+        "url": "{{ url('/') }}",
+        "logo": "{{ asset('images/logo.png') }}",
+        "description": "Hệ thống cho thuê tài khoản UnlockTool, Vietmap Live, Griffin, TSM Tool tự động 24/7",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer service",
+            "availableLanguage": "Vietnamese"
+        }
+    }
+    </script>
+    
+    <!-- WebSite Schema with SearchAction -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Thuetaikhoan.net",
+        "url": "{{ url('/') }}",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "{{ url('/tim-kiem') }}?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">

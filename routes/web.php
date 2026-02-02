@@ -10,7 +10,13 @@ use App\Http\Controllers\CheckoutController;
 
 
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\SitemapController;
 
+// Sitemap Routes
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap.index');
+Route::get('/sitemap-pages.xml', [SitemapController::class, 'pages'])->name('sitemap.pages');
+Route::get('/sitemap-services.xml', [SitemapController::class, 'services'])->name('sitemap.services');
+Route::get('/sitemap-posts.xml', [SitemapController::class, 'posts'])->name('sitemap.posts');
 
 Route::get('/', function () {
     return view('welcome');

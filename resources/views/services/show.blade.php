@@ -4,6 +4,28 @@
 
 @section('service_color', $service['color'])
 
+@section('meta_description', 'Thuê ' . $service['name'] . ' giá rẻ từ ' . number_format($info['min']) . ' VND. Tự động nhận tài khoản sau thanh toán. Hỗ trợ 24/7.')
+
+@section('schema')
+@include('partials.seo-schemas', [
+    'breadcrumbs' => [
+        ['name' => 'Trang chủ', 'url' => url('/')],
+        ['name' => 'Dịch vụ', 'url' => url('/dich-vu')],
+        ['name' => $service['name'], 'url' => url()->current()]
+    ],
+    'productSchema' => [
+        'name' => 'Thuê ' . $service['name'],
+        'description' => $service['description'],
+        'image' => asset($service['logo']),
+        'lowPrice' => $info['min'],
+        'highPrice' => $info['max'] ?? $info['min'],
+        'offerCount' => count($info['packages']),
+        'available' => $info['available']
+    ],
+    'faqSchema' => $service['faq'] ?? []
+])
+@endsection
+
 @section('styles')
 <link rel="stylesheet" href="/css/service-page.css">
 <link rel="stylesheet" href="/css/modern-ui.css">

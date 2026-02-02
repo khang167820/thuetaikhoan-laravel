@@ -1,2 +1,36 @@
+# Robots.txt for Thuetaikhoan.net
+# Generated: 2026-02-02
+
 User-agent: *
-Disallow:
+Allow: /
+
+# Sitemap
+Sitemap: https://thuetaikhoan.net/sitemap.xml
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /storage/
+Disallow: /*.php$
+Disallow: /login
+Disallow: /register
+
+# Allow specific public PHP pages (legacy support)
+Allow: /thue-*.php
+Allow: /blog/*.php
+
+# Crawl delay (optional - remove if causing issues)
+Crawl-delay: 1
+
+# Googlebot specific
+User-agent: Googlebot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+# Bingbot specific
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Crawl-delay: 2
