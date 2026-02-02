@@ -1053,8 +1053,8 @@ body.modal-open {
 
 .pkg-modal {
   width: 100%;
-  max-width: 400px;
-  max-height: 88vh;
+  max-width: 450px;
+  max-height: 92vh;
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 24px 70px rgba(15, 23, 42, .32);
@@ -1125,6 +1125,8 @@ body.modal-open {
 .pkg-options {
   border-top: 1px solid #e5e7eb;
   padding-top: 8px;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 /* =========================================
