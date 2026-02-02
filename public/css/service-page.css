@@ -454,8 +454,8 @@
 .package-card {
   background: white;
   border: 2px solid #e2e8f0;
-  border-radius: 20px;
-  padding: 28px 24px;
+  border-radius: 16px;
+  padding: 18px 16px;
   transition: all 0.3s;
   position: relative;
   display: flex;
@@ -464,8 +464,8 @@
 
 .package-card:hover {
   border-color: #f97316;
-  box-shadow: 0 15px 40px rgba(249, 115, 22, 0.15);
-  transform: translateY(-6px);
+  box-shadow: 0 10px 30px rgba(249, 115, 22, 0.12);
+  transform: translateY(-4px);
 }
 
 /* Color variations */
@@ -497,81 +497,81 @@
 }
 
 .package-duration {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   color: #1e293b;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .package-pricing {
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
 
 .package-price-current {
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 800;
   color: #f97316;
   line-height: 1;
 }
 
 .package-price-currency {
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 600;
   color: #f97316;
-  margin-left: 4px;
+  margin-left: 3px;
 }
 
 .package-price-old {
-  display: block;
-  font-size: 13px;
+  display: inline-block;
+  font-size: 12px;
   color: #94a3b8;
   text-decoration: line-through;
   font-weight: 500;
-  margin-top: 4px;
+  margin-left: 8px;
 }
 
 .package-features {
   list-style: none;
   padding: 0;
-  margin: 0 0 20px;
+  margin: 0 0 12px;
   flex: 1;
 }
 
 .package-features li {
-  padding: 6px 0;
+  padding: 3px 0;
   color: #64748b;
-  font-size: 13px;
+  font-size: 12px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .package-features li:before {
   content: "✓";
   color: #10b981;
   font-weight: bold;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .package-btn {
   width: 100%;
-  padding: 14px;
+  padding: 10px;
   background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
   color: white;
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 13px;
   cursor: pointer;
   transition: all 0.3s;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
 }
 
 .package-btn:hover {
   background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(249, 115, 22, 0.35);
+  box-shadow: 0 6px 15px rgba(249, 115, 22, 0.3);
 }
 
 /* Color variations */
