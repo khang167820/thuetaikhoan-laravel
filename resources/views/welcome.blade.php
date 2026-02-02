@@ -2770,12 +2770,12 @@ function openPriceModal(serviceId) {
         document.getElementById('pm-points-section').style.display = 'flex';
         document.getElementById('pm-user-points').textContent = userPoints.toLocaleString('vi-VN') + ' điểm';
         document.getElementById('pm-points-vnd').textContent = userPoints.toLocaleString('vi-VN');
-        document.getElementById('pm-use-points-wrapper').style.display = 'flex';
-        document.getElementById('pm-points-deduct').textContent = userPoints.toLocaleString('vi-VN');
     } else {
         document.getElementById('pm-points-section').style.display = 'none';
-        document.getElementById('pm-use-points-wrapper').style.display = 'none';
     }
+    
+    // Always show points deduction checkbox with fixed 3000 VND
+    document.getElementById('pm-use-points-wrapper').style.display = 'flex';
     
     // Build package options
     const optionsContainer = document.getElementById('pm-options');
