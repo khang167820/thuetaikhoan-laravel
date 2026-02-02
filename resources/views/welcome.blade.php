@@ -2326,24 +2326,24 @@ function toggleFeatures(cardId) {
 .pm-options-scroll {
     flex: 1;
     overflow-y: auto;
-    max-height: 320px;
-    padding: 12px 24px;
+    max-height: 450px;
+    padding: 8px 20px;
 }
 .pm-options {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
 }
 
 /* Single Price Option */
 .pm-option {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
+    gap: 10px;
+    padding: 8px 12px;
     background: #fff;
     border: 2px solid #e5e7eb;
-    border-radius: 12px;
+    border-radius: 10px;
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -2398,13 +2398,13 @@ function toggleFeatures(cardId) {
 
 .pm-option-info { flex: 1; min-width: 0; }
 .pm-option-name {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
     color: #1f2937;
-    margin-bottom: 2px;
+    margin-bottom: 1px;
 }
 .pm-option-duration {
-    font-size: 12px;
+    font-size: 11px;
     color: #6b7280;
 }
 .pm-option-price {
@@ -2412,7 +2412,7 @@ function toggleFeatures(cardId) {
     flex-shrink: 0;
 }
 .pm-option-current {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
     color: #1f2937;
 }
