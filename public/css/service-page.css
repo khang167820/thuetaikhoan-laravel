@@ -454,16 +454,18 @@
 .package-card {
   background: white;
   border: 2px solid #e2e8f0;
-  border-radius: 16px;
-  padding: 24px;
+  border-radius: 20px;
+  padding: 28px 24px;
   transition: all 0.3s;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .package-card:hover {
-  border-color: #667eea;
-  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.15);
-  transform: translateY(-4px);
+  border-color: #f97316;
+  box-shadow: 0 15px 40px rgba(249, 115, 22, 0.15);
+  transform: translateY(-6px);
 }
 
 /* Color variations */
@@ -495,17 +497,20 @@
 }
 
 .package-duration {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
   color: #1e293b;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f1f5f9;
 }
 
 .package-price {
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 800;
-  color: #667eea;
-  margin: 16px 0;
+  color: #f97316;
+  margin: 0 0 4px;
+  line-height: 1.2;
 }
 
 /* Color variations */
@@ -522,48 +527,56 @@
 }
 
 .package-price-old {
-  font-size: 16px;
+  font-size: 14px;
   color: #94a3b8;
   text-decoration: line-through;
-  margin-left: 8px;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 16px;
 }
 
 .package-features {
   list-style: none;
   padding: 0;
-  margin: 20px 0;
+  margin: 0 0 20px;
+  flex: 1;
 }
 
 .package-features li {
-  padding: 8px 0;
+  padding: 6px 0;
   color: #64748b;
-  font-size: 14px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .package-features li:before {
-  content: "✓ ";
+  content: "✓";
   color: #10b981;
   font-weight: bold;
-  margin-right: 8px;
+  font-size: 12px;
 }
 
 .package-btn {
   width: 100%;
   padding: 14px;
-  background: #667eea;
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
   color: white;
   border: none;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 16px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 15px;
   cursor: pointer;
   transition: all 0.3s;
-  margin-top: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .package-btn:hover {
-  background: #5568d3;
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
   transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(249, 115, 22, 0.35);
 }
 
 /* Color variations */
