@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -6,12 +6,50 @@
     <title>Thuê GSM Tool & Unlock Services – Unlocktool, TSM Tool, Vietmap Live, Griffin, AMT | ThueTaiKhoan.net</title>
     <meta name="description" content="ThueTaiKhoan.net cung cấp dịch vụ thuê tài khoản UnlockTool, Vietmap Live, TSM Tool, Griffin-Unlocker và nhiều phần mềm kỹ thuật số khác. Hệ thống tự động, giá cạnh tranh, hỗ trợ nhanh chóng 24/7.">
     
+    <!-- Organization Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Thuetaikhoan.net",
+        "url": "https://thuetaikhoan.net",
+        "logo": "https://thuetaikhoan.net/images/logo.png",
+        "description": "Hệ thống cho thuê tài khoản UnlockTool, Vietmap Live, Griffin, TSM Tool tự động 24/7",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer service",
+            "availableLanguage": "Vietnamese"
+        }
+    }
+    </script>
+    
+    <!-- WebSite Schema with SearchAction -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Thuetaikhoan.net",
+        "url": "https://thuetaikhoan.net",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://thuetaikhoan.net/tim-kiem?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Modern UI Enhancement -->
     <link rel="stylesheet" href="/css/modern-ui.css?v=6">
+    
+    <!-- Mobile Menu Styles -->
+    <link rel="stylesheet" href="/css/mobile-menu.css?v=1">
     
     <style>
         /* ============================================
@@ -65,6 +103,88 @@
         [data-theme="dark"] .site-footer { background: var(--bg); }
         [data-theme="dark"] .guide-payment-section { background: #0f172a; }
         [data-theme="dark"] .fast-order-wrap { background: var(--bg); }
+
+        /* HERO SECTION - Modern */
+        .hero-modern {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #020617 100%);
+            padding: 60px 20px;
+            text-align: center;
+            color: #fff;
+        }
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .hero-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+        .hero-title-accent {
+            color: #fbbf24;
+        }
+        .hero-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        .search-modern {
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto 24px;
+            background: #fff;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        }
+        .search-modern input {
+            flex: 1;
+            padding: 16px 24px;
+            border: none;
+            font-size: 15px;
+            outline: none;
+            color: #333;
+        }
+        .search-modern input::placeholder {
+            color: #9ca3af;
+            opacity: 1;
+        }
+        .search-modern button {
+            padding: 16px 28px;
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            color: #fff;
+            border: none;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        .hero-stat {
+            text-align: center;
+        }
+        .hero-stat-number {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fbbf24;
+        }
+        .hero-stat-label {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+        @media (max-width: 768px) {
+            .hero-title { font-size: 1.6rem; }
+            .hero-modern { padding: 40px 16px; }
+            .hero-stats { gap: 24px; }
+            .hero-stat-number { font-size: 1.4rem; }
+        }
 
         /* RESET & BASE */
         *, *::before, *::after { box-sizing: border-box; }
@@ -302,6 +422,19 @@
         [data-theme="dark"] .history-search-in-dropdown { border-color: #334155; }
         [data-theme="dark"] .history-search-form-dropdown { background: #1e293b; border-color: #334155; }
         [data-theme="dark"] .history-search-input-dropdown { color: #f1f5f9; }
+        
+        /* Theme Toggle Button */
+        .theme-toggle-btn {
+            display: flex; align-items: center; justify-content: center;
+            width: 40px; height: 40px;
+            background: #f1f5f9; border: none; border-radius: 10px;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .theme-toggle-btn:hover { background: #e2e8f0; }
+        .theme-toggle-btn svg { color: #64748b; }
+        [data-theme="dark"] .theme-toggle-btn { background: #334155; }
+        [data-theme="dark"] .theme-toggle-btn:hover { background: #475569; }
+        [data-theme="dark"] .theme-toggle-btn svg { color: #fbbf24; }
 
         /* Auth buttons */
         .header-auth {
@@ -499,19 +632,19 @@
             position: relative;
             background: #ffffff;
             border-radius: 24px;
-            border: 3px solid #fec9a5;
+            border: 3px solid #f97316;
             padding: 20px 18px 16px;
             display: flex;
             flex-direction: column;
             overflow: visible;
-            box-shadow: 0 6px 14px rgba(0,0,0,.08);
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.15), 0 4px 8px rgba(0,0,0,.1);
             transition: transform .18s ease-out, box-shadow .18s ease-out, border-color .18s ease-out;
             height: 100%;
         }
         .fo-card:hover {
-            transform: translateY(-4px) scale(1.01);
-            border-color: #fca567;
-            box-shadow: 0 10px 22px rgba(0,0,0,.12);
+            transform: translateY(-6px) scale(1.02);
+            border-color: #ea580c;
+            box-shadow: 0 14px 32px rgba(249, 115, 22, 0.25), 0 6px 12px rgba(0,0,0,.15);
         }
         .fo-ribbon {
             position: absolute;
@@ -1130,219 +1263,11 @@
 </head>
 <body>
 
-<!-- HEADER - Giống trang cũ -->
-<header class="site-header">
-    <div class="header-main">
-        <div class="container header-inner">
-            <!-- Left: Logo + Navigation -->
-            <div class="header-left">
-                <!-- Logo -->
-                <a class="header-brand" href="/">
-                    <img class="header-logo" src="/assets/images/logo.png" alt="logo" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 36 36%22><rect fill=%22%231e40af%22 width=%2236%22 height=%2236%22 rx=%228%22/><text x=%2218%22 y=%2224%22 fill=%22white%22 font-size=%2218%22 text-anchor=%22middle%22>T</text></svg>'">
-                    <div class="header-brand-text">
-                        <span class="brand-name">thuetaikhoan.net</span>
-                        <span class="brand-tagline">Thuê tài khoản tự động 24/7</span>
-                    </div>
-                </a>
-                
-                <!-- Navigation -->
-                <nav class="header-nav">
-                    <a href="/" class="nav-link active">
-                        <span class="nav-icon-box">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                                <polyline points="9 22 9 12 15 12 15 22"/>
-                            </svg>
-                        </span>
-                        Trang chủ
-                    </a>
-                    <div class="nav-dropdown">
-                        <a href="#fast-order" class="nav-link">
-                            <span class="nav-icon-box">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="3" y="3" width="7" height="7"/>
-                                    <rect x="14" y="3" width="7" height="7"/>
-                                    <rect x="14" y="14" width="7" height="7"/>
-                                    <rect x="3" y="14" width="7" height="7"/>
-                                </svg>
-                            </span>
-                            Dịch vụ
-                            <svg class="nav-arrow-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="6 9 12 15 18 9"/>
-                            </svg>
-                        </a>
-                        <div class="nav-dropdown-menu">
-                            <a href="/thue-unlocktool"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg> Unlocktool</a>
-                            <a href="/thue-vietmap"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="3"/><path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 7 8 11.7z"/></svg> Vietmap Live</a>
-                            <a href="/thue-tsm"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> TSM Tool</a>
-                            <a href="/thue-griffin"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg> Griffin-Unlocker</a>
-                            <a href="/thue-amt"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Android Multitool</a>
-                            <a href="/thue-kg-killer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg> KG Killer Tool</a>
-                            <a href="/thue-samsung-tool"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Samsung Tool</a>
-                            <div style="border-top: 1px solid #e5e7eb; margin: 8px 0;"></div>
-                            <a href="/ord-services" class="dropdown-cta">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
-                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-                                </svg>
-                                Thuê Dịch Vụ Khác
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                    <a href="#huong-dan" class="nav-link">
-                        <span class="nav-icon-box">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                            </svg>
-                        </span>
-                        Hướng dẫn
-                    </a>
-                    <a href="/blog" class="nav-link">
-                        <span class="nav-icon-box">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                <polyline points="14 2 14 8 20 8"/>
-                            </svg>
-                        </span>
-                        Blog
-                    </a>
-                </nav>
-            </div>
 
-            <!-- Right: Auth -->
-            <div class="header-right">
-                <!-- Lịch sử thuê dropdown -->
-                <div class="header-history-dropdown">
-                    <div class="nav-dropdown">
-                        <a href="#" class="nav-link" id="historyNavLink">
-                            <span class="nav-icon-box">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                    <polyline points="14 2 14 8 20 8"/>
-                                    <line x1="16" y1="13" x2="8" y2="13"/>
-                                    <line x1="16" y1="17" x2="8" y2="17"/>
-                                </svg>
-                            </span>
-                            Lịch sử thuê
-                            <svg class="nav-arrow-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="6 9 12 15 18 9"/>
-                            </svg>
-                        </a>
-                        <div class="nav-dropdown-menu history-menu">
-                            <a href="/order-history-ip">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                    <polyline points="14 2 14 8 20 8"/>
-                                    <line x1="16" y1="13" x2="8" y2="13"/>
-                                    <line x1="16" y1="17" x2="8" y2="17"/>
-                                </svg>
-                                Lịch sử thuê 30 ngày
-                            </a>
-                            <div class="history-search-in-dropdown">
-                                <form class="history-search-form-dropdown" action="/order-detail">
-                                    <input type="text" name="code" placeholder="Tìm mã đơn hàng..." class="history-search-input-dropdown">
-                                    <button type="submit" class="history-search-btn-dropdown">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <circle cx="11" cy="11" r="8"/>
-                                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                                        </svg>
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Auth buttons -->
-                <div class="header-auth">
-                    <?php if(auth()->guard()->check()): ?>
-                    
-                    <div class="user-balance">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
-                        </svg>
-                        <span><?php echo e(number_format(Auth::user()->balance ?? 0, 0, ',', '.')); ?>đ</span>
-                    </div>
-                    <div class="nav-dropdown user-dropdown">
-                        <a href="#" class="user-btn">
-                            <span class="user-avatar"><?php echo e(substr(Auth::user()->name ?? Auth::user()->fullname ?? 'U', 0, 1)); ?></span>
-                            <span class="user-name"><?php echo e(Auth::user()->name ?? Auth::user()->fullname ?? 'User'); ?></span>
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="6 9 12 15 18 9"/>
-                            </svg>
-                        </a>
-                        <div class="nav-dropdown-menu">
-                            <a href="/account">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                                    <circle cx="12" cy="7" r="4"/>
-                                </svg>
-                                Tài khoản
-                            </a>
-                            <a href="/order-history">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                    <polyline points="14 2 14 8 20 8"/>
-                                </svg>
-                                Lịch sử đơn hàng
-                            </a>
-                            <a href="/deposit">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
-                                    <line x1="1" y1="10" x2="23" y2="10"/>
-                                </svg>
-                                Nạp tiền
-                            </a>
-                            <div style="border-top: 1px solid #e5e7eb; margin: 8px 0;"></div>
-                            <form action="/logout" method="POST" style="margin: 0;">
-                                <?php echo csrf_field(); ?>
-                                <button type="submit" class="logout-btn">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                                        <polyline points="16 17 21 12 16 7"/>
-                                        <line x1="21" y1="12" x2="9" y2="12"/>
-                                    </svg>
-                                    Đăng xuất
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                    <?php else: ?>
-                    
-                    <a href="/login" class="auth-login-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
-                            <polyline points="10 17 15 12 10 7"/>
-                            <line x1="15" y1="12" x2="3" y2="12"/>
-                        </svg>
-                        Đăng nhập
-                    </a>
-                    <a href="/register" class="auth-register-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                            <circle cx="8.5" cy="7" r="4"/>
-                            <line x1="20" y1="8" x2="20" y2="14"/>
-                            <line x1="23" y1="11" x2="17" y2="11"/>
-                        </svg>
-                        Đăng ký
-                    </a>
-                    <?php endif; ?>
-                </div>
-            </div>
+<!-- SHARED HEADER -->
+<?php echo $__env->make('partials.header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
-            <!-- Mobile menu button -->
-            <button class="btn-mobile-menu" id="mobileMenuBtn">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </div>
-</header>
+<?php echo $__env->make('partials.mobile-menu', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
 <!-- HERO SECTION - MODERN -->
 <section class="hero-modern">
@@ -1831,7 +1756,7 @@
                     </div>
                     <div class="guide-step-content">
                         <div class="guide-step-title">Bước 5: Nhận tài khoản</div>
-                        <div class="guide-step-text">Tại trang thanh toán, hệ thống sẽ tự động chuyển tới trang hiển thị thông tin tài khoản. Đăng ký tài khoản để kiểm tra được thông tin đơn cũng như nhận nhiều đặc quyền khuyến mãi của ThueVIP.</div>
+                        <div class="guide-step-text">Tại trang thanh toán, hệ thống sẽ tự động chuyển tới trang hiển thị thông tin tài khoản. Đăng ký tài khoản để kiểm tra được thông tin đơn cũng như nhận nhiều đặc quyền khuyến mãi của Thuetaikhoan.net.</div>
                     </div>
                 </div>
             </div>
@@ -2178,6 +2103,7 @@ function toggleFeatures(cardId) {
         <div class="pm-header">
             <h2 class="pm-title">Chọn gói thuê</h2>
             <p class="pm-subtitle">Chọn gói thuê cho tài khoản: <strong id="pm-service-name">UNLOCKTOOL</strong></p>
+            <p style="font-size: 12px; color: #92400e; margin: 6px 0 0 0; padding: 8px 10px; background: linear-gradient(135deg, #fef3c7, #fef9c3); border-radius: 8px;">💡 Tích lũy điểm, khuyến mại và mã giảm giá sẽ được áp dụng ở bước thanh toán.</p>
         </div>
         
         <!-- User Points -->
@@ -2185,14 +2111,6 @@ function toggleFeatures(cardId) {
             <span class="pm-points-label">Điểm hiện có:</span>
             <span class="pm-points-value" id="pm-user-points">0 điểm</span>
             <span class="pm-points-vnd">(≈ <span id="pm-points-vnd">0</span> VND)</span>
-        </div>
-        
-        <!-- Promo Notice -->
-        <div class="pm-promo-notice">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
-            </svg>
-            <span>Tích lũy điểm, khuyến mại và mã giảm giá sẽ được áp dụng ở bước thanh toán. Chọn gói phù hợp nhu cầu của bạn.</span>
         </div>
         
         <!-- Price Options List -->
@@ -2205,10 +2123,10 @@ function toggleFeatures(cardId) {
         <!-- Discount Section -->
         <div class="pm-discount-section">
             <!-- Use Points Checkbox -->
-            <label class="pm-checkbox" id="pm-use-points-wrapper" style="display:none;">
+            <label class="pm-checkbox" id="pm-use-points-wrapper">
                 <input type="checkbox" id="pm-use-points">
                 <span class="pm-checkbox-mark"></span>
-                <span class="pm-checkbox-label">Sử dụng điểm tích lũy (<span id="pm-points-deduct">0</span> VND)</span>
+                <span class="pm-checkbox-label">Sử dụng điểm tích lũy (3.000 VND)</span>
             </label>
             
             <!-- Use Coupon Checkbox -->
@@ -2241,10 +2159,31 @@ function toggleFeatures(cardId) {
                         <span class="pm-coupon-use">Dùng</span>
                     </div>
                 </div>
-                <div class="pm-coupon-input">
-                    <input type="text" id="pm-coupon-code" placeholder="Hoặc nhập mã khác...">
-                    <button type="button" onclick="applyCouponCode()">ÁP DỤNG</button>
+                <!-- Hidden input to store coupon code -->
+                <input type="hidden" id="pm-coupon-code" value="">
+                
+                <!-- Coupon Result Display -->
+                <div id="pm-coupon-result" style="display: none; margin-top: 12px; padding: 12px; background: #f0fdf4; border: 1px solid #86efac; border-radius: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <span style="font-size: 12px; color: #15803d; font-weight: 600;">✓ Mã <span id="pm-coupon-code-display"></span></span>
+                        <button type="button" onclick="removeCouponWelcome()" style="background: none; border: none; color: #dc2626; font-size: 11px; cursor: pointer;">Xóa</button>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                        <span style="color: #64748b;">Giá gốc:</span>
+                        <span id="pm-original-price" style="color: #64748b; text-decoration: line-through;"></span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                        <span style="color: #16a34a;">Giảm:</span>
+                        <span id="pm-discount-amount" style="color: #16a34a; font-weight: 600;"></span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 15px; margin-top: 6px; padding-top: 6px; border-top: 1px dashed #86efac;">
+                        <span style="color: #1e293b; font-weight: 700;">Thành tiền:</span>
+                        <span id="pm-final-price" style="color: #dc2626; font-weight: 800;"></span>
+                    </div>
                 </div>
+                
+                <!-- Error Message -->
+                <div id="pm-coupon-error" style="display: none; margin-top: 8px; padding: 8px 12px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; color: #dc2626; font-size: 12px;"></div>
             </div>
         </div>
         
@@ -2271,6 +2210,7 @@ function toggleFeatures(cardId) {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 20px;
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
@@ -2288,16 +2228,18 @@ function toggleFeatures(cardId) {
 .price-modal-content {
     position: relative;
     background: #fff;
-    border-radius: 16px;
+    border-radius: 24px !important;
     max-width: 560px;
-    width: 95%;
-    max-height: 90vh;
+    width: 92%;
+    max-height: 92vh;
+    margin-bottom: 4vh;
     display: flex;
     flex-direction: column;
     box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25);
     transform: scale(0.95) translateY(20px);
     transition: transform 0.3s ease;
-    overflow: hidden;
+    overflow: hidden !important;
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
 }
 .price-modal.open .price-modal-content {
     transform: scale(1) translateY(0);
@@ -2377,24 +2319,24 @@ function toggleFeatures(cardId) {
 .pm-options-scroll {
     flex: 1;
     overflow-y: auto;
-    max-height: 320px;
-    padding: 12px 24px;
+    max-height: 450px;
+    padding: 8px 20px;
 }
 .pm-options {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
 }
 
 /* Single Price Option */
 .pm-option {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
+    gap: 10px;
+    padding: 8px 12px;
     background: #fff;
     border: 2px solid #e5e7eb;
-    border-radius: 12px;
+    border-radius: 10px;
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -2449,13 +2391,13 @@ function toggleFeatures(cardId) {
 
 .pm-option-info { flex: 1; min-width: 0; }
 .pm-option-name {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
     color: #1f2937;
-    margin-bottom: 2px;
+    margin-bottom: 1px;
 }
 .pm-option-duration {
-    font-size: 12px;
+    font-size: 11px;
     color: #6b7280;
 }
 .pm-option-price {
@@ -2463,7 +2405,7 @@ function toggleFeatures(cardId) {
     flex-shrink: 0;
 }
 .pm-option-current {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
     color: #1f2937;
 }
@@ -2615,9 +2557,10 @@ function toggleFeatures(cardId) {
 .pm-footer {
     display: flex;
     gap: 12px;
-    padding: 16px 24px;
+    padding: 16px 24px 20px;
     border-top: 1px solid #e5e7eb;
     background: #fff;
+    border-radius: 0 0 20px 20px;
 }
 .pm-btn-cancel {
     flex: 1;
@@ -2902,14 +2845,91 @@ function selectCoupon(code, value, type) {
         item.classList.toggle('selected', item.dataset.code === code);
     });
     document.getElementById('pm-coupon-code').value = code;
+    
+    // Automatically apply and calculate
+    calculateCouponDiscount(code);
 }
 
 function applyCouponCode() {
     const code = document.getElementById('pm-coupon-code').value.trim();
-    if (code) {
-        selectedCoupon = { code, value: 0, type: 'custom' };
-        alert('Mã giảm giá "' + code + '" sẽ được áp dụng khi thanh toán!');
+    if (!code) {
+        showCouponError('Vui lòng nhập mã giảm giá.');
+        return;
     }
+    calculateCouponDiscount(code);
+}
+
+function calculateCouponDiscount(code) {
+    const btn = document.getElementById('pm-apply-coupon-btn');
+    const resultBox = document.getElementById('pm-coupon-result');
+    const errorBox = document.getElementById('pm-coupon-error');
+    
+    // Hide previous results
+    resultBox.style.display = 'none';
+    errorBox.style.display = 'none';
+    
+    // Get current package price
+    const service = servicePricesV2[currentServiceId];
+    if (!service) {
+        showCouponError('Vui lòng chọn dịch vụ trước.');
+        return;
+    }
+    const pkg = service.packages[selectedPackageIndex];
+    const price = pkg.price;
+    
+    // Show loading
+    if (btn) {
+        btn.textContent = 'Đang kiểm tra...';
+        btn.disabled = true;
+    }
+    
+    // Call API
+    fetch('/api/coupons/validate?code=' + encodeURIComponent(code) + '&price=' + price)
+        .then(res => res.json())
+        .then(data => {
+            if (btn) {
+                btn.textContent = 'ÁP DỤNG';
+                btn.disabled = false;
+            }
+            
+            if (data.success) {
+                selectedCoupon = { code: data.coupon.code, value: data.discount_amount, type: data.coupon.discount_type };
+                
+                // Show result
+                document.getElementById('pm-coupon-code-display').textContent = data.coupon.code;
+                document.getElementById('pm-original-price').textContent = formatVNDWelcome(price);
+                document.getElementById('pm-discount-amount').textContent = '-' + formatVNDWelcome(data.discount_amount);
+                document.getElementById('pm-final-price').textContent = formatVNDWelcome(data.final_price);
+                resultBox.style.display = 'block';
+            } else {
+                showCouponError(data.message || 'Mã giảm giá không hợp lệ.');
+            }
+        })
+        .catch(err => {
+            if (btn) {
+                btn.textContent = 'ÁP DỤNG';
+                btn.disabled = false;
+            }
+            showCouponError('Có lỗi xảy ra. Vui lòng thử lại.');
+        });
+}
+
+function showCouponError(message) {
+    const errorBox = document.getElementById('pm-coupon-error');
+    errorBox.textContent = message;
+    errorBox.style.display = 'block';
+}
+
+function removeCouponWelcome() {
+    document.getElementById('pm-coupon-code').value = '';
+    document.getElementById('pm-coupon-result').style.display = 'none';
+    document.getElementById('pm-coupon-error').style.display = 'none';
+    document.querySelectorAll('.pm-coupon-item').forEach(item => item.classList.remove('selected'));
+    selectedCoupon = null;
+}
+
+function formatVNDWelcome(amount) {
+    return new Intl.NumberFormat('vi-VN').format(amount) + ' VND';
 }
 
 function confirmRental() {
@@ -2936,6 +2956,67 @@ function closePriceModal() {
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closePriceModal();
 });
+</script>
+
+<!-- Theme Toggle Script -->
+<script>
+// Desktop Theme Toggle Function
+function toggleDesktopTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    
+    if (isDark) {
+        html.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+    }
+    updateThemeIcons(!isDark);
+}
+
+function updateThemeIcons(isDark) {
+    // Desktop theme toggle
+    const desktopBtn = document.getElementById('desktopThemeToggle');
+    if (desktopBtn) {
+        const sunIcon = desktopBtn.querySelector('.theme-icon-sun');
+        const moonIcon = desktopBtn.querySelector('.theme-icon-moon');
+        if (sunIcon && moonIcon) {
+            sunIcon.style.display = isDark ? 'block' : 'none';
+            moonIcon.style.display = isDark ? 'none' : 'block';
+        }
+    }
+    // Mobile theme toggle (if exists)
+    const mobileBtn = document.getElementById('mobileThemeToggle');
+    if (mobileBtn) {
+        const sunIcon = mobileBtn.querySelector('.theme-icon-sun');
+        const moonIcon = mobileBtn.querySelector('.theme-icon-moon');
+        const textEl = mobileBtn.querySelector('.theme-text');
+        if (sunIcon && moonIcon) {
+            sunIcon.style.display = isDark ? 'block' : 'none';
+            moonIcon.style.display = isDark ? 'none' : 'block';
+        }
+        if (textEl) {
+            textEl.textContent = isDark ? 'Chế độ sáng' : 'Chế độ tối';
+        }
+    }
+}
+
+// Initialize theme on load
+(function() {
+    const html = document.documentElement;
+    const savedTheme = localStorage.getItem('theme');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
+        html.setAttribute('data-theme', 'dark');
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() { updateThemeIcons(true); });
+        } else {
+            updateThemeIcons(true);
+        }
+    }
+})();
 </script>
 
 
