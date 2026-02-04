@@ -50,6 +50,45 @@ class CheckoutController extends Controller
             return redirect('/')->with('error', 'Gói dịch vụ không tồn tại');
         }
 
+        // Calculate discounts from URL parameters
+        $usePoints = $request->input('use_points') == '1';
+        $couponCode = $request->input('coupon');
+        
+        $originalPrice = $price->price;
+        $totalDiscount = 0;
+        $discountDetails = [];
+        
+        // Loyalty points discount (fixed 3000 VND)
+        $pointsDiscount = 0;
+        if ($usePoints && Auth::check()) {
+            $pointsDiscount = 3000;
+            $totalDiscount += $pointsDiscount;
+            $discountDetails[] = ['label' => 'Điểm tích lũy', 'amount' => $pointsDiscount];
+        }
+        
+        // Coupon discount
+        $couponDiscount = 0;
+        $appliedCoupon = null;
+        if ($couponCode) {
+            $coupon = \App\Models\Coupon::where('code', $couponCode)
+                ->where('active', true)
+                ->first();
+            
+            if ($coupon) {
+                if ($coupon->discount_type === 'percent') {
+                    $couponDiscount = round(($originalPrice * $coupon->discount_value) / 100);
+                } else {
+                    $couponDiscount = $coupon->discount_value;
+                }
+                $totalDiscount += $couponDiscount;
+                $discountDetails[] = ['label' => 'Mã ' . $couponCode, 'amount' => $couponDiscount];
+                $appliedCoupon = $coupon;
+            }
+        }
+        
+        // Final price
+        $finalPrice = max(0, $originalPrice - $totalDiscount);
+
         // Check if user is logged in and get balance
         $userBalance = 0;
         if (Auth::check()) {
@@ -64,6 +103,15 @@ class CheckoutController extends Controller
             'bankInfo' => $bankInfo,
             'userBalance' => $userBalance,
             'isLoggedIn' => Auth::check(),
+            // Discount data
+            'originalPrice' => $originalPrice,
+            'totalDiscount' => $totalDiscount,
+            'finalPrice' => $finalPrice,
+            'discountDetails' => $discountDetails,
+            'usePoints' => $usePoints,
+            'couponCode' => $couponCode,
+            'pointsDiscount' => $pointsDiscount,
+            'couponDiscount' => $couponDiscount,
         ]);
     }
 

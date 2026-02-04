@@ -56,15 +56,21 @@
                             <span class="co-detail-label">Thời hạn</span>
                             <span class="co-detail-value">{{ $price->hours_label }}</span>
                         </div>
-                        @if($price->has_discount && $price->original_price)
                         <div class="co-detail-row">
                             <span class="co-detail-label">Giá gốc</span>
-                            <span class="co-detail-value co-old-price">{{ number_format($price->original_price, 0, ',', '.') }}đ</span>
+                            <span class="co-detail-value @if($totalDiscount > 0) co-old-price @endif">{{ number_format($originalPrice, 0, ',', '.') }}đ</span>
                         </div>
+                        @if($totalDiscount > 0)
+                        @foreach($discountDetails as $discount)
+                        <div class="co-detail-row">
+                            <span class="co-detail-label" style="color: #16a34a;">{{ $discount['label'] }}</span>
+                            <span class="co-detail-value" style="color: #16a34a; font-weight: 600;">-{{ number_format($discount['amount'], 0, ',', '.') }}đ</span>
+                        </div>
+                        @endforeach
                         @endif
                         <div class="co-detail-row co-detail-total">
                             <span class="co-detail-label">Tổng thanh toán</span>
-                            <span class="co-detail-value co-price">{{ number_format($price->price, 0, ',', '.') }}<small>đ</small></span>
+                            <span class="co-detail-value co-price">{{ number_format($finalPrice, 0, ',', '.') }}<small>đ</small></span>
                         </div>
                     </div>
 
@@ -73,6 +79,9 @@
                         @csrf
                         <input type="hidden" name="price_id" value="{{ $price->id }}">
                         <input type="hidden" name="g-recaptcha-response" id="recaptcha-response">
+                        <input type="hidden" name="use_points" value="{{ $usePoints ? '1' : '0' }}">
+                        <input type="hidden" name="coupon_code" value="{{ $couponCode ?? '' }}">
+                        <input type="hidden" name="final_price" value="{{ $finalPrice }}">
 
                         @if($errors->any())
                         <div class="co-alert co-alert-error">
