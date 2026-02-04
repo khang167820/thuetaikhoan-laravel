@@ -345,19 +345,14 @@
 .product-category {
     display: inline-block;
     padding: 4px 10px;
-    background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
-    color: white;
-    border-radius: 20px;
+    background: #334155;
+    color: #94a3b8;
+    border-radius: 6px;
     font-size: 9px;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.3px;
 }
-/* Category color variations */
-.product-card:nth-child(4n+1) .product-category { background: linear-gradient(135deg, #f97316, #fb923c); }
-.product-card:nth-child(4n+2) .product-category { background: linear-gradient(135deg, #10b981, #34d399); }
-.product-card:nth-child(4n+3) .product-category { background: linear-gradient(135deg, #6366f1, #818cf8); }
-.product-card:nth-child(4n) .product-category { background: linear-gradient(135deg, #ec4899, #f472b6); }
 
 .product-name {
     padding: 10px 14px 0;
