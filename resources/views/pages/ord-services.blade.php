@@ -139,14 +139,18 @@
 <style>
 .ord-services-content {
     background: var(--light, #f8fafc);
-    padding: 30px 0 50px;
+    padding: 20px 0 50px;
     min-height: 80vh;
+}
+.ord-services-content .container {
+    max-width: 1600px;
+    width: 95%;
 }
 
 .services-layout {
     display: grid;
-    grid-template-columns: 260px 1fr;
-    gap: 24px;
+    grid-template-columns: 220px 1fr;
+    gap: 20px;
 }
 
 /* SIDEBAR */
@@ -323,7 +327,7 @@
 /* PRODUCTS GRID */
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 16px;
 }
 .product-card {
@@ -482,6 +486,9 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
+@media (max-width: 1400px) {
+    .products-grid { grid-template-columns: repeat(4, 1fr); }
+}
 @media (max-width: 1200px) {
     .products-grid { grid-template-columns: repeat(3, 1fr); }
 }
