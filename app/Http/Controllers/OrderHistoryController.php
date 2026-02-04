@@ -84,7 +84,9 @@ class OrderHistoryController extends Controller
         // Security: Only allow access if order belongs to this IP or authenticated user
         $canAccess = false;
         if (Auth::check()) {
-            $canAccess = ($order->user_id == Auth::id() || $order->ip_address == $customerIp);
+            // Check if user_id property exists to avoid error if migration not run
+            $hasUserId = property_exists($order, 'user_id');
+            $canAccess = (($hasUserId && $order->user_id == Auth::id()) || $order->ip_address == $customerIp);
         } else {
             $canAccess = ($order->ip_address == $customerIp);
         }
@@ -115,7 +117,7 @@ class OrderHistoryController extends Controller
                 'orders.hours',
                 'orders.amount',
                 'orders.status',
-                'orders.service_type',
+                'orders.service_type', // Ensure this column is safe too? It was missing in error? No, error was user_id
                 'orders.created_at',
                 'orders.paid_at',
                 'orders.expires_at',
@@ -126,9 +128,11 @@ class OrderHistoryController extends Controller
             )
             ->where(function ($q) use ($user, $request) {
                 // Match by user_id if exists in orders table
-                $q->where('orders.user_id', $user->id)
-                  // Or by IP for backward compatibility
-                  ->orWhere('orders.ip_address', $request->ip());
+                // TODO: Uncomment when migration 2026_01_31_180800 is run
+                // $q->where('orders.user_id', $user->id) 
+                
+                // Fallback to IP address only for now to avoid SQL error
+                $q->where('orders.ip_address', $request->ip());
             })
             ->orderBy('orders.created_at', 'desc');
         
@@ -143,8 +147,12 @@ class OrderHistoryController extends Controller
         // Get counts for each status
         $statusCounts = DB::table('orders')
             ->where(function ($q) use ($user, $request) {
-                $q->where('user_id', $user->id)
-                  ->orWhere('ip_address', $request->ip());
+                // TODO: Uncomment check user_id when migration is run
+                // $q->where('user_id', $user->id)
+                //  ->orWhere('ip_address', $request->ip());
+                
+                // Fallback to IP only
+                $q->where('ip_address', $request->ip());
             })
             ->select('status', DB::raw('count(*) as count'))
             ->groupBy('status')
