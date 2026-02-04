@@ -262,6 +262,17 @@
     .od-actions { flex-direction: column; }
     .od-btn { width: 100%; }
 }
+
+/* Bold UI Enhancements */
+.od-title { font-weight: 800; color: #111827; letter-spacing: -0.025em; }
+.od-label { color: #4b5563; font-weight: 600; }
+.od-value { color: #000000; font-weight: 700; }
+.od-account-title { color: #374151; font-weight: 700; }
+.od-acc-label { color: #4b5563; font-weight: 600; }
+.od-acc-value { color: #000000; font-weight: 700; }
+.od-item { border-bottom: 1px dashed #d1d5db; }
+.od-btn { font-weight: 700; }
+
 </style>
 
 <script>
