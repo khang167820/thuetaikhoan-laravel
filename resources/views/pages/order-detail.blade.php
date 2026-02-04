@@ -265,13 +265,23 @@
 
 /* Bold UI Enhancements */
 .od-title { font-weight: 800; color: #111827; letter-spacing: -0.025em; }
-.od-label { color: #4b5563; font-weight: 600; }
+.od-label { color: #374151; font-weight: 700; }
 .od-value { color: #000000; font-weight: 700; }
-.od-account-title { color: #374151; font-weight: 700; }
-.od-acc-label { color: #4b5563; font-weight: 600; }
+.od-account-title { color: #111827; font-weight: 700; }
+.od-acc-label { color: #374151; font-weight: 700; }
 .od-acc-value { color: #000000; font-weight: 700; }
-.od-item { border-bottom: 1px dashed #d1d5db; }
-.od-btn { font-weight: 700; }
+.od-btn { font-weight: 700; border-width: 2px; }
+
+/* High Contrast Borders */
+.od-card { 
+    border: 2px solid #e5e7eb; 
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
+}
+.od-item { border-bottom: 2px dashed #cbd5e1; }
+.od-account-box { border: 2px solid #e2e8f0; }
+.od-btn-outline { border: 2px solid #d1d5db; color: #111827; }
+.od-btn-outline:hover { border-color: #9ca3af; background: #f3f4f6; }
+
 
 </style>
 
