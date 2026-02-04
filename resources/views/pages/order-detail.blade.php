@@ -90,12 +90,7 @@
                         <span class="od-acc-value od-copy-target" onclick="copyText('{{ $order->account_password }}')">{{ $order->account_password }}</span>
                     </div>
                     @endif
-                    @if($order->account_extra)
-                    <div class="od-acc-item">
-                        <span class="od-acc-label">Thông tin thêm</span>
-                        <span class="od-acc-value"><pre>{{ $order->account_extra }}</pre></span>
-                    </div>
-                    @endif
+
                 </div>
             </div>
             @endif
