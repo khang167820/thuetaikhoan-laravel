@@ -2189,6 +2189,22 @@ function toggleFeatures(cardId) {
                 <!-- Error Message -->
                 <div id="pm-coupon-error" style="display: none; margin-top: 8px; padding: 8px 12px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; color: #dc2626; font-size: 12px;"></div>
             </div>
+            
+            <!-- Real-time Price Summary -->
+            <div id="pm-price-summary" class="pm-price-summary" style="margin-top: 16px; padding: 16px; background: linear-gradient(135deg, #f0fdf4, #dcfce7); border: 2px solid #22c55e; border-radius: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-size: 13px; color: #374151; font-weight: 600;">Giá gốc:</span>
+                    <span id="pm-summary-original" style="font-size: 13px; color: #6b7280; text-decoration: line-through;">0 VND</span>
+                </div>
+                <div id="pm-summary-discount-row" style="display: none; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-size: 13px; color: #16a34a; font-weight: 600;">Giảm giá:</span>
+                    <span id="pm-summary-discount" style="font-size: 13px; color: #16a34a; font-weight: 700;">-0 VND</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 2px dashed #86efac;">
+                    <span style="font-size: 15px; color: #0f172a; font-weight: 800;">💰 Thành tiền:</span>
+                    <span id="pm-summary-total" style="font-size: 18px; color: #dc2626; font-weight: 900;">0 VND</span>
+                </div>
+            </div>
             </div>
         </div>
         
@@ -2836,6 +2852,9 @@ function openPriceModal(serviceId) {
     // Show modal
     document.getElementById('price-modal').classList.add('open');
     document.body.style.overflow = 'hidden';
+    
+    // Initialize price summary
+    setTimeout(() => updatePriceDisplay(), 50);
 }
 
 function selectPackage(index) {
@@ -2843,6 +2862,8 @@ function selectPackage(index) {
     document.querySelectorAll('.pm-option').forEach((opt, i) => {
         opt.classList.toggle('selected', i === index);
     });
+    // Update price summary when package changes
+    updatePriceDisplay();
 }
 
 function toggleCouponSection() {
@@ -2980,9 +3001,26 @@ function updatePriceDisplay() {
         discountDetails.push('Mã ' + selectedCoupon.code + ': -' + formatVNDWelcome(selectedCoupon.value));
     }
     
-    // Show combined result if there's any discount
+    const finalPrice = Math.max(0, originalPrice - totalDiscount);
+    
+    // Update ALWAYS VISIBLE price summary section
+    const summaryOriginal = document.getElementById('pm-summary-original');
+    const summaryDiscountRow = document.getElementById('pm-summary-discount-row');
+    const summaryDiscount = document.getElementById('pm-summary-discount');
+    const summaryTotal = document.getElementById('pm-summary-total');
+    
+    if (summaryOriginal) summaryOriginal.textContent = formatVNDWelcome(originalPrice);
+    if (summaryTotal) summaryTotal.textContent = formatVNDWelcome(finalPrice);
+    
     if (totalDiscount > 0) {
-        const finalPrice = Math.max(0, originalPrice - totalDiscount);
+        if (summaryDiscountRow) summaryDiscountRow.style.display = 'flex';
+        if (summaryDiscount) summaryDiscount.textContent = '-' + formatVNDWelcome(totalDiscount);
+    } else {
+        if (summaryDiscountRow) summaryDiscountRow.style.display = 'none';
+    }
+    
+    // Show combined result if there's any discount (legacy behavior)
+    if (totalDiscount > 0) {
         const codeDisplay = document.getElementById('pm-coupon-code-display');
         const originalPriceEl = document.getElementById('pm-original-price');
         const discountAmount = document.getElementById('pm-discount-amount');
