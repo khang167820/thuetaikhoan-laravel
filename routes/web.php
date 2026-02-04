@@ -8,6 +8,7 @@ use App\Http\Controllers\OrderHistoryController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrdServicesController;
+use App\Http\Controllers\OrdCheckoutController;
 
 
 use App\Http\Controllers\BlogController;
@@ -35,6 +36,8 @@ Route::get('/thue-samsung-tool', [ServiceController::class, 'samsungTool'])->nam
 
 // Ord-services (API GSM Services)
 Route::get('/ord-services', [OrdServicesController::class, 'index'])->name('ord-services');
+Route::get('/ord-checkout', [OrdCheckoutController::class, 'show'])->name('ord-checkout');
+Route::post('/ord-checkout', [OrdCheckoutController::class, 'submit'])->name('ord-checkout.submit');
 
 // Blog routes
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
