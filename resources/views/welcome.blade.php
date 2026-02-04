@@ -2173,25 +2173,7 @@ function toggleFeatures(cardId) {
                 <!-- Hidden input to store coupon code -->
                 <input type="hidden" id="pm-coupon-code" value="">
                 
-                <!-- Coupon Result Display -->
-                <div id="pm-coupon-result" style="display: none; margin-top: 12px; padding: 12px; background: #f0fdf4; border: 1px solid #86efac; border-radius: 10px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                        <span style="font-size: 12px; color: #15803d; font-weight: 600;">✓ Mã <span id="pm-coupon-code-display"></span></span>
-                        <button type="button" onclick="removeCouponWelcome()" style="background: none; border: none; color: #dc2626; font-size: 11px; cursor: pointer;">Xóa</button>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 13px;">
-                        <span style="color: #64748b;">Giá gốc:</span>
-                        <span id="pm-original-price" style="color: #64748b; text-decoration: line-through;"></span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 13px;">
-                        <span style="color: #16a34a;">Giảm:</span>
-                        <span id="pm-discount-amount" style="color: #16a34a; font-weight: 600;"></span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 15px; margin-top: 6px; padding-top: 6px; border-top: 1px dashed #86efac;">
-                        <span style="color: #1e293b; font-weight: 700;">Thành tiền:</span>
-                        <span id="pm-final-price" style="color: #dc2626; font-weight: 800;"></span>
-                    </div>
-                </div>
+                <!-- Old coupon result removed - now using only the consolidated price summary below -->
                 
                 <!-- Error Message -->
                 <div id="pm-coupon-error" style="display: none; margin-top: 8px; padding: 8px 12px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; color: #dc2626; font-size: 12px;"></div>
@@ -2984,7 +2966,6 @@ const LOYALTY_POINTS_VALUE = 3000;
 
 // Update price display when points checkbox changes
 function updatePriceDisplay() {
-    const resultBox = document.getElementById('pm-coupon-result');
     const usePoints = document.getElementById('pm-use-points')?.checked || false;
     
     // Get current package price
@@ -3024,22 +3005,6 @@ function updatePriceDisplay() {
         if (summaryDiscount) summaryDiscount.textContent = '-' + formatVNDWelcome(totalDiscount);
     } else {
         if (summaryDiscountRow) summaryDiscountRow.style.display = 'none';
-    }
-    
-    // Show combined result if there's any discount (legacy behavior)
-    if (totalDiscount > 0) {
-        const codeDisplay = document.getElementById('pm-coupon-code-display');
-        const originalPriceEl = document.getElementById('pm-original-price');
-        const discountAmount = document.getElementById('pm-discount-amount');
-        const finalPriceEl = document.getElementById('pm-final-price');
-        
-        if (codeDisplay) codeDisplay.textContent = discountDetails.length > 1 ? 'Điểm + Mã' : (usePoints ? 'Điểm tích lũy' : selectedCoupon?.code || '');
-        if (originalPriceEl) originalPriceEl.textContent = formatVNDWelcome(originalPrice);
-        if (discountAmount) discountAmount.textContent = '-' + formatVNDWelcome(totalDiscount);
-        if (finalPriceEl) finalPriceEl.textContent = formatVNDWelcome(finalPrice);
-        if (resultBox) resultBox.style.display = 'block';
-    } else if (!selectedCoupon) {
-        if (resultBox) resultBox.style.display = 'none';
     }
 }
 
