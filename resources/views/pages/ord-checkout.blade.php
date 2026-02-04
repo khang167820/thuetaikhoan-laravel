@@ -159,10 +159,6 @@
                     <span class="product-info-value">{{ $product['deliveryTime'] }}</span>
                 </div>
                 <div class="product-info-row">
-                    <span class="product-info-label">Giá USD</span>
-                    <span class="product-info-value">${{ number_format($product['priceUsd'], 2) }}</span>
-                </div>
-                <div class="product-info-row">
                     <span class="product-info-label">Giá VNĐ</span>
                     <span class="product-info-value price">{{ number_format($product['priceVnd']) }}đ</span>
                 </div>
