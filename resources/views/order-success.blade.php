@@ -25,7 +25,7 @@
             </div>
             <div class="detail-row">
                 <span class="detail-label">Dịch vụ</span>
-                <span class="detail-value">{{ $price->service ?? 'N/A' }}</span>
+                <span class="detail-value">{{ $price->type ?? 'N/A' }}</span>
             </div>
             <div class="detail-row">
                 <span class="detail-label">Thời gian</span>
@@ -37,13 +37,40 @@
             </div>
             <div class="detail-row">
                 <span class="detail-label">Thời gian thanh toán</span>
-                <span class="detail-value">{{ $order->paid_at ? $order->paid_at->format('H:i d/m/Y') : 'N/A' }}</span>
+                <span class="detail-value">{{ $order->paid_at ? \Carbon\Carbon::parse($order->paid_at)->format('H:i d/m/Y') : 'N/A' }}</span>
             </div>
             <div class="detail-row">
                 <span class="detail-label">Trạng thái</span>
                 <span class="detail-value status-paid">✓ Đã thanh toán</span>
             </div>
         </div>
+
+        <!-- Account Info -->
+        @if($order->account)
+        <div class="account-info">
+            <h3>Tài khoản đã cấp</h3>
+            <div class="detail-row account-row">
+                <span class="detail-label">Tài khoản</span>
+                <div class="account-input-group">
+                    <input type="text" value="{{ $order->account->username }}" readonly onclick="this.select()">
+                    <button type="button" onclick="copyToClipboard('{{ $order->account->username }}', this)">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    </button>
+                </div>
+            </div>
+            @if($order->account->password)
+            <div class="detail-row account-row">
+                <span class="detail-label">Mật khẩu</span>
+                <div class="account-input-group">
+                    <input type="text" value="{{ $order->account->password }}" readonly onclick="this.select()">
+                    <button type="button" onclick="copyToClipboard('{{ $order->account->password }}', this)">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    </button>
+                </div>
+            </div>
+            @endif
+        </div>
+        @endif
 
         <!-- Instructions -->
         <div class="instructions">
@@ -300,5 +327,83 @@
         flex-direction: column;
     }
 }
+/* Account Info Styles */
+.account-info {
+    background: #f8fafc;
+    border: 2px dashed #cbd5e1;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    text-align: left;
+}
+.account-info h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 16px;
+    margin-top: 0;
+}
+.account-input-group {
+    display: flex;
+    flex: 1;
+    gap: 8px;
+}
+.account-input-group input {
+    flex: 1;
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #0f172a;
+    background: #fff;
+    outline: none;
+}
+.account-input-group button {
+    padding: 8px 12px;
+    background: #eff6ff;
+    border: 1px solid #dbeafe;
+    border-radius: 8px;
+    color: #2563eb;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.account-input-group button:hover {
+    background: #dbeafe;
+}
+[data-theme="dark"] .account-info {
+    background: #1e293b;
+    border-color: #475569;
+}
+[data-theme="dark"] .account-info h3 { color: #e2e8f0; }
+[data-theme="dark"] .account-input-group input {
+    background: #0f172a;
+    border-color: #334155;
+    color: #f1f5f9;
+}
 </style>
+
+<script>
+function copyToClipboard(text, btn) {
+    if (!text) return;
+    navigator.clipboard.writeText(text).then(() => {
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+        btn.style.color = '#10b981';
+        btn.style.borderColor = '#a7f3d0';
+        btn.style.backgroundColor = '#ecfdf5';
+        
+        setTimeout(() => {
+            btn.innerHTML = originalHtml;
+            btn.style.color = '';
+            btn.style.borderColor = '';
+            btn.style.backgroundColor = '';
+        }, 2000);
+    });
+}
+</script>
 @endsection

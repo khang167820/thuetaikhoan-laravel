@@ -78,6 +78,14 @@ class Order extends Model
     {
         return $this->belongsTo(Price::class);
     }
+
+    /**
+     * Get the account assigned to this order.
+     */
+    public function account(): BelongsTo
+    {
+        return $this->belongsTo(Account::class);
+    }
     
     /**
      * Get the user who placed the order.
