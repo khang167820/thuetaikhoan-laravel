@@ -48,6 +48,54 @@ class OrderHistoryController extends Controller
 
         return view('pages.order-history', compact('orders', 'error', 'customerIp'));
     }
+
+    /**
+     * Display order detail page
+     */
+    public function orderDetail(Request $request)
+    {
+        $code = $request->input('code');
+        $customerIp = $request->ip();
+        
+        if (empty($code)) {
+            return redirect()->route('order-history')->with('error', 'Mã đơn hàng không hợp lệ');
+        }
+
+        // Get order with related data
+        $order = DB::table('orders')
+            ->leftJoin('accounts', 'orders.account_id', '=', 'accounts.id')
+            ->leftJoin('prices', 'orders.price_id', '=', 'prices.id')
+            ->select(
+                'orders.*',
+                'accounts.type as account_type',
+                'accounts.username as account_username',
+                'accounts.password as account_password',
+                'accounts.extra_data as account_extra',
+                'prices.type as service_type',
+                'prices.price as original_price',
+                'prices.hours_label'
+            )
+            ->where('orders.tracking_code', $code)
+            ->first();
+
+        if (!$order) {
+            return redirect()->route('order-history')->with('error', 'Không tìm thấy đơn hàng');
+        }
+
+        // Security: Only allow access if order belongs to this IP or authenticated user
+        $canAccess = false;
+        if (Auth::check()) {
+            $canAccess = ($order->user_id == Auth::id() || $order->ip_address == $customerIp);
+        } else {
+            $canAccess = ($order->ip_address == $customerIp);
+        }
+
+        if (!$canAccess) {
+            return redirect()->route('order-history')->with('error', 'Bạn không có quyền xem đơn hàng này');
+        }
+
+        return view('pages.order-detail', compact('order'));
+    }
     
     /**
      * Display order history for authenticated user

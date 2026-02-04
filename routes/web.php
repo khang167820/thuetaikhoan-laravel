@@ -40,6 +40,7 @@ Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 // Other pages
 Route::get('/ma-giam-gia', [CouponController::class, 'index'])->name('coupons');
 Route::get('/order-history-ip', [OrderHistoryController::class, 'index'])->name('order-history');
+Route::get('/order-detail', [OrderHistoryController::class, 'orderDetail'])->name('order-detail');
 Route::get('/terms', function () {
     return view('terms');
 })->name('terms');
