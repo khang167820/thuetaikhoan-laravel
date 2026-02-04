@@ -2703,46 +2703,36 @@ const servicePricesV2 = {
     'griffin': {
         name: 'GRIFFIN-UNLOCKER',
         packages: [
-            { hours: 6, name: 'Griffin 6 giờ', price: 42000, oldPrice: 80000, tags: ['hot'] },
-            { hours: 24, name: 'Griffin 1 ngày', price: 75000, oldPrice: 150000, tags: ['promo'] },
-            { hours: 168, name: 'Griffin 7 ngày', price: 200000, oldPrice: 400000, tags: ['flash-sale', 'promo'] },
-            { hours: 720, name: 'Griffin 30 ngày', price: 450000, oldPrice: 800000, tags: ['flash-sale'], discount: 44 }
+            { hours: 6, name: 'Griffin 6 giờ', price: 27000, oldPrice: 100000, tags: ['special', 'promo'], specialTag: 'Tưng bừng khai trương', discount: 73 },
+            { hours: 12, name: 'Griffin 12 giờ', price: 120000, oldPrice: 180000, tags: ['promo'], discount: 33 },
+            { hours: 24, name: 'Griffin 1 ngày', price: 150000, oldPrice: 250000, tags: ['flash-sale'], discount: 40 }
         ]
     },
     'amt': {
         name: 'ANDROID MULTITOOL',
         packages: [
-            { hours: 6, name: 'AMT 6 giờ', price: 9000, oldPrice: 20000, tags: ['flash-sale'] },
-            { hours: 24, name: 'AMT 1 ngày', price: 20000, oldPrice: 40000, tags: ['promo'] },
-            { hours: 168, name: 'AMT 7 ngày', price: 60000, oldPrice: 120000, tags: ['flash-sale', 'promo'] },
-            { hours: 720, name: 'AMT 30 ngày', price: 150000, oldPrice: 300000, tags: ['hot'], discount: 50 }
+            { hours: 3, name: 'AMT 3 giờ', price: 15000, oldPrice: 30000, tags: ['special', 'hot'], specialTag: 'Tưng bừng khai trương', discount: 50 },
+            { hours: 6, name: 'AMT 6 giờ', price: 29000, oldPrice: 50000, tags: ['special', 'promo'], specialTag: 'Tưng bừng khai trương', discount: 42 },
+            { hours: 12, name: 'AMT 12 giờ', price: 39000, oldPrice: 60000, tags: ['special', 'promo'], specialTag: 'Tưng bừng khai trương', discount: 35 },
+            { hours: 24, name: 'AMT 1 ngày', price: 45000, oldPrice: 70000, tags: ['special', 'promo'], specialTag: 'Tưng bừng khai trương', discount: 36 }
         ]
     },
     'kg-killer': {
         name: 'KG KILLER TOOL',
         packages: [
-            { hours: 6, name: 'KG Killer 6 giờ', price: 8000, oldPrice: 25000, tags: ['hot'] },
-            { hours: 24, name: 'KG Killer 1 ngày', price: 18000, oldPrice: 45000, tags: ['promo'] },
-            { hours: 168, name: 'KG Killer 7 ngày', price: 55000, oldPrice: 130000, tags: ['flash-sale'] },
-            { hours: 720, name: 'KG Killer 30 ngày', price: 120000, oldPrice: 280000, tags: ['flash-sale', 'promo'], discount: 57 }
+            { hours: 4, name: 'KG Killer 4 giờ', price: 15000, oldPrice: 50000, tags: ['special', 'promo'], specialTag: 'Tưng bừng khai trương', discount: 70 }
         ]
     },
     'samsung-tool': {
         name: 'SAMSUNG TOOL',
         packages: [
-            { hours: 6, name: 'Samsung Tool 6 giờ', price: 162000, oldPrice: 200000, tags: ['hot'] },
-            { hours: 24, name: 'Samsung Tool 1 ngày', price: 280000, oldPrice: 380000, tags: ['promo'] },
-            { hours: 168, name: 'Samsung Tool 7 ngày', price: 650000, oldPrice: 900000, tags: ['flash-sale'] },
-            { hours: 720, name: 'Samsung Tool 30 ngày', price: 1200000, oldPrice: 1800000, tags: ['flash-sale', 'promo'], discount: 33 }
+            { hours: 48, name: 'Samsung Tool 2 ngày', price: 240000, oldPrice: 300000, tags: ['promo'], discount: 20, specialTag: 'Sẵn 12 Credits' }
         ]
     },
     'dft': {
         name: 'DFT PRO TOOL',
         packages: [
-            { hours: 6, name: 'DFT Pro 6 giờ', price: 105000, oldPrice: 130000, tags: ['hot'] },
-            { hours: 24, name: 'DFT Pro 1 ngày', price: 180000, oldPrice: 250000, tags: ['promo'] },
-            { hours: 168, name: 'DFT Pro 7 ngày', price: 450000, oldPrice: 650000, tags: ['flash-sale'] },
-            { hours: 720, name: 'DFT Pro 30 ngày', price: 900000, oldPrice: 1400000, tags: ['flash-sale', 'promo'], discount: 36 }
+            { hours: 48, name: 'DFT Pro 2 ngày', price: 70000, oldPrice: 130000, tags: ['promo'], discount: 46 }
         ]
     },
     'tsm': {
