@@ -15,6 +15,18 @@ class CheckoutController extends Controller
      */
     public function show(Request $request)
     {
+        // Mapping from frontend service IDs to database type values
+        $serviceTypeMapping = [
+            'unlocktool' => 'unlocktool',
+            'vietmap' => 'vietmap',
+            'griffin' => 'griffin',
+            'amt' => 'amt',
+            'kg-killer' => 'kgkiller',
+            'samsung-tool' => 'SamsungTool',
+            'dft' => 'dft',
+            'tsm' => 'tsm',
+        ];
+        
         // Get price_id from request OR find by service+hours
         $priceId = $request->input('price_id');
         $serviceType = $request->input('service');
@@ -22,7 +34,10 @@ class CheckoutController extends Controller
         
         // If no price_id but have service+hours, find the price
         if (!$priceId && $serviceType && $hours) {
-            $price = Price::where('type', $serviceType)
+            // Map frontend service type to database type
+            $dbType = $serviceTypeMapping[$serviceType] ?? $serviceType;
+            
+            $price = Price::where('type', $dbType)
                 ->where('hours', (int)$hours)
                 ->first();
         } else if ($priceId) {
