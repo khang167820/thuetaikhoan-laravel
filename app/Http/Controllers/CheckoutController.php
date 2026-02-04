@@ -60,7 +60,7 @@ class CheckoutController extends Controller
         
         // Loyalty points discount (fixed 3000 VND)
         $pointsDiscount = 0;
-        if ($usePoints && Auth::check()) {
+        if ($usePoints) {
             $pointsDiscount = 3000;
             $totalDiscount += $pointsDiscount;
             $discountDetails[] = ['label' => 'Điểm tích lũy', 'amount' => $pointsDiscount];
