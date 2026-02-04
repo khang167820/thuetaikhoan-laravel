@@ -498,5 +498,242 @@ function toggleServicesMenu() {
 
 @yield('scripts')
 
+<!-- Floating Contact Widget -->
+<div id="floatingContact" class="floating-contact">
+    <!-- Contact Options (hidden by default) -->
+    <div class="contact-options">
+        <a href="https://zalo.me/0799161640" target="_blank" class="contact-item zalo">
+            <span class="contact-info">
+                <strong>Zalo Mai Quyên</strong>
+                <small>Cấp tài khoản</small>
+            </span>
+            <span class="contact-icon">💬</span>
+        </a>
+        <a href="https://zalo.me/0777333763" target="_blank" class="contact-item zalo">
+            <span class="contact-info">
+                <strong>Zalo Thanhtaj</strong>
+                <small>Hỗ trợ mở khóa</small>
+            </span>
+            <span class="contact-icon">💬</span>
+        </a>
+        <a href="tel:0799161640" class="contact-item phone">
+            <span class="contact-info">
+                <strong>Gọi Mai Quyên</strong>
+                <small>0799 161 640</small>
+            </span>
+            <span class="contact-icon">📞</span>
+        </a>
+        <a href="tel:0777333763" class="contact-item phone">
+            <span class="contact-info">
+                <strong>Gọi Khang</strong>
+                <small>0777 333 763</small>
+            </span>
+            <span class="contact-icon">📞</span>
+        </a>
+        <a href="https://zalo.me/g/xxxxxx" target="_blank" class="contact-item group">
+            <span class="contact-info">
+                <strong>Group Hỗ Trợ</strong>
+                <small>Tham gia ngay</small>
+            </span>
+            <span class="contact-icon">👥</span>
+        </a>
+    </div>
+    
+    <!-- Main Toggle Button -->
+    <button class="contact-toggle" onclick="toggleContactWidget()">
+        <span class="icon-open">✕</span>
+        <span class="icon-close">💬</span>
+    </button>
+</div>
+
+<style>
+/* Floating Contact Widget */
+.floating-contact {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.contact-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px) scale(0.95);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.floating-contact.active .contact-options {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    background: #fff;
+    border-radius: 50px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    text-decoration: none;
+    transition: all 0.2s;
+    min-width: 180px;
+}
+
+.contact-item:hover {
+    transform: translateX(-5px);
+    box-shadow: 0 6px 25px rgba(0,0,0,0.2);
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    text-align: right;
+}
+
+.contact-info strong {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.contact-info small {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.contact-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+/* Icon colors */
+.contact-item.zalo .contact-icon {
+    background: linear-gradient(135deg, #0068ff, #0099ff);
+    color: #fff;
+}
+
+.contact-item.phone .contact-icon {
+    background: linear-gradient(135deg, #10b981, #34d399);
+    color: #fff;
+}
+
+.contact-item.group .contact-icon {
+    background: linear-gradient(135deg, #f97316, #fb923c);
+    color: #fff;
+}
+
+/* Toggle Button */
+.contact-toggle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, #ef4444, #f87171);
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.contact-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 30px rgba(239, 68, 68, 0.5);
+}
+
+.contact-toggle .icon-open,
+.contact-toggle .icon-close {
+    position: absolute;
+    transition: all 0.3s;
+}
+
+.contact-toggle .icon-open {
+    opacity: 0;
+    transform: rotate(-90deg);
+}
+
+.contact-toggle .icon-close {
+    opacity: 1;
+    transform: rotate(0);
+}
+
+.floating-contact.active .contact-toggle .icon-open {
+    opacity: 1;
+    transform: rotate(0);
+}
+
+.floating-contact.active .contact-toggle .icon-close {
+    opacity: 0;
+    transform: rotate(90deg);
+}
+
+/* Dark mode */
+[data-theme="dark"] .contact-item {
+    background: #1e293b;
+}
+
+[data-theme="dark"] .contact-info strong {
+    color: #f1f5f9;
+}
+
+[data-theme="dark"] .contact-info small {
+    color: #94a3b8;
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+    .floating-contact {
+        bottom: 16px;
+        right: 16px;
+    }
+    
+    .contact-item {
+        min-width: 160px;
+        padding: 8px 12px;
+    }
+    
+    .contact-toggle {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+}
+</style>
+
+<script>
+function toggleContactWidget() {
+    const widget = document.getElementById('floatingContact');
+    widget.classList.toggle('active');
+}
+
+// Close when clicking outside
+document.addEventListener('click', function(e) {
+    const widget = document.getElementById('floatingContact');
+    if (widget && !widget.contains(e.target)) {
+        widget.classList.remove('active');
+    }
+});
+</script>
+
 </body>
 </html>
