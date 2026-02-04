@@ -248,7 +248,7 @@
 /* Main Card */
 .co-card {
     background: white;
-    border: 2px solid #e2e8f0;
+    border: 3px solid #94a3b8;
     border-radius: 16px;
     padding: 28px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
@@ -559,7 +559,7 @@
     align-items: flex-start;
     gap: 14px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-    border: 2px solid #e2e8f0;
+    border: 3px solid #94a3b8;
 }
 
 [data-theme="dark"] .co-trust-card {
