@@ -34,10 +34,12 @@ Route::get('/thue-dft', [ServiceController::class, 'dft'])->name('service.dft');
 Route::get('/thue-kg-killer', [ServiceController::class, 'kgKiller'])->name('service.kg-killer');
 Route::get('/thue-samsung-tool', [ServiceController::class, 'samsungTool'])->name('service.samsung-tool');
 
-// Ord-services (API GSM Services)
-Route::get('/ord-services', [OrdServicesController::class, 'index'])->name('ord-services');
-Route::get('/ord-checkout', [OrdCheckoutController::class, 'show'])->name('ord-checkout');
-Route::post('/ord-checkout', [OrdCheckoutController::class, 'submit'])->name('ord-checkout.submit');
+// Ord-services (API GSM Services) - Rate limited to prevent DDoS
+Route::middleware('throttle:30,1')->group(function () {
+    Route::get('/ord-services', [OrdServicesController::class, 'index'])->name('ord-services');
+    Route::get('/ord-checkout', [OrdCheckoutController::class, 'show'])->name('ord-checkout');
+    Route::post('/ord-checkout', [OrdCheckoutController::class, 'submit'])->name('ord-checkout.submit');
+});
 
 // Blog routes
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
@@ -55,24 +57,30 @@ Route::get('/dieu-khoan', function () {
     return view('terms');
 })->name('terms.vi');
 
-// Auth routes
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [AuthController::class, 'register']);
+// Auth routes - Rate limited to prevent brute force
+Route::middleware('throttle:10,1')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+    Route::post('/register', [AuthController::class, 'register']);
+});
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Checkout routes
-Route::get('/thanh-toan', [CheckoutController::class, 'show'])->name('checkout');
-Route::post('/thanh-toan', [CheckoutController::class, 'createOrder'])->name('checkout.create');
+// Checkout routes - Rate limited
+Route::middleware('throttle:20,1')->group(function () {
+    Route::get('/thanh-toan', [CheckoutController::class, 'show'])->name('checkout');
+    Route::post('/thanh-toan', [CheckoutController::class, 'createOrder'])->name('checkout.create');
+});
 Route::get('/order-success', [CheckoutController::class, 'orderSuccess'])->name('order.success');
-Route::get('/api/check-payment', [CheckoutController::class, 'checkPayment'])->name('api.check-payment');
-Route::post('/api/cancel-order', [CheckoutController::class, 'cancelOrder'])->name('api.cancel-order');
-Route::post('/api/pay-with-balance', [CheckoutController::class, 'payWithBalance'])->name('api.pay-with-balance');
 
-// Coupon API routes
-Route::get('/api/coupons/active', [CouponController::class, 'getActiveCoupons'])->name('api.coupons.active');
-Route::get('/api/coupons/validate', [CouponController::class, 'validateCoupon'])->name('api.coupons.validate');
+// API routes - Rate limited to prevent abuse
+Route::middleware('throttle:60,1')->group(function () {
+    Route::get('/api/check-payment', [CheckoutController::class, 'checkPayment'])->name('api.check-payment');
+    Route::post('/api/cancel-order', [CheckoutController::class, 'cancelOrder'])->name('api.cancel-order');
+    Route::post('/api/pay-with-balance', [CheckoutController::class, 'payWithBalance'])->name('api.pay-with-balance');
+    Route::get('/api/coupons/active', [CouponController::class, 'getActiveCoupons'])->name('api.coupons.active');
+    Route::get('/api/coupons/validate', [CouponController::class, 'validateCoupon'])->name('api.coupons.validate');
+});
 
 // Order History (authenticated users)
 Route::middleware('auth')->group(function () {
