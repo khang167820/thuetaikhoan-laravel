@@ -125,14 +125,6 @@
                             </div>
                         </div>
                         @endif
-                        @if($order->account_extra)
-                        <div class="od-account-row">
-                            <span class="od-account-label">Thông tin thêm</span>
-                            <div class="od-account-value od-extra">
-                                <pre>{{ $order->account_extra }}</pre>
-                            </div>
-                        </div>
-                        @endif
                         @if(!$order->account_username && !$order->account_password)
                         <div class="od-notice od-notice--info">
                             <span>ℹ️</span> Tài khoản đang được cấp phát. Vui lòng chờ hoặc liên hệ hỗ trợ.

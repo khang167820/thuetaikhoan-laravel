@@ -70,7 +70,6 @@ class OrderHistoryController extends Controller
                 'accounts.type as account_type',
                 'accounts.username as account_username',
                 'accounts.password as account_password',
-                'accounts.extra_data as account_extra',
                 'prices.type as service_type',
                 'prices.price as original_price',
                 'prices.hours_label'
