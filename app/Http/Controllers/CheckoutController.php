@@ -17,14 +17,14 @@ class CheckoutController extends Controller
     {
         // Mapping from frontend service IDs to database type values
         $serviceTypeMapping = [
-            'unlocktool' => 'unlocktool',
-            'vietmap' => 'vietmap',
-            'griffin' => 'griffin',
-            'amt' => 'amt',
-            'kg-killer' => 'kgkiller',
+            'unlocktool' => 'Unlocktool',
+            'vietmap' => 'Vietmap',
+            'griffin' => 'Griffin',
+            'amt' => 'AMT',
+            'kg-killer' => 'KGKiller',
             'samsung-tool' => 'SamsungTool',
-            'dft' => 'dft',
-            'tsm' => 'tsm',
+            'dft' => 'DFTPro',
+            'tsm' => 'TSMTool',
         ];
         
         // Get price_id from request OR find by service+hours
