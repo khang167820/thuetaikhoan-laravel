@@ -287,8 +287,8 @@ class CheckoutController extends Controller
      */
     private function verifyRecaptcha(string $response, string $action = null): array
     {
-        $secretKey = config('services.recaptcha.secret_key', '6LegMlIsAAAAAOxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-        $threshold = 0.5;
+        $secretKey = config('services.recaptcha.secret_key', '');
+        $threshold = config('services.recaptcha.score_threshold', 0.5);
 
         // If secret key not configured, skip verification
         if (empty($secretKey) || strpos($secretKey, 'xxx') !== false) {
