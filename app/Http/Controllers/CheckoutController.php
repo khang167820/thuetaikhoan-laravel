@@ -71,7 +71,7 @@ class CheckoutController extends Controller
         $appliedCoupon = null;
         if ($couponCode) {
             $coupon = \App\Models\Coupon::where('code', $couponCode)
-                ->where('active', true)
+                ->where('is_active', true)
                 ->first();
             
             if ($coupon) {
