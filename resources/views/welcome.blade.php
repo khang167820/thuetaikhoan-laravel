@@ -2682,7 +2682,7 @@ function toggleFeatures(cardId) {
         margin-top: auto;
     }
     .pm-options-scroll {
-        max-height: 280px;
+        max-height: 450px;
     }
     .pm-option {
         padding: 10px 12px;
