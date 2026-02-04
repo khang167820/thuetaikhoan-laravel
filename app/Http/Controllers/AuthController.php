@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Traits\RecaptchaVerifiable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -10,6 +11,8 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    use RecaptchaVerifiable;
+
     /**
      * Hiển thị form đăng nhập
      */
@@ -35,6 +38,17 @@ class AuthController extends Controller
             'email.required' => 'Vui lòng nhập email hoặc số điện thoại',
             'password.required' => 'Vui lòng nhập mật khẩu',
         ]);
+
+        // Verify reCAPTCHA v3
+        $recaptchaResponse = $request->input('g-recaptcha-response');
+        if ($recaptchaResponse) {
+            $recaptchaResult = $this->verifyRecaptcha($recaptchaResponse, 'login');
+            if (!$recaptchaResult['success']) {
+                throw ValidationException::withMessages([
+                    'recaptcha' => $recaptchaResult['message'],
+                ]);
+            }
+        }
 
         $loginField = $request->input('email');
         $password = $request->input('password');
@@ -110,6 +124,17 @@ class AuthController extends Controller
             'password.confirmed' => 'Mật khẩu xác nhận không khớp',
             'terms.accepted' => 'Bạn phải đồng ý với điều khoản sử dụng',
         ]);
+
+        // Verify reCAPTCHA v3
+        $recaptchaResponse = $request->input('g-recaptcha-response');
+        if ($recaptchaResponse) {
+            $recaptchaResult = $this->verifyRecaptcha($recaptchaResponse, 'register');
+            if (!$recaptchaResult['success']) {
+                throw ValidationException::withMessages([
+                    'recaptcha' => $recaptchaResult['message'],
+                ]);
+            }
+        }
 
         // Tạo user mới - password sẽ được hash bởi User model mutator
         $user = User::create([

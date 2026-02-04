@@ -3,6 +3,11 @@
 @section('title', 'Đăng nhập - ThueTaiKhoan.net')
 @section('meta_description', 'Đăng nhập vào tài khoản ThueTaiKhoan.net để quản lý đơn thuê, xem lịch sử và nhận ưu đãi.')
 
+@push('head')
+<script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key', '6LegMlIsAAAAALh9UGh23nn8c_J5Gq_MbiVNrtTY') }}"></script>
+<style>.grecaptcha-badge { visibility: hidden !important; }</style>
+@endpush
+
 @section('styles')
 <style>
 /* Auth Page Styles */
@@ -202,8 +207,9 @@
             <p class="auth-sub">Chào mừng bạn quay trở lại</p>
         </div>
 
-        <form class="auth-form" method="POST" action="/login">
+        <form class="auth-form" method="POST" action="/login" id="loginForm">
             @csrf
+            <input type="hidden" name="g-recaptcha-response" id="recaptcha-response">
             
             @if ($errors->any())
             <div style="background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 14px 18px; border-radius: 10px; margin-bottom: 16px; font-size: 14px;">
@@ -239,6 +245,10 @@
                 </svg>
                 Đăng nhập
             </button>
+            
+            <div style="font-size: 11px; color: #94a3b8; text-align: center; margin-top: 8px;">
+                Trang này được bảo vệ bởi reCAPTCHA và tuân theo <a href="https://policies.google.com/privacy" target="_blank" style="color: #6366f1;">Chính sách bảo mật</a> của Google.
+            </div>
         </form>
 
         <div class="auth-divider">hoặc</div>
@@ -259,4 +269,29 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('loginForm');
+    const recaptchaInput = document.getElementById('recaptcha-response');
+    const siteKey = '{{ config('services.recaptcha.site_key', '6LegMlIsAAAAALh9UGh23nn8c_J5Gq_MbiVNrtTY') }}';
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        if (typeof grecaptcha !== 'undefined') {
+            grecaptcha.ready(function() {
+                grecaptcha.execute(siteKey, {action: 'login'}).then(function(token) {
+                    recaptchaInput.value = token;
+                    form.submit();
+                });
+            });
+        } else {
+            form.submit();
+        }
+    });
+});
+</script>
 @endsection
