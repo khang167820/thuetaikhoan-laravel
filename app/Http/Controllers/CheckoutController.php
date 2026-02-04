@@ -136,6 +136,11 @@ class CheckoutController extends Controller
 
         $priceId = $request->input('price_id');
         $customerEmail = $request->input('customer_email');
+        
+        // Get discount info from form
+        $usePoints = $request->input('use_points') === '1';
+        $couponCode = $request->input('coupon_code');
+        $finalPrice = (int) $request->input('final_price', 0);
 
         // Get price
         $price = Price::find($priceId);
@@ -143,6 +148,33 @@ class CheckoutController extends Controller
         if (!$price) {
             return back()->with('error', 'Gói dịch vụ không tồn tại');
         }
+        
+        // Validate and recalculate final price server-side for security
+        $originalPrice = $price->price;
+        $totalDiscount = 0;
+        
+        // Points discount
+        if ($usePoints) {
+            $totalDiscount += 3000;
+        }
+        
+        // Coupon discount
+        if ($couponCode) {
+            $coupon = \App\Models\Coupon::where('code', $couponCode)
+                ->where('is_active', true)
+                ->first();
+            if ($coupon) {
+                if ($coupon->discount_type === 'percent') {
+                    $totalDiscount += round(($originalPrice * $coupon->discount_value) / 100);
+                } else {
+                    $totalDiscount += $coupon->discount_value;
+                }
+            }
+        }
+        
+        // Calculate final amount (server-side validation)
+        $calculatedFinalPrice = max(0, $originalPrice - $totalDiscount);
+        $orderAmount = $calculatedFinalPrice;
 
         // Generate tracking code
         $trackingCode = OrderHelper::generateTrackingCode();
@@ -150,21 +182,21 @@ class CheckoutController extends Controller
         // Calculate hours from duration
         $hours = $price->hours ?? 0;
 
-        // Create order
+        // Create order with discounted amount
         $order = Order::create([
             'tracking_code' => $trackingCode,
             'price_id' => $priceId,
             'service_type' => $price->type,
             'hours' => $hours,
-            'amount' => $price->price,
+            'amount' => $orderAmount,
             'status' => Order::STATUS_PENDING,
             'ip_address' => $request->ip(),
             'customer_email' => $customerEmail,
             'created_at' => now(),
         ]);
 
-        // Generate QR URL
-        $qrUrl = OrderHelper::generateQRUrl($price->price, $trackingCode);
+        // Generate QR URL with discounted amount
+        $qrUrl = OrderHelper::generateQRUrl($orderAmount, $trackingCode);
         $bankInfo = OrderHelper::getBankInfo();
 
         // Check if user is logged in
