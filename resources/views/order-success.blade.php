@@ -5,98 +5,104 @@
 @section('content')
 <div class="success-container">
     <div class="success-card">
-        <!-- Success Icon -->
-        <div class="success-icon">
-            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                <polyline points="22 4 12 14.01 9 11.01"/>
-            </svg>
+        <!-- Success Header -->
+        <div class="success-header">
+            <div class="success-icon">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+            </div>
+            <h1 class="success-title">Thanh Toán Thành Công!</h1>
+            <p class="success-subtitle">Cảm ơn bạn đã sử dụng dịch vụ ThueTaiKhoan</p>
         </div>
         
-        <!-- Success Title -->
-        <h1 class="success-title">Thanh Toán Thành Công!</h1>
-        <p class="success-subtitle">Cảm ơn bạn đã sử dụng dịch vụ ThueTaiKhoan</p>
-        
-        <!-- Order Details -->
-        <div class="order-details">
-            <div class="detail-row">
-                <span class="detail-label">Mã đơn hàng</span>
-                <span class="detail-value highlight">{{ $order->tracking_code }}</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">Dịch vụ</span>
-                <span class="detail-value">{{ $price->type ?? 'N/A' }}</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">Thời gian</span>
-                <span class="detail-value">{{ $order->hours ?? 1 }} giờ</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">Số tiền</span>
-                <span class="detail-value price">{{ number_format($order->amount, 0, ',', '.') }}đ</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">Thời gian thanh toán</span>
-                <span class="detail-value">{{ $order->paid_at ? \Carbon\Carbon::parse($order->paid_at)->format('H:i d/m/Y') : 'N/A' }}</span>
-            </div>
-            <div class="detail-row">
-                <span class="detail-label">Trạng thái</span>
-                <span class="detail-value status-paid">✓ Đã thanh toán</span>
-            </div>
-        </div>
+        <div class="success-grid">
+            <!-- Left Column: Order Info -->
+            <div class="success-col">
+                <div class="order-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Mã đơn hàng</span>
+                        <span class="detail-value highlight">{{ $order->tracking_code }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Dịch vụ</span>
+                        <span class="detail-value">{{ $price->type ?? 'N/A' }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Thời gian</span>
+                        <span class="detail-value">{{ $order->hours ?? 1 }} giờ</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Số tiền</span>
+                        <span class="detail-value price">{{ number_format($order->amount, 0, ',', '.') }}đ</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Thời gian thanh toán</span>
+                        <span class="detail-value">{{ $order->paid_at ? \Carbon\Carbon::parse($order->paid_at)->format('H:i d/m/Y') : 'N/A' }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Trạng thái</span>
+                        <span class="detail-value status-paid">✓ Đã thanh toán</span>
+                    </div>
+                </div>
 
-        <!-- Account Info -->
-        @if($order->account)
-        <div class="account-info">
-            <h3>Tài khoản đã cấp</h3>
-            <div class="detail-row account-row">
-                <span class="detail-label">Tài khoản</span>
-                <div class="account-input-group">
-                    <input type="text" value="{{ $order->account->username }}" readonly onclick="this.select()">
-                    <button type="button" onclick="copyToClipboard('{{ $order->account->username }}', this)">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                    </button>
+                <div class="instructions">
+                    <h3>Hướng dẫn tiếp theo</h3>
+                    <ul>
+                        <li>Thông tin đăng nhập hiển thị bên phải (hoặc bên dưới)</li>
+                        <li>Vui lòng lưu lại mã đơn hàng để tra cứu</li>
+                        <li>Nếu cần hỗ trợ, liên hệ qua Zalo/Telegram</li>
+                    </ul>
                 </div>
             </div>
-            @if($order->account->password)
-            <div class="detail-row account-row">
-                <span class="detail-label">Mật khẩu</span>
-                <div class="account-input-group">
-                    <input type="text" value="{{ $order->account->password }}" readonly onclick="this.select()">
-                    <button type="button" onclick="copyToClipboard('{{ $order->account->password }}', this)">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                    </button>
+
+            <!-- Right Column: Account & Actions -->
+            <div class="success-col">
+                <!-- Account Info -->
+                @if($order->account)
+                <div class="account-info">
+                    <h3>Tài khoản đã cấp</h3>
+                    <div class="detail-row account-row">
+                        <span class="detail-label">Tài khoản</span>
+                        <div class="account-input-group">
+                            <input type="text" value="{{ $order->account->username }}" readonly onclick="this.select()">
+                            <button type="button" onclick="copyToClipboard('{{ $order->account->username }}', this)">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                    @if($order->account->password)
+                    <div class="detail-row account-row">
+                        <span class="detail-label">Mật khẩu</span>
+                        <div class="account-input-group">
+                            <input type="text" value="{{ $order->account->password }}" readonly onclick="this.select()">
+                            <button type="button" onclick="copyToClipboard('{{ $order->account->password }}', this)">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+                @endif
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <a href="/" class="btn-primary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        </svg>
+                        Về trang chủ
+                    </a>
+                    <a href="/order-history" class="btn-secondary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                        </svg>
+                        Xem lịch sử
+                    </a>
                 </div>
             </div>
-            @endif
-        </div>
-        @endif
-
-        <!-- Instructions -->
-        <div class="instructions">
-            <h3>Hướng dẫn tiếp theo</h3>
-            <ul>
-                <li>Thông tin đăng nhập sẽ được gửi qua email hoặc hiển thị tại trang này</li>
-                <li>Vui lòng lưu lại mã đơn hàng để tra cứu sau này</li>
-                <li>Nếu cần hỗ trợ, liên hệ qua Zalo hoặc Telegram</li>
-            </ul>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="action-buttons">
-            <a href="/" class="btn-primary">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                </svg>
-                Về trang chủ
-            </a>
-            <a href="/order-history" class="btn-secondary">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                    <polyline points="14 2 14 8 20 8"/>
-                </svg>
-                Xem lịch sử
-            </a>
         </div>
     </div>
 </div>
@@ -116,17 +122,23 @@
 .success-card {
     background: #fff;
     border-radius: 24px;
-    padding: 48px 40px;
-    max-width: 500px;
+    padding: 40px 48px;
+    max-width: 960px;
     width: 100%;
     text-align: center;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
 }
 
+.success-header {
+    margin-bottom: 40px;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 32px;
+}
+
 .success-icon {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto 24px;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -143,31 +155,42 @@
 
 .success-title {
     font-size: 28px;
-    font-weight: 700;
+    font-weight: 800;
     color: #059669;
     margin-bottom: 8px;
 }
 
 .success-subtitle {
-    font-size: 15px;
+    font-size: 16px;
     color: #6b7280;
-    margin-bottom: 32px;
 }
 
-.order-details {
-    background: #f9fafb;
+.success-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    text-align: left;
+}
+
+.success-col {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.order-details, .account-info {
+    background: #f8fafc;
     border-radius: 16px;
     padding: 24px;
-    margin-bottom: 24px;
-    text-align: left;
+    border: 1px solid #e5e7eb;
 }
 
 .detail-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid #e5e7eb;
+    padding: 12px 0;
+    border-bottom: 1px dashed #e5e7eb;
 }
 
 .detail-row:last-child {
@@ -210,8 +233,6 @@
     border: 1px solid #fcd34d;
     border-radius: 12px;
     padding: 20px;
-    margin-bottom: 28px;
-    text-align: left;
 }
 
 .instructions h3 {
@@ -235,7 +256,8 @@
 .action-buttons {
     display: flex;
     gap: 12px;
-    justify-content: center;
+    justify-content: center; /* Centered buttons usually look better */
+    margin-top: 10px;
 }
 
 .btn-primary, .btn-secondary {
@@ -248,11 +270,13 @@
     border-radius: 12px;
     text-decoration: none;
     transition: all 0.2s;
+    justify-content: center;
 }
 
 .btn-primary {
     background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
     color: #fff;
+    border: none;
 }
 
 .btn-primary:hover {
@@ -270,71 +294,10 @@
     background: #e5e7eb;
 }
 
-/* Dark mode */
-[data-theme="dark"] .success-container {
-    background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
-}
-
-[data-theme="dark"] .success-card {
-    background: #1e293b;
-}
-
-[data-theme="dark"] .success-title {
-    color: #34d399;
-}
-
-[data-theme="dark"] .success-subtitle {
-    color: #94a3b8;
-}
-
-[data-theme="dark"] .order-details {
-    background: #0f172a;
-}
-
-[data-theme="dark"] .detail-row {
-    border-color: #334155;
-}
-
-[data-theme="dark"] .detail-label {
-    color: #94a3b8;
-}
-
-[data-theme="dark"] .detail-value {
-    color: #e2e8f0;
-}
-
-[data-theme="dark"] .instructions {
-    background: #1e293b;
-    border-color: #fbbf24;
-}
-
-[data-theme="dark"] .btn-secondary {
-    background: #334155;
-    color: #e2e8f0;
-    border-color: #475569;
-}
-
-@media (max-width: 480px) {
-    .success-card {
-        padding: 32px 24px;
-    }
-    
-    .success-title {
-        font-size: 22px;
-    }
-    
-    .action-buttons {
-        flex-direction: column;
-    }
-}
 /* Account Info Styles */
 .account-info {
-    background: #f8fafc;
     border: 2px dashed #cbd5e1;
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 24px;
-    text-align: left;
+    border-top: 3px solid #3b82f6; /* Highlight top */
 }
 .account-info h3 {
     font-size: 15px;
@@ -375,16 +338,34 @@
 .account-input-group button:hover {
     background: #dbeafe;
 }
-[data-theme="dark"] .account-info {
-    background: #1e293b;
-    border-color: #475569;
+
+@media (max-width: 768px) {
+    .success-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    .success-card {
+        padding: 32px 24px;
+    }
+    .action-buttons {
+        flex-direction: column;
+    }
 }
+
+/* Dark mode */
+[data-theme="dark"] .success-container { background: linear-gradient(135deg, #064e3b 0%, #065f46 100%); }
+[data-theme="dark"] .success-card { background: #1e293b; }
+[data-theme="dark"] .success-title { color: #34d399; }
+[data-theme="dark"] .success-subtitle { color: #94a3b8; }
+[data-theme="dark"] .order-details { background: #0f172a; border-color: #334155; }
+[data-theme="dark"] .detail-row { border-color: #334155; }
+[data-theme="dark"] .detail-label { color: #94a3b8; }
+[data-theme="dark"] .detail-value { color: #e2e8f0; }
+[data-theme="dark"] .instructions { background: #1e293b; border-color: #fbbf24; }
+[data-theme="dark"] .btn-secondary { background: #334155; color: #e2e8f0; border-color: #475569; }
+[data-theme="dark"] .account-info { background: #1e293b; border-color: #475569; }
 [data-theme="dark"] .account-info h3 { color: #e2e8f0; }
-[data-theme="dark"] .account-input-group input {
-    background: #0f172a;
-    border-color: #334155;
-    color: #f1f5f9;
-}
+[data-theme="dark"] .account-input-group input { background: #0f172a; border-color: #334155; color: #f1f5f9; }
 </style>
 
 <script>
