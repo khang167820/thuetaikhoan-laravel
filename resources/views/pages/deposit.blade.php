@@ -1,229 +1,388 @@
 @extends('layouts.app')
 
-@section('title', 'Nạp tiền vào tài khoản - ThueTaiKhoan.net')
-@section('meta_description', 'Nạp tiền vào tài khoản ThueTaiKhoan.net để thanh toán nhanh chóng hơn.')
+@section('title', 'Nạp tiền - ThueTaiKhoan.net')
+@section('meta_description', 'Nạp tiền vào tài khoản ThueTaiKhoan.net để thanh toán nhanh chóng.')
+
+@push('head')
+<script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key', '6LegMlIsAAAAALh9UGh23nn8c_J5Gq_MbiVNrtTY') }}"></script>
+<style>.grecaptcha-badge { visibility: hidden !important; }</style>
+@endpush
 
 @section('styles')
 <style>
-.deposit-wrap {
-    min-height: 70vh;
-    padding: 40px 20px;
-    max-width: 900px;
-    margin: 0 auto;
-}
-.deposit-header {
+/* Deposit Page - Legacy Style */
+.dep-header {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    padding: 20px 0;
     text-align: center;
-    margin-bottom: 32px;
 }
-.deposit-title {
-    font-size: 28px;
-    font-weight: 800;
-    color: #0f172a;
-    margin: 0 0 8px;
-}
-.deposit-sub {
-    color: #64748b;
-    font-size: 15px;
-}
-
-/* Balance Card */
-.balance-card {
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-    border-radius: 20px;
-    padding: 30px;
-    color: #fff;
-    margin-bottom: 32px;
+.dep-header-inner {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.balance-info h3 {
-    font-size: 14px;
-    font-weight: 500;
-    opacity: 0.9;
-    margin: 0 0 8px;
-}
-.balance-amount {
-    font-size: 36px;
-    font-weight: 800;
-}
-.balance-amount span {
-    font-size: 20px;
-    opacity: 0.8;
-}
-.balance-icon {
-    width: 60px;
-    height: 60px;
-    background: rgba(255,255,255,0.2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-}
-
-/* Deposit Grid */
-.deposit-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-}
-.deposit-card {
-    background: #fff;
-    border-radius: 16px;
-    padding: 28px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-}
-.deposit-card-title {
+.dep-title {
+    color: #fff;
     font-size: 18px;
     font-weight: 700;
-    color: #0f172a;
-    margin: 0 0 20px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
-.deposit-card-title span {
-    font-size: 22px;
-}
-
-/* QR Section */
-.qr-container {
-    text-align: center;
-}
-.qr-code {
-    width: 200px;
-    height: 200px;
-    border-radius: 12px;
-    border: 2px solid #e5e7eb;
-    margin-bottom: 16px;
-}
-.bank-info {
-    text-align: left;
-    background: #f8fafc;
-    border-radius: 12px;
-    padding: 16px;
-    margin-top: 16px;
-}
-.bank-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px solid #e5e7eb;
+.dep-back {
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
     font-size: 14px;
 }
-.bank-row:last-child {
-    border-bottom: none;
-}
-.bank-label {
-    color: #64748b;
-}
-.bank-value {
-    color: #0f172a;
-    font-weight: 600;
-}
-.copy-btn {
-    background: #6366f1;
+.dep-back:hover {
     color: #fff;
-    border: none;
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 12px;
-    cursor: pointer;
-    margin-left: 8px;
-}
-.copy-btn:hover {
-    background: #4f46e5;
 }
 
-/* Instructions */
-.instructions {
-    list-style: none;
-    padding: 0;
+.dep-wrap {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 32px 20px;
+}
+
+/* Balance Display */
+.dep-balance {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+.dep-balance-info p {
+    font-size: 13px;
+    color: #64748b;
+    margin: 0 0 4px;
+}
+.dep-balance-info h2 {
+    font-size: 28px;
+    font-weight: 800;
+    color: #10b981;
     margin: 0;
 }
-.instructions li {
-    display: flex;
-    gap: 12px;
-    padding: 12px 0;
-    border-bottom: 1px solid #f1f5f9;
-}
-.instructions li:last-child {
-    border-bottom: none;
-}
-.step-num {
-    width: 28px;
-    height: 28px;
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-    color: #fff;
-    border-radius: 50%;
+.dep-balance-icon {
+    width: 48px;
+    height: 48px;
+    background: #f0fdf4;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 13px;
-    font-weight: 700;
-    flex-shrink: 0;
-}
-.step-text {
-    color: #374151;
-    font-size: 14px;
-    line-height: 1.5;
-}
-.step-text strong {
-    color: #0f172a;
+    font-size: 24px;
 }
 
-/* Login Prompt */
-.login-prompt {
-    text-align: center;
-    padding: 40px;
-    background: #f8fafc;
-    border-radius: 16px;
+/* Create Order Card */
+.dep-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 24px;
     margin-bottom: 24px;
 }
-.login-prompt h3 {
-    margin: 0 0 12px;
-    color: #0f172a;
-}
-.login-prompt p {
-    color: #64748b;
-    margin: 0 0 20px;
-}
-.login-btn {
-    display: inline-block;
-    padding: 14px 32px;
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-    color: #fff;
-    border-radius: 12px;
+.dep-card-title {
+    font-size: 16px;
     font-weight: 700;
-    text-decoration: none;
+    color: #0f172a;
+    margin: 0 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
-.login-btn:hover {
+
+/* Amount Selection */
+.amount-label {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 12px;
+}
+.amount-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+}
+.amount-btn {
+    padding: 14px;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    background: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+}
+.amount-btn:hover {
+    border-color: #10b981;
+    background: #f0fdf4;
+}
+.amount-btn.active {
+    border-color: #10b981;
+    background: #10b981;
+    color: #fff;
+}
+.custom-amount {
+    margin-top: 12px;
+}
+.custom-amount input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.custom-amount input:focus {
+    border-color: #10b981;
+}
+.custom-amount input::placeholder {
+    color: #9ca3af;
+}
+
+/* Payment Methods */
+.payment-label {
+    font-size: 13px;
+    color: #64748b;
+    margin: 24px 0 12px;
+}
+.payment-methods {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+.payment-method {
+    padding: 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+}
+.payment-method:hover {
+    border-color: #10b981;
+}
+.payment-method.active {
+    border-color: #10b981;
+    background: #f0fdf4;
+}
+.payment-method-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+.payment-method-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+/* Submit Button */
+.dep-submit-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: all 0.2s;
+}
+.dep-submit-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(99,102,241,0.3);
+    box-shadow: 0 8px 20px rgba(16,185,129,0.3);
+}
+.dep-submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.recaptcha-notice {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 11px;
+    color: #94a3b8;
+}
+.recaptcha-notice a {
+    color: #10b981;
+}
+
+/* QR Section (shown after creating order) */
+.qr-section {
+    display: none;
+}
+.qr-section.active {
+    display: block;
+}
+.success-alert {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 24px;
+    color: #166534;
+    font-size: 14px;
+}
+.qr-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 28px;
+    text-align: center;
+}
+.qr-card-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.vietqr-logo {
+    color: #e63946;
+    font-weight: 800;
+    font-size: 18px;
+}
+.qr-image {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 16px;
+    border-radius: 12px;
+    border: 2px solid #e5e7eb;
+}
+.qr-hint {
+    color: #64748b;
+    font-size: 13px;
+    margin-bottom: 24px;
+}
+
+/* Bank Info Table */
+.bank-table {
+    width: 100%;
+    text-align: left;
+    border-top: 1px solid #e5e7eb;
+}
+.bank-table tr {
+    border-bottom: 1px solid #f1f5f9;
+}
+.bank-table td {
+    padding: 14px 0;
+    font-size: 14px;
+}
+.bank-table td:first-child {
+    color: #64748b;
+    width: 120px;
+}
+.bank-table td:last-child {
+    color: #0f172a;
+    font-weight: 600;
+    text-align: right;
+}
+.bank-table .amount {
+    color: #10b981;
+    font-size: 16px;
+}
+.bank-table .code {
+    color: #6366f1;
+}
+.copy-btn {
+    background: #10b981;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 10px;
+}
+.copy-btn:hover {
+    background: #059669;
+}
+
+/* Warning Box */
+.warning-box {
+    background: #fef3c7;
+    border: 1px solid #fcd34d;
+    border-radius: 10px;
+    padding: 16px;
+    margin-top: 24px;
+}
+.warning-box h4 {
+    color: #92400e;
+    font-size: 14px;
+    margin: 0 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.warning-box ul {
+    margin: 0;
+    padding-left: 20px;
+    color: #92400e;
+    font-size: 13px;
+}
+.warning-box li {
+    margin-bottom: 6px;
+}
+
+/* Cancel Button */
+.cancel-btn {
+    display: block;
+    width: fit-content;
+    margin: 24px auto 0;
+    padding: 12px 24px;
+    background: #fff;
+    border: 2px solid #ef4444;
+    color: #ef4444;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.cancel-btn:hover {
+    background: #fef2f2;
 }
 
 /* History */
-.history-section {
+.dep-history {
     margin-top: 32px;
 }
-.history-title {
-    font-size: 18px;
+.dep-history-title {
+    font-size: 16px;
     font-weight: 700;
     margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 .history-table {
     width: 100%;
     background: #fff;
+    border: 1px solid #e5e7eb;
     border-radius: 12px;
     overflow: hidden;
-    border: 1px solid #e5e7eb;
 }
 .history-table th, .history-table td {
     padding: 14px 16px;
     text-align: left;
-    font-size: 14px;
+    font-size: 13px;
 }
 .history-table th {
     background: #f8fafc;
@@ -243,171 +402,171 @@
 }
 
 /* Dark Mode */
-[data-theme="dark"] .deposit-title { color: var(--ink); }
-[data-theme="dark"] .deposit-sub { color: var(--muted); }
-[data-theme="dark"] .deposit-card { background: var(--bg-card); border-color: #334155; }
-[data-theme="dark"] .deposit-card-title { color: var(--ink); }
-[data-theme="dark"] .bank-info { background: #1e293b; }
-[data-theme="dark"] .bank-row { border-color: #334155; }
-[data-theme="dark"] .bank-label { color: #94a3b8; }
-[data-theme="dark"] .bank-value { color: var(--ink); }
-[data-theme="dark"] .step-text { color: #cbd5e1; }
-[data-theme="dark"] .step-text strong { color: var(--ink); }
-[data-theme="dark"] .instructions li { border-color: #334155; }
-[data-theme="dark"] .login-prompt { background: #1e293b; }
-[data-theme="dark"] .login-prompt h3 { color: var(--ink); }
+[data-theme="dark"] .dep-balance, [data-theme="dark"] .dep-card, [data-theme="dark"] .qr-card { 
+    background: var(--bg-card); 
+    border-color: #334155; 
+}
+[data-theme="dark"] .dep-balance-info h2 { color: #4ade80; }
+[data-theme="dark"] .dep-balance-icon { background: #1e293b; }
+[data-theme="dark"] .dep-card-title { color: var(--ink); }
+[data-theme="dark"] .amount-btn { background: var(--bg-card); border-color: #334155; color: var(--ink); }
+[data-theme="dark"] .amount-btn:hover { border-color: #10b981; background: #1e293b; }
+[data-theme="dark"] .amount-btn.active { background: #10b981; color: #fff; }
+[data-theme="dark"] .custom-amount input { background: #1e293b; border-color: #334155; color: var(--ink); }
+[data-theme="dark"] .payment-method { background: var(--bg-card); border-color: #334155; }
+[data-theme="dark"] .payment-method-name { color: var(--ink); }
+[data-theme="dark"] .bank-table { border-color: #334155; }
+[data-theme="dark"] .bank-table tr { border-color: #334155; }
+[data-theme="dark"] .bank-table td:last-child { color: var(--ink); }
 [data-theme="dark"] .history-table { background: var(--bg-card); border-color: #334155; }
-[data-theme="dark"] .history-table th { background: #1e293b; color: #94a3b8; }
+[data-theme="dark"] .history-table th { background: #1e293b; }
 [data-theme="dark"] .history-table td { border-color: #334155; color: var(--ink); }
 
-@media (max-width: 768px) {
-    .deposit-grid { grid-template-columns: 1fr; }
-    .balance-card { flex-direction: column; text-align: center; gap: 20px; }
-    .balance-amount { font-size: 28px; }
-    .qr-code { width: 180px; height: 180px; }
+@media (max-width: 480px) {
+    .amount-grid { grid-template-columns: repeat(2, 1fr); }
+    .payment-methods { grid-template-columns: 1fr 1fr; }
 }
 </style>
 @endsection
 
 @section('content')
-<div class="deposit-wrap">
-    <div class="deposit-header">
-        <h1 class="deposit-title">💳 Nạp tiền vào tài khoản</h1>
-        <p class="deposit-sub">Nạp tiền để thanh toán nhanh hơn và nhận ưu đãi</p>
+<!-- Green Header -->
+<div class="dep-header">
+    <div class="dep-header-inner">
+        <div class="dep-title">💰 Nạp tiền</div>
+        <a href="/account" class="dep-back">← Tài khoản</a>
+    </div>
+</div>
+
+<div class="dep-wrap">
+    <!-- Balance -->
+    <div class="dep-balance">
+        <div class="dep-balance-info">
+            <p>Số dư hiện tại</p>
+            <h2>{{ number_format($user->balance ?? 0, 0, ',', '.') }} VND</h2>
+        </div>
+        <div class="dep-balance-icon">💳</div>
     </div>
 
-    @if($user)
-    <!-- Balance Card -->
-    <div class="balance-card">
-        <div class="balance-info">
-            <h3>Số dư hiện tại</h3>
-            <div class="balance-amount">{{ number_format($user->balance ?? 0, 0, ',', '.') }} <span>VNĐ</span></div>
-        </div>
-        <div class="balance-icon">💰</div>
+    <!-- Create Order Form -->
+    <div class="dep-card" id="createOrderSection">
+        <h3 class="dep-card-title">📝 Tạo lệnh nạp tiền</h3>
+        
+        <form id="depositForm">
+            @csrf
+            <p class="amount-label">Chọn số tiền nạp</p>
+            <div class="amount-grid">
+                <button type="button" class="amount-btn" data-amount="50000">50,000đ</button>
+                <button type="button" class="amount-btn" data-amount="100000">100,000đ</button>
+                <button type="button" class="amount-btn" data-amount="200000">200,000đ</button>
+                <button type="button" class="amount-btn" data-amount="500000">500,000đ</button>
+                <button type="button" class="amount-btn" data-amount="1000000">1,000,000đ</button>
+                <button type="button" class="amount-btn" data-amount="2000000">2,000,000đ</button>
+            </div>
+            
+            <div class="custom-amount">
+                <input type="number" name="amount" id="customAmount" placeholder="Hoặc nhập số tiền khác" min="10000">
+            </div>
+            
+            <p class="payment-label">Phương thức thanh toán</p>
+            <div class="payment-methods">
+                <div class="payment-method active" data-method="bank">
+                    <div class="payment-method-icon">🏦</div>
+                    <div class="payment-method-name">Ngân hàng</div>
+                </div>
+                <div class="payment-method" data-method="momo">
+                    <div class="payment-method-icon">📱</div>
+                    <div class="payment-method-name">MoMo</div>
+                </div>
+            </div>
+            
+            <input type="hidden" name="method" id="paymentMethod" value="bank">
+            <input type="hidden" name="amount_selected" id="amountSelected" value="">
+            
+            <button type="submit" class="dep-submit-btn" id="submitBtn" disabled>
+                Tạo lệnh nạp tiền
+            </button>
+            
+            <div class="recaptcha-notice">
+                Trang này được bảo vệ bởi reCAPTCHA.<br>
+                <a href="https://policies.google.com/privacy" target="_blank">Chính sách</a> · <a href="https://policies.google.com/terms" target="_blank">Điều khoản</a> Google.
+            </div>
+        </form>
     </div>
 
-    <div class="deposit-grid">
-        <!-- QR Code Card -->
-        <div class="deposit-card">
-            <h2 class="deposit-card-title"><span>📱</span> Quét mã QR để nạp</h2>
-            <div class="qr-container">
-                <img src="https://img.vietqr.io/image/{{ $bankInfo['bin'] }}-{{ $bankInfo['account'] }}-compact.png?addInfo={{ $depositCode }}&accountName={{ urlencode($bankInfo['owner']) }}" 
-                     alt="QR Code nạp tiền" class="qr-code" id="qr-code">
-                <p style="color: #64748b; font-size: 13px; margin: 0;">Quét bằng app ngân hàng hoặc ví điện tử</p>
-            </div>
-            
-            <div class="bank-info">
-                <div class="bank-row">
-                    <span class="bank-label">Ngân hàng</span>
-                    <span class="bank-value">{{ $bankInfo['name'] }}</span>
-                </div>
-                <div class="bank-row">
-                    <span class="bank-label">Số tài khoản</span>
-                    <span class="bank-value">
-                        {{ $bankInfo['account'] }}
-                        <button class="copy-btn" onclick="copyText('{{ $bankInfo['account'] }}')">Copy</button>
-                    </span>
-                </div>
-                <div class="bank-row">
-                    <span class="bank-label">Chủ tài khoản</span>
-                    <span class="bank-value">{{ $bankInfo['owner'] }}</span>
-                </div>
-                <div class="bank-row">
-                    <span class="bank-label">Nội dung CK</span>
-                    <span class="bank-value" style="color: #6366f1;">
-                        {{ $depositCode }}
-                        <button class="copy-btn" onclick="copyText('{{ $depositCode }}')">Copy</button>
-                    </span>
-                </div>
-            </div>
+    <!-- QR Code Section (Hidden by default) -->
+    <div class="qr-section" id="qrSection">
+        <div class="success-alert">
+            ✅ Tạo lệnh nạp tiền thành công! Vui lòng chuyển khoản theo thông tin bên dưới.
         </div>
-
-        <!-- Instructions Card -->
-        <div class="deposit-card">
-            <h2 class="deposit-card-title"><span>📋</span> Hướng dẫn nạp tiền</h2>
-            <ul class="instructions">
-                <li>
-                    <span class="step-num">1</span>
-                    <span class="step-text">Mở app ngân hàng hoặc ví điện tử (MoMo, ZaloPay...)</span>
-                </li>
-                <li>
-                    <span class="step-num">2</span>
-                    <span class="step-text"><strong>Quét mã QR</strong> hoặc chuyển khoản thủ công theo thông tin bên cạnh</span>
-                </li>
-                <li>
-                    <span class="step-num">3</span>
-                    <span class="step-text">Nhập số tiền muốn nạp (tối thiểu <strong>10,000đ</strong>)</span>
-                </li>
-                <li>
-                    <span class="step-num">4</span>
-                    <span class="step-text"><strong>Quan trọng:</strong> Ghi đúng nội dung chuyển khoản: <strong style="color: #6366f1;">{{ $depositCode }}</strong></span>
-                </li>
-                <li>
-                    <span class="step-num">5</span>
-                    <span class="step-text">Tiền sẽ được cộng vào tài khoản trong <strong>1-5 phút</strong></span>
-                </li>
-            </ul>
+        
+        <div class="qr-card">
+            <h3 class="qr-card-title">🏦 Chuyển khoản ngân hàng <span class="vietqr-logo">VIETQR</span></h3>
+            <img src="" alt="QR Code" class="qr-image" id="qrImage">
+            <p class="qr-hint">Quét mã QR bằng app ngân hàng để thanh toán</p>
             
-            <div style="background: #fef3c7; border: 1px solid #fcd34d; border-radius: 10px; padding: 14px; margin-top: 20px;">
-                <p style="margin: 0; font-size: 13px; color: #92400e;">
-                    ⚠️ <strong>Lưu ý:</strong> Nếu ghi sai nội dung chuyển khoản, vui lòng liên hệ Zalo 
-                    <a href="https://zalo.me/0777333763" style="color: #6366f1; font-weight: 600;">0777333763</a> để được hỗ trợ.
-                </p>
+            <table class="bank-table">
+                <tr>
+                    <td>Ngân hàng</td>
+                    <td>{{ $bankInfo['name'] }}</td>
+                </tr>
+                <tr>
+                    <td>Số tài khoản</td>
+                    <td>{{ $bankInfo['account'] }} <button class="copy-btn" onclick="copyText('{{ $bankInfo['account'] }}')">Copy</button></td>
+                </tr>
+                <tr>
+                    <td>Chủ tài khoản</td>
+                    <td>{{ $bankInfo['owner'] }}</td>
+                </tr>
+                <tr>
+                    <td>Số tiền</td>
+                    <td class="amount" id="displayAmount">-</td>
+                </tr>
+                <tr>
+                    <td>Nội dung CK</td>
+                    <td class="code" id="displayCode">- <button class="copy-btn" onclick="copyText(document.getElementById('displayCode').innerText.replace(' Copy', ''))">Copy</button></td>
+                </tr>
+            </table>
+            
+            <div class="warning-box">
+                <h4>⚠️ Lưu ý quan trọng:</h4>
+                <ul>
+                    <li>Nhập đúng nội dung chuyển khoản để được cộng tiền tự động</li>
+                    <li>Hệ thống sẽ tự động cộng tiền trong vòng 1-5 phút sau khi nhận được tiền</li>
+                    <li>Nếu sau 10 phút chưa nhận được tiền, vui lòng liên hệ hỗ trợ</li>
+                </ul>
             </div>
+            
+            <button class="cancel-btn" onclick="cancelDeposit()">✕ Hủy lệnh nạp tiền</button>
         </div>
     </div>
 
     <!-- Deposit History -->
-    @if($deposits->count() > 0)
-    <div class="history-section">
-        <h3 class="history-title">📜 Lịch sử nạp tiền</h3>
+    @if(isset($deposits) && $deposits->count() > 0)
+    <div class="dep-history">
+        <h3 class="dep-history-title">📜 Lịch sử nạp tiền</h3>
         <table class="history-table">
             <thead>
                 <tr>
                     <th>Thời gian</th>
                     <th>Số tiền</th>
-                    <th>Nội dung</th>
+                    <th>Phương thức</th>
                     <th>Trạng thái</th>
+                    <th>Mã GD</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($deposits as $deposit)
+                @foreach($deposits as $dep)
                 <tr>
-                    <td>{{ \Carbon\Carbon::parse($deposit->created_at)->format('d/m/Y H:i') }}</td>
-                    <td style="font-weight: 600; color: #10b981;">+{{ number_format($deposit->amount, 0, ',', '.') }}đ</td>
-                    <td>{{ $deposit->note ?? '-' }}</td>
-                    <td class="status-{{ $deposit->status }}">{{ $deposit->status == 'success' ? 'Thành công' : 'Đang xử lý' }}</td>
+                    <td>{{ \Carbon\Carbon::parse($dep->created_at)->format('d/m/Y H:i') }}</td>
+                    <td style="font-weight: 600;">{{ number_format($dep->amount, 0, ',', '.') }}đ</td>
+                    <td>🏦 Ngân hàng</td>
+                    <td class="status-{{ $dep->status }}">{{ $dep->status == 'success' ? '✅ Hoàn thành' : '⏳ Đang xử lý' }}</td>
+                    <td style="font-size: 11px; color: #94a3b8;">{{ $dep->note ?? '-' }}</td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
-    </div>
-    @endif
-
-    @else
-    <!-- Login Prompt for Guest -->
-    <div class="login-prompt">
-        <h3>🔐 Đăng nhập để nạp tiền</h3>
-        <p>Bạn cần đăng nhập để sử dụng tính năng nạp tiền vào tài khoản</p>
-        <a href="/login" class="login-btn">Đăng nhập ngay</a>
-    </div>
-    
-    <div class="deposit-card" style="max-width: 600px; margin: 0 auto;">
-        <h2 class="deposit-card-title"><span>🎁</span> Lợi ích khi nạp tiền</h2>
-        <ul class="instructions">
-            <li>
-                <span class="step-num">✓</span>
-                <span class="step-text"><strong>Thanh toán nhanh hơn</strong> - Không cần chờ xác nhận chuyển khoản</span>
-            </li>
-            <li>
-                <span class="step-num">✓</span>
-                <span class="step-text"><strong>Tích điểm thưởng</strong> - Mỗi lần nạp được cộng điểm đổi voucher</span>
-            </li>
-            <li>
-                <span class="step-num">✓</span>
-                <span class="step-text"><strong>Ưu đãi đặc biệt</strong> - Nạp nhiều nhận thêm khuyến mãi</span>
-            </li>
-        </ul>
     </div>
     @endif
 </div>
@@ -415,10 +574,97 @@
 
 @section('scripts')
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const amountBtns = document.querySelectorAll('.amount-btn');
+    const customAmount = document.getElementById('customAmount');
+    const amountSelected = document.getElementById('amountSelected');
+    const submitBtn = document.getElementById('submitBtn');
+    const paymentMethods = document.querySelectorAll('.payment-method');
+    const paymentMethodInput = document.getElementById('paymentMethod');
+    const createOrderSection = document.getElementById('createOrderSection');
+    const qrSection = document.getElementById('qrSection');
+    const depositForm = document.getElementById('depositForm');
+    
+    const bankInfo = {
+        bin: '{{ $bankInfo['bin'] }}',
+        account: '{{ $bankInfo['account'] }}',
+        owner: '{{ $bankInfo['owner'] }}'
+    };
+    
+    // Amount button click
+    amountBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            amountBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            amountSelected.value = this.dataset.amount;
+            customAmount.value = '';
+            updateSubmitBtn();
+        });
+    });
+    
+    // Custom amount input
+    customAmount.addEventListener('input', function() {
+        amountBtns.forEach(b => b.classList.remove('active'));
+        amountSelected.value = this.value;
+        updateSubmitBtn();
+    });
+    
+    // Payment method selection
+    paymentMethods.forEach(method => {
+        method.addEventListener('click', function() {
+            paymentMethods.forEach(m => m.classList.remove('active'));
+            this.classList.add('active');
+            paymentMethodInput.value = this.dataset.method;
+        });
+    });
+    
+    function updateSubmitBtn() {
+        const amount = parseInt(amountSelected.value) || 0;
+        submitBtn.disabled = amount < 10000;
+    }
+    
+    // Form submit
+    depositForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const amount = parseInt(amountSelected.value);
+        if (amount < 10000) {
+            alert('Số tiền tối thiểu là 10,000đ');
+            return;
+        }
+        
+        // Generate deposit code
+        const userId = {{ $user->id ?? 0 }};
+        const timestamp = Date.now();
+        const depositCode = 'NAP' + timestamp + (userId > 0 ? userId : '');
+        
+        // Generate QR URL
+        const qrUrl = 'https://img.vietqr.io/image/' + bankInfo.bin + '-' + bankInfo.account + 
+            '-compact.png?amount=' + amount + '&addInfo=' + depositCode + '&accountName=' + encodeURIComponent(bankInfo.owner);
+        
+        // Update QR section
+        document.getElementById('qrImage').src = qrUrl;
+        document.getElementById('displayAmount').innerText = amount.toLocaleString('vi-VN') + ' VND';
+        document.getElementById('displayCode').innerHTML = depositCode + ' <button class="copy-btn" onclick="copyText(\'' + depositCode + '\')">Copy</button>';
+        
+        // Show QR section
+        createOrderSection.style.display = 'none';
+        qrSection.classList.add('active');
+        
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+});
+
 function copyText(text) {
     navigator.clipboard.writeText(text).then(function() {
         alert('Đã copy: ' + text);
     });
+}
+
+function cancelDeposit() {
+    document.getElementById('createOrderSection').style.display = 'block';
+    document.getElementById('qrSection').classList.remove('active');
 }
 </script>
 @endsection
