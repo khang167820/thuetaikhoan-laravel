@@ -1907,6 +1907,13 @@
     flex-direction: column;
     align-items: flex-end;
     gap: 12px;
+    pointer-events: none; /* Don't block clicks when closed */
+}
+.contact-float.open {
+    pointer-events: auto;
+}
+.contact-float-toggle {
+    pointer-events: auto !important; /* Toggle button always clickable */
 }
 .contact-float-items {
     display: flex;
