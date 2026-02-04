@@ -2323,7 +2323,7 @@ function toggleFeatures(cardId) {
 /* Options Scroll */
 .pm-options-scroll {
     overflow-y: auto;
-    height: 380px;
+    height: 500px;
     padding: 6px 16px;
 }
 .pm-options {
