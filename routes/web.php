@@ -9,10 +9,15 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrdServicesController;
 use App\Http\Controllers\OrdCheckoutController;
+use App\Http\Controllers\DepositController;
 
 
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\SitemapController;
+
+// Deposit Route
+Route::get('/deposit', [DepositController::class, 'index'])->name('deposit');
+Route::get('/api/deposit/check', [DepositController::class, 'checkStatus'])->name('api.deposit.check');
 
 // Sitemap Routes
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap.index');
