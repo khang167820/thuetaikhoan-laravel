@@ -227,48 +227,69 @@
 }
 .qr-section.active {
     display: block;
+    animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 .success-alert {
-    background: #f0fdf4;
-    border: 1px solid #bbf7d0;
-    border-radius: 10px;
-    padding: 16px;
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border: 2px solid #4ade80;
+    border-radius: 12px;
+    padding: 18px 20px;
     margin-bottom: 24px;
     color: #166534;
-    font-size: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 .qr-card {
     background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 28px;
+    border: 2px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 32px;
     text-align: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.06);
 }
 .qr-card-title {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 700;
-    margin: 0 0 20px;
+    margin: 0 0 24px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
+    color: #0f172a;
 }
 .vietqr-logo {
-    color: #e63946;
+    background: linear-gradient(135deg, #e63946 0%, #f94449 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     font-weight: 800;
-    font-size: 18px;
+    font-size: 20px;
+}
+.qr-wrapper {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    padding: 20px;
+    border-radius: 16px;
+    display: inline-block;
+    margin-bottom: 20px;
 }
 .qr-image {
-    width: 200px;
-    height: 200px;
-    margin: 0 auto 16px;
+    width: 220px;
+    height: 220px;
     border-radius: 12px;
-    border: 2px solid #e5e7eb;
+    border: 3px solid #fff;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 .qr-hint {
     color: #64748b;
-    font-size: 13px;
-    margin-bottom: 24px;
+    font-size: 14px;
+    margin-bottom: 28px;
 }
 
 /* Bank Info Table */
@@ -301,18 +322,50 @@
     color: #6366f1;
 }
 .copy-btn {
-    background: #10b981;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     color: #fff;
     border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
-    margin-left: 10px;
+    margin-left: 12px;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 .copy-btn:hover {
-    background: #059669;
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(16,185,129,0.3);
+}
+.copy-btn.copied {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+}
+
+/* Toast notification */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #fff;
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 9999;
+    opacity: 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+}
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+.toast.success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
 }
 
 /* Warning Box */
@@ -502,8 +555,10 @@
         
         <div class="qr-card">
             <h3 class="qr-card-title">🏦 Chuyển khoản ngân hàng <span class="vietqr-logo">VIETQR</span></h3>
-            <img src="" alt="QR Code" class="qr-image" id="qrImage">
-            <p class="qr-hint">Quét mã QR bằng app ngân hàng để thanh toán</p>
+            <div class="qr-wrapper">
+                <img src="" alt="QR Code" class="qr-image" id="qrImage">
+            </div>
+            <p class="qr-hint">📱 Mở app ngân hàng → Quét mã QR → Xác nhận thanh toán</p>
             
             <table class="bank-table">
                 <tr>
@@ -656,15 +711,41 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-function copyText(text) {
+function copyText(text, btn) {
     navigator.clipboard.writeText(text).then(function() {
-        alert('Đã copy: ' + text);
+        showToast('✓ Đã copy: ' + text, 'success');
+        if (btn) {
+            btn.classList.add('copied');
+            btn.innerText = 'Đã copy!';
+            setTimeout(() => {
+                btn.classList.remove('copied');
+                btn.innerText = 'Copy';
+            }, 2000);
+        }
     });
+}
+
+function showToast(message, type = '') {
+    // Remove existing toast
+    const existingToast = document.querySelector('.toast');
+    if (existingToast) existingToast.remove();
+    
+    const toast = document.createElement('div');
+    toast.className = 'toast ' + type;
+    toast.innerText = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => toast.classList.add('show'), 10);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 2500);
 }
 
 function cancelDeposit() {
     document.getElementById('createOrderSection').style.display = 'block';
     document.getElementById('qrSection').classList.remove('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 </script>
 @endsection
