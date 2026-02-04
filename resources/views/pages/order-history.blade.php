@@ -172,13 +172,52 @@ tbody tr:last-child td {
         padding: 20px 16px;
     }
     .page-title {
-        font-size: 24px;
+        font-size: 22px;
     }
-    table {
+    .ip-info {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+    }
+    /* Hide table on mobile, show as cards */
+    table thead {
+        display: none;
+    }
+    table, table tbody, table tr, table td {
+        display: block;
+        width: 100%;
+    }
+    table tr {
+        background: #fff;
+        margin-bottom: 12px;
+        border-radius: 12px;
+        padding: 16px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        border: 1px solid #f1f5f9;
+    }
+    table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px dashed #f1f5f9;
+        font-size: 13px;
+    }
+    table td:last-child {
+        border-bottom: none;
+    }
+    table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #64748b;
         font-size: 12px;
     }
-    th, td {
-        padding: 8px;
+    .order-link {
+        font-size: 12px;
+    }
+    .status-badge {
+        padding: 4px 10px;
+        font-size: 11px;
     }
 }
 </style>
@@ -236,21 +275,21 @@ tbody tr:last-child td {
                         $statusClass = OrderHistoryController::getStatusBadgeClass($order->status);
                     @endphp
                     <tr>
-                        <td>
+                        <td data-label="Mã đơn">
                             <a href="/order-detail?code={{ urlencode($order->tracking_code) }}" class="order-link">
                                 {{ $order->tracking_code }}
                             </a>
                         </td>
-                        <td>{{ $serviceName }}</td>
-                        <td>{{ $hoursLabel }}</td>
-                        <td><strong>{{ number_format($order->amount) }}₫</strong></td>
-                        <td>
+                        <td data-label="Dịch vụ">{{ $serviceName }}</td>
+                        <td data-label="Gói">{{ $hoursLabel }}</td>
+                        <td data-label="Số tiền"><strong>{{ number_format($order->amount) }}₫</strong></td>
+                        <td data-label="Trạng thái">
                             <span class="status-badge {{ $statusClass }}">
                                 {{ $statusText }}
                             </span>
                         </td>
-                        <td>{{ $order->created_at ? \Carbon\Carbon::parse($order->created_at)->format('d/m/Y H:i') : '-' }}</td>
-                        <td>
+                        <td data-label="Ngày tạo">{{ $order->created_at ? \Carbon\Carbon::parse($order->created_at)->format('d/m/Y H:i') : '-' }}</td>
+                        <td data-label="Hết hạn">
                             @if($order->expires_at)
                                 @php
                                     $expires = \Carbon\Carbon::parse($order->expires_at);
@@ -263,7 +302,7 @@ tbody tr:last-child td {
                                 -
                             @endif
                         </td>
-                        <td>
+                        <td data-label="">
                             <a href="/order-detail?code={{ urlencode($order->tracking_code) }}" class="order-link">
                                 Xem chi tiết
                             </a>
