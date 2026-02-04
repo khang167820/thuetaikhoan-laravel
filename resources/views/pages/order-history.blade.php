@@ -230,13 +230,6 @@ tbody tr:last-child td {
         <p class="page-subtitle">Xem lại các đơn hàng bạn đã đặt trong 30 ngày qua</p>
     </div>
 
-    <div class="ip-info">
-        <span class="ip-info-icon">🌐</span>
-        <span class="ip-info-text">
-            Đang hiển thị lịch sử đơn hàng từ IP: <span class="ip-value">{{ $customerIp }}</span>
-        </span>
-    </div>
-
     @if($error)
     <div class="error-box">
         <strong>Lỗi:</strong> {{ $error }}
