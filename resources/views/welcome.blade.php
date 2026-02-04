@@ -2822,9 +2822,13 @@ function openPriceModal(serviceId) {
     }).join('');
     
     // Reset coupon section
-    document.getElementById('pm-use-coupon').checked = false;
-    document.getElementById('pm-coupon-section').style.display = 'none';
-    document.getElementById('pm-coupon-code').value = '';
+    const useCouponCheckbox = document.getElementById('pm-use-coupon');
+    const couponSection = document.getElementById('pm-coupon-section');
+    const couponCodeInput = document.getElementById('pm-coupon-code');
+    
+    if (useCouponCheckbox) useCouponCheckbox.checked = false;
+    if (couponSection) couponSection.style.display = 'none';
+    if (couponCodeInput) couponCodeInput.value = '';
     document.querySelectorAll('.pm-coupon-item').forEach(item => item.classList.remove('selected'));
     
     // Show modal
@@ -2840,8 +2844,11 @@ function selectPackage(index) {
 }
 
 function toggleCouponSection() {
-    const isChecked = document.getElementById('pm-use-coupon').checked;
-    document.getElementById('pm-coupon-section').style.display = isChecked ? 'block' : 'none';
+    const checkbox = document.getElementById('pm-use-coupon');
+    const section = document.getElementById('pm-coupon-section');
+    if (checkbox && section) {
+        section.style.display = checkbox.checked ? 'block' : 'none';
+    }
 }
 
 function selectCoupon(code, value, type) {
@@ -2849,14 +2856,16 @@ function selectCoupon(code, value, type) {
     document.querySelectorAll('.pm-coupon-item').forEach(item => {
         item.classList.toggle('selected', item.dataset.code === code);
     });
-    document.getElementById('pm-coupon-code').value = code;
+    const couponCodeInput = document.getElementById('pm-coupon-code');
+    if (couponCodeInput) couponCodeInput.value = code;
     
     // Automatically apply and calculate
     calculateCouponDiscount(code);
 }
 
 function applyCouponCode() {
-    const code = document.getElementById('pm-coupon-code').value.trim();
+    const codeInput = document.getElementById('pm-coupon-code');
+    const code = codeInput ? codeInput.value.trim() : '';
     if (!code) {
         showCouponError('Vui lòng nhập mã giảm giá.');
         return;
@@ -2917,14 +2926,20 @@ function calculateCouponDiscount(code) {
 
 function showCouponError(message) {
     const errorBox = document.getElementById('pm-coupon-error');
-    errorBox.textContent = message;
-    errorBox.style.display = 'block';
+    if (errorBox) {
+        errorBox.textContent = message;
+        errorBox.style.display = 'block';
+    }
 }
 
 function removeCouponWelcome() {
-    document.getElementById('pm-coupon-code').value = '';
-    document.getElementById('pm-coupon-result').style.display = 'none';
-    document.getElementById('pm-coupon-error').style.display = 'none';
+    const couponCode = document.getElementById('pm-coupon-code');
+    const couponResult = document.getElementById('pm-coupon-result');
+    const couponError = document.getElementById('pm-coupon-error');
+    
+    if (couponCode) couponCode.value = '';
+    if (couponResult) couponResult.style.display = 'none';
+    if (couponError) couponError.style.display = 'none';
     document.querySelectorAll('.pm-coupon-item').forEach(item => item.classList.remove('selected'));
     selectedCoupon = null;
     updatePriceDisplay();
