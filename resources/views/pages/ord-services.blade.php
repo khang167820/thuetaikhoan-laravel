@@ -327,8 +327,8 @@
 /* PRODUCTS GRID */
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 18px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
 }
 .product-card {
     background: var(--bg-card, white);
@@ -486,9 +486,6 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-@media (max-width: 1400px) {
-    .products-grid { grid-template-columns: repeat(4, 1fr); }
-}
 @media (max-width: 1200px) {
     .products-grid { grid-template-columns: repeat(3, 1fr); }
 }
