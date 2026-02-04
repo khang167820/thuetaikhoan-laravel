@@ -212,6 +212,12 @@ class CheckoutController extends Controller
             'bankInfo' => $bankInfo,
             'userBalance' => $userBalance,
             'isLoggedIn' => Auth::check(),
+            // Discount details for display
+            'originalPrice' => $originalPrice,
+            'pointsDiscount' => $usePoints ? 3000 : 0,
+            'couponDiscount' => $couponCode ? ($totalDiscount - ($usePoints ? 3000 : 0)) : 0,
+            'couponCode' => $couponCode,
+            'usePoints' => $usePoints,
         ]);
     }
 

@@ -116,8 +116,24 @@
                             <span>Thời hạn</span>
                             <span class="cp-summary-val">{{ $price->hours_label }}</span>
                         </div>
+                        <div class="cp-summary-row">
+                            <span>Giá gốc</span>
+                            <span class="cp-summary-val @if(($pointsDiscount ?? 0) > 0 || ($couponDiscount ?? 0) > 0) cp-old-price @endif">{{ number_format($originalPrice ?? $price->price, 0, ',', '.') }}đ</span>
+                        </div>
+                        @if(($pointsDiscount ?? 0) > 0)
+                        <div class="cp-summary-row cp-discount-row">
+                            <span>🎁 Điểm tích lũy</span>
+                            <span class="cp-summary-discount">-{{ number_format($pointsDiscount, 0, ',', '.') }}đ</span>
+                        </div>
+                        @endif
+                        @if(($couponDiscount ?? 0) > 0)
+                        <div class="cp-summary-row cp-discount-row">
+                            <span>🏷️ Mã {{ $couponCode ?? 'giảm giá' }}</span>
+                            <span class="cp-summary-discount">-{{ number_format($couponDiscount, 0, ',', '.') }}đ</span>
+                        </div>
+                        @endif
                         <div class="cp-summary-row cp-summary-total">
-                            <span>Tổng thanh toán</span>
+                            <span>💰 Tổng thanh toán</span>
                             <span class="cp-summary-price">{{ number_format($order->amount, 0, ',', '.') }}đ</span>
                         </div>
                     </div>
@@ -407,12 +423,32 @@
     color: var(--muted, #6b7280);
 }
 .cp-summary-val { color: var(--ink, #1f2937); font-weight: 500; }
+.cp-summary-val.cp-old-price { 
+    text-decoration: line-through; 
+    color: var(--muted, #6b7280); 
+    font-weight: 400;
+}
+.cp-discount-row {
+    background: #f0fdf4;
+    margin: 4px -18px;
+    padding: 10px 18px !important;
+}
+[data-theme="dark"] .cp-discount-row { background: #064e3b; }
+.cp-summary-discount { 
+    color: #16a34a; 
+    font-weight: 600; 
+}
 .cp-summary-total {
     margin-top: 8px;
     padding-top: 12px;
     border-top: 2px solid var(--line, #e5e7eb);
     font-weight: 600;
+    background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
+    margin: 8px -18px -16px;
+    padding: 16px 18px !important;
+    border-radius: 0 0 12px 12px;
 }
+[data-theme="dark"] .cp-summary-total { background: linear-gradient(135deg, #064e3b 0%, #065f46 100%); }
 .cp-summary-price {
     font-size: 20px;
     font-weight: 800;
