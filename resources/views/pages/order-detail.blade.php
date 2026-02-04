@@ -23,7 +23,7 @@
                 </div>
                 <div>
                     <h1 class="od-title">{{ $order->service_type ?? $order->account_type ?? 'Dịch vụ' }}</h1>
-                    <div class="od-duration">{{ $order->hours_label ?? $order->hours . ' giờ' }}</div>
+                    <div class="od-duration">{{ $order->hours }} giờ</div>
                 </div>
             </div>
             <div class="od-header-right">
@@ -71,7 +71,7 @@
                     </div>
                     <div class="od-row">
                         <span>Thời hạn</span>
-                        <span class="od-val">{{ $order->hours_label ?? $order->hours . ' giờ' }}</span>
+                        <span class="od-val">{{ $order->hours }} giờ</span>
                     </div>
                     <div class="od-row">
                         <span>Ngày tạo</span>

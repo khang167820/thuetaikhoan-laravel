@@ -72,7 +72,7 @@ class OrderHistoryController extends Controller
                 'accounts.password as account_password',
                 'prices.type as service_type',
                 'prices.price as original_price',
-                'prices.hours_label'
+                'prices.hours as price_hours'
             )
             ->where('orders.tracking_code', $code)
             ->first();
