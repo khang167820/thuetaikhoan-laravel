@@ -2395,27 +2395,28 @@ function toggleFeatures(cardId) {
 
 .pm-option-info { flex: 1; min-width: 0; }
 .pm-option-name {
-    font-size: 12px;
-    font-weight: 600;
-    color: #1f2937;
+    font-size: 13px;
+    font-weight: 700;
+    color: #0f172a;
     margin-bottom: 1px;
 }
 .pm-option-duration {
-    font-size: 11px;
-    color: #6b7280;
+    font-size: 12px;
+    font-weight: 500;
+    color: #475569;
 }
 .pm-option-price {
     text-align: right;
     flex-shrink: 0;
 }
 .pm-option-current {
-    font-size: 14px;
-    font-weight: 700;
-    color: #1f2937;
+    font-size: 15px;
+    font-weight: 800;
+    color: #0f172a;
 }
 .pm-option-old {
-    font-size: 11px;
-    color: #9ca3af;
+    font-size: 12px;
+    color: #64748b;
     text-decoration: line-through;
 }
 .pm-option-discount {
