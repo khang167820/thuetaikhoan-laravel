@@ -21,7 +21,7 @@ class OrderHistoryController extends Controller
         if (empty($customerIp)) {
             $error = 'Không thể xác định địa chỉ IP';
         } else {
-            // Get orders by IP in last 30 days
+            // Get paid orders by IP in last 30 days (exclude pending)
             $orders = DB::table('orders')
                 ->leftJoin('accounts', 'orders.account_id', '=', 'accounts.id')
                 ->leftJoin('prices', 'orders.price_id', '=', 'prices.id')
@@ -41,6 +41,7 @@ class OrderHistoryController extends Controller
                 )
                 ->where('orders.ip_address', $customerIp)
                 ->where('orders.created_at', '>=', now()->subDays(30))
+                ->whereIn('orders.status', ['paid', 'completed'])
                 ->orderBy('orders.created_at', 'desc')
                 ->limit(100)
                 ->get();
