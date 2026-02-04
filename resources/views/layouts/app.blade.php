@@ -275,16 +275,23 @@
         
         /* FOOTER */
         .site-footer {
-            background: #fff; padding: 40px 0 20px;
+            background: #fff; padding: 40px 20px 20px;
             border-top: 1px solid var(--line); margin-top: 60px;
         }
-        .footer-copyright { text-align: center; font-size: 14px; color: var(--muted); margin-bottom: 20px; }
-        .footer-links { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; margin-bottom: 25px; }
+        .footer-copyright { text-align: center; font-size: 14px; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
+        .footer-links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 25px; }
         .footer-link {
-            padding: 6px 14px; border: 1px solid #d1d5db; border-radius: 8px;
+            padding: 8px 16px; border: 1px solid #d1d5db; border-radius: 8px;
             font-size: 13px; color: #374151; text-decoration: none; transition: all 0.2s;
         }
         .footer-link:hover { border-color: var(--primary); color: var(--primary); }
+        
+        @media (max-width: 640px) {
+            .site-footer { padding: 24px 16px 16px; margin-top: 40px; }
+            .footer-copyright { font-size: 12px; margin-bottom: 16px; padding: 0 10px; }
+            .footer-links { gap: 8px; justify-content: center; }
+            .footer-link { padding: 6px 12px; font-size: 12px; flex: 0 0 auto; }
+        }
         
         /* SEARCH BAR */
         .tool-search-bar {
