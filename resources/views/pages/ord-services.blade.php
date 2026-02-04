@@ -505,10 +505,10 @@
     .products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
 }
 @media (max-width: 500px) {
-    .products-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-    .product-name { font-size: 12px; min-height: 34px; }
-    .price-vnd { font-size: 15px; }
-    .btn-order { padding: 8px; font-size: 11px; }
+    .products-grid { grid-template-columns: 1fr; gap: 14px; }
+    .product-name { font-size: 14px; min-height: auto; }
+    .price-vnd { font-size: 18px; }
+    .btn-order { padding: 12px; font-size: 13px; }
 }
 
 /* Dark mode */
