@@ -246,10 +246,9 @@
                 </div>
                 @endforeach
             </div>
-        </div>
-        
-        <!-- Discount Section -->
-        <div class="pm-discount-section">
+            
+            <!-- Discount Section (moved inside scroll area) -->
+            <div class="pm-discount-section" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
             <!-- Use Points Checkbox -->
             <label class="pm-checkbox" id="pm-use-points-wrapper">
                 <input type="checkbox" id="pm-use-points" onchange="updatePriceDisplay()">
@@ -310,6 +309,7 @@
                 
                 <!-- Error Message -->
                 <div id="pm-coupon-error" style="display: none; margin-top: 8px; padding: 8px 12px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; color: #dc2626; font-size: 12px;"></div>
+            </div>
             </div>
         </div>
         
