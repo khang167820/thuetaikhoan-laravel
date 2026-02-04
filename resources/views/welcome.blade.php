@@ -2691,10 +2691,13 @@ const servicePricesV2 = {
     'vietmap': {
         name: 'VIETMAP LIVE PRO',
         packages: [
-            { hours: 6, name: 'Vietmap 6 giờ', price: 8000, oldPrice: 15000, tags: ['hot'] },
-            { hours: 24, name: 'Vietmap 1 ngày', price: 15000, oldPrice: 25000, tags: ['promo'] },
-            { hours: 168, name: 'Vietmap 7 ngày', price: 45000, oldPrice: 80000, tags: ['flash-sale'] },
-            { hours: 720, name: 'Vietmap 30 ngày', price: 90000, oldPrice: 150000, tags: ['flash-sale', 'promo'], discount: 40 }
+            { hours: 12, name: 'Vietmap 12 giờ', price: 13000, oldPrice: 19000, tags: ['promo'], discount: 32 },
+            { hours: 24, name: 'Vietmap 1 ngày', price: 18000, oldPrice: 25000, tags: ['promo'], discount: 28 },
+            { hours: 72, name: 'Vietmap 3 ngày', price: 38000, oldPrice: 50000, tags: ['flash-sale'], discount: 24 },
+            { hours: 168, name: 'Vietmap 7 ngày', price: 58000, oldPrice: 80000, tags: ['hot'] },
+            { hours: 240, name: 'Vietmap 10 ngày', price: 80000, oldPrice: 100000, tags: ['flash-sale'], discount: 20 },
+            { hours: 480, name: 'Vietmap 20 ngày', price: 99000, oldPrice: 150000, tags: ['promo'], discount: 34 },
+            { hours: 720, name: 'Vietmap 30 ngày', price: 139000, oldPrice: 185000, tags: ['promo'], discount: 25 }
         ]
     },
     'griffin': {
@@ -2745,10 +2748,13 @@ const servicePricesV2 = {
     'tsm': {
         name: 'TSM TOOL',
         packages: [
-            { hours: 6, name: 'TSM 6 giờ', price: 6000, oldPrice: 15000, tags: ['flash-sale'] },
-            { hours: 24, name: 'TSM 1 ngày', price: 15000, oldPrice: 30000, tags: ['promo'] },
-            { hours: 168, name: 'TSM 7 ngày', price: 45000, oldPrice: 90000, tags: ['flash-sale', 'hot'] },
-            { hours: 720, name: 'TSM 30 ngày', price: 100000, oldPrice: 200000, tags: ['flash-sale', 'promo'], discount: 50 }
+            { hours: 4, name: 'TSM 4 giờ', price: 11000, oldPrice: 20000, tags: ['special', 'promo'], specialTag: 'Siêu hot', discount: 45 },
+            { hours: 12, name: 'TSM 12 giờ', price: 14900, oldPrice: 29000, tags: ['special', 'flash-sale'], specialTag: 'Siêu hot', discount: 49 },
+            { hours: 24, name: 'TSM 1 ngày', price: 20000, oldPrice: 30000, tags: ['hot', 'flash-sale'], discount: 33 },
+            { hours: 48, name: 'TSM 2 ngày', price: 27000, oldPrice: 29000, tags: ['flash-sale'] },
+            { hours: 72, name: 'TSM 3 ngày', price: 47000, oldPrice: 49000, tags: ['flash-sale'] },
+            { hours: 168, name: 'TSM 7 ngày', price: 87000, oldPrice: 90000, tags: ['flash-sale'] },
+            { hours: 720, name: 'TSM 30 ngày', price: 147000, oldPrice: 149000, tags: ['flash-sale'] }
         ]
     }
 };
