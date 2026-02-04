@@ -1865,6 +1865,9 @@
         const icon = document.getElementById('theme-icon');
         const html = document.documentElement;
         
+        // Exit early if elements don't exist
+        if (!toggle || !icon) return;
+        
         const savedTheme = localStorage.getItem('theme');
         const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         
@@ -2066,15 +2069,17 @@
 </div>
 <script>
 function toggleContactFloat() {
-    document.getElementById('contact-float').classList.toggle('open');
+    const el = document.getElementById('contact-float');
+    if (el) el.classList.toggle('open');
 }
 
 function toggleFeatures(cardId) {
     const features = document.getElementById('features-' + cardId);
+    if (!features) return;
     const card = features.closest('.fo-card-compact');
     const button = features.nextElementSibling;
     features.classList.toggle('collapsed');
-    card.classList.toggle('expanded');
+    if (card) card.classList.toggle('expanded');
     
     // Update button text visibility
     const expandText = button.querySelector('.expand-text');
