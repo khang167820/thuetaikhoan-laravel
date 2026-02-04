@@ -7,6 +7,7 @@ use App\Http\Controllers\CouponController;
 use App\Http\Controllers\OrderHistoryController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrdServicesController;
 
 
 use App\Http\Controllers\BlogController;
@@ -31,6 +32,9 @@ Route::get('/thue-tsm', [ServiceController::class, 'tsm'])->name('service.tsm');
 Route::get('/thue-dft', [ServiceController::class, 'dft'])->name('service.dft');
 Route::get('/thue-kg-killer', [ServiceController::class, 'kgKiller'])->name('service.kg-killer');
 Route::get('/thue-samsung-tool', [ServiceController::class, 'samsungTool'])->name('service.samsung-tool');
+
+// Ord-services (API GSM Services)
+Route::get('/ord-services', [OrdServicesController::class, 'index'])->name('ord-services');
 
 // Blog routes
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
