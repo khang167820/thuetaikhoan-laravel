@@ -365,8 +365,8 @@
 
 .co-detail-label {
     font-size: 14px;
-    font-weight: 500;
-    color: #475569;
+    font-weight: 600;
+    color: #334155;
 }
 
 [data-theme="dark"] .co-detail-label {
@@ -375,7 +375,7 @@
 
 .co-detail-value {
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 700;
     color: #0f172a;
 }
 
@@ -604,8 +604,8 @@
 }
 
 .co-trust-content h4 {
-    font-size: 13px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 800;
     color: #0f172a;
     margin: 0 0 4px;
 }
@@ -616,9 +616,10 @@
 
 .co-trust-content p {
     font-size: 12px;
-    color: #64748b;
+    color: #475569;
     margin: 0;
     line-height: 1.5;
+    font-weight: 500;
 }
 
 [data-theme="dark"] .co-trust-content p {
