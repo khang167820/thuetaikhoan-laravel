@@ -494,12 +494,23 @@
     .sidebar {
         display: none;
         position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        z-index: 1000;
-        max-height: 100vh;
-        border-radius: 0;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        max-width: 360px;
+        max-height: 80vh;
+        z-index: 1001;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     }
     .sidebar.open { display: flex; }
+    .sidebar.open::before {
+        content: '';
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: -1;
+    }
     .sidebar.open .sidebar-close { display: block; }
     .mobile-filter-btn { display: flex; }
     .products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
