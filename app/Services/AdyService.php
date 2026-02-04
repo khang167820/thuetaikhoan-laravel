@@ -113,17 +113,7 @@ class AdyService
         $result = $this->callApi('GET', '/api/reseller/v1/products');
 
         if (isset($result['error'])) {
-            // Try fallback from database cache
-            $dbCache = DB::table('settings')->where('key', 'ady_products_cache')->first();
-            if ($dbCache && $dbCache->value) {
-                $oldCache = json_decode($dbCache->value, true);
-                if ($oldCache && !empty($oldCache['products'])) {
-                    $oldCache['from_cache'] = true;
-                    $oldCache['cache_warning'] = true;
-                    $oldCache['api_error'] = $result['error'];
-                    return $oldCache;
-                }
-            }
+            // Return error - no database fallback (data too large for TEXT column)
             return ['success' => false, 'error' => $result['error'], 'products' => []];
         }
 
@@ -138,15 +128,9 @@ class AdyService
                 'from_cache' => false
             ];
 
-            // Cache in memory and database
+            // Cache in memory only - database column too small for 6000+ products JSON
             if (!empty($products)) {
                 Cache::put($cacheKey, $data, self::CACHE_TTL);
-                
-                // Also save to database for fallback
-                DB::table('settings')->updateOrInsert(
-                    ['key' => 'ady_products_cache'],
-                    ['value' => json_encode($data), 'updated_at' => now()]
-                );
             }
 
             return $data;
