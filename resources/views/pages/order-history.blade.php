@@ -16,17 +16,17 @@ use App\Http\Controllers\OrderHistoryController;
     padding: 40px 20px;
 }
 .page-header {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
 }
 .page-title {
-    font-size: 32px;
+    font-size: 28px;
     font-weight: 800;
     color: #1f2937;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 .page-subtitle {
     color: #6b7280;
-    font-size: 16px;
+    font-size: 15px;
 }
 .card {
     background: #fff;
@@ -168,57 +168,44 @@ tbody tr:last-child td {
 [data-theme="dark"] .empty-state-text { color: #cbd5e1; }
 
 @media (max-width: 768px) {
-    .history-container {
-        padding: 20px 16px;
-    }
-    .page-title {
-        font-size: 22px;
-    }
-    .ip-info {
-        flex-direction: column;
-        text-align: center;
-        gap: 8px;
-    }
-    /* Hide table on mobile, show as cards */
-    table thead {
-        display: none;
-    }
-    table, table tbody, table tr, table td {
-        display: block;
-        width: 100%;
-    }
+    .history-container { padding: 16px 12px; }
+    .page-header { margin-bottom: 16px; }
+    .page-title { font-size: 20px; }
+    .page-subtitle { font-size: 13px; display: none; }
+    .card { padding: 12px; border-radius: 12px; }
+    
+    /* Compact card layout on mobile */
+    table thead { display: none; }
+    table, table tbody, table tr, table td { display: block; width: 100%; }
     table tr {
         background: #fff;
-        margin-bottom: 12px;
-        border-radius: 12px;
-        padding: 16px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        border: 1px solid #f1f5f9;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        padding: 12px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        border: 1px solid #e5e7eb;
     }
     table td {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 8px 0;
-        border-bottom: 1px dashed #f1f5f9;
-        font-size: 13px;
-    }
-    table td:last-child {
+        padding: 5px 0;
         border-bottom: none;
+        font-size: 12px;
     }
     table td::before {
         content: attr(data-label);
         font-weight: 600;
-        color: #64748b;
-        font-size: 12px;
-    }
-    .order-link {
-        font-size: 12px;
-    }
-    .status-badge {
-        padding: 4px 10px;
+        color: #94a3b8;
         font-size: 11px;
     }
+    /* Hide less important fields on mobile */
+    table td[data-label="Gói"],
+    table td[data-label="Ngày tạo"],
+    table td[data-label=""] { display: none; }
+    
+    .order-link { font-size: 11px; }
+    .status-badge { padding: 3px 8px; font-size: 10px; }
 }
 </style>
 @endsection
