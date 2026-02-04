@@ -3126,6 +3126,62 @@ function updateThemeIcons(isDark) {
         }
     }
 })();
+
+// Mobile Menu Toggle
+(function() {
+    function initMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const menuBtn = document.getElementById('mobileMenuBtn');
+        const menuClose = document.getElementById('mobileMenuClose');
+        const overlay = document.getElementById('mobileMenuOverlay');
+        
+        if (!menu || !menuBtn) return;
+        
+        function openMenu() {
+            menu.classList.add('active');
+            if (overlay) overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeMenu() {
+            menu.classList.remove('active');
+            if (overlay) overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        menuBtn.addEventListener('click', openMenu);
+        if (menuClose) menuClose.addEventListener('click', closeMenu);
+        if (overlay) overlay.addEventListener('click', closeMenu);
+        
+        // Close on ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeMenu();
+        });
+        
+        // Close menu when clicking links
+        document.querySelectorAll('.mobile-menu-link').forEach(function(link) {
+            link.addEventListener('click', closeMenu);
+        });
+    }
+    
+    // Run when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMobileMenu);
+    } else {
+        initMobileMenu();
+    }
+})();
+
+// Toggle Services Menu in mobile menu
+function toggleServicesMenu() {
+    const btn = document.querySelector('.mobile-menu-section-toggle');
+    const list = document.getElementById('mobileServicesList');
+    
+    if (btn && list) {
+        btn.classList.toggle('collapsed');
+        list.classList.toggle('collapsed');
+    }
+}
 </script>
 
 
