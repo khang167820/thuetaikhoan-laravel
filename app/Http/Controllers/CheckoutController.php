@@ -77,6 +77,15 @@ class CheckoutController extends Controller
             'customer_email' => 'nullable|email|max:255',
         ]);
 
+        // Verify reCAPTCHA v3
+        $recaptchaResponse = $request->input('g-recaptcha-response');
+        if ($recaptchaResponse) {
+            $recaptchaResult = $this->verifyRecaptcha($recaptchaResponse, 'create_order');
+            if (!$recaptchaResult['success']) {
+                return back()->withErrors(['recaptcha' => $recaptchaResult['message']]);
+            }
+        }
+
         $priceId = $request->input('price_id');
         $customerEmail = $request->input('customer_email');
 
@@ -271,6 +280,57 @@ class CheckoutController extends Controller
             'order' => $order,
             'price' => $price,
         ]);
+    }
+
+    /**
+     * Verify Google reCAPTCHA v3 token
+     */
+    private function verifyRecaptcha(string $response, string $action = null): array
+    {
+        $secretKey = config('services.recaptcha.secret_key', '6LegMlIsAAAAAOxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+        $threshold = 0.5;
+
+        // If secret key not configured, skip verification
+        if (empty($secretKey) || strpos($secretKey, 'xxx') !== false) {
+            return ['success' => true, 'message' => '', 'score' => 1.0];
+        }
+
+        $url = 'https://www.google.com/recaptcha/api/siteverify';
+        $data = [
+            'secret' => $secretKey,
+            'response' => $response,
+            'remoteip' => request()->ip(),
+        ];
+
+        try {
+            $client = new \GuzzleHttp\Client(['timeout' => 10]);
+            $result = $client->post($url, ['form_params' => $data]);
+            $json = json_decode($result->getBody(), true);
+
+            $score = (float)($json['score'] ?? 0);
+
+            if (!empty($json['success'])) {
+                // Check action if provided
+                if ($action !== null && isset($json['action']) && $json['action'] !== $action) {
+                    \Log::warning("reCAPTCHA action mismatch. Expected: $action, Got: " . $json['action']);
+                    return ['success' => false, 'message' => 'Xác thực bảo mật thất bại.', 'score' => $score];
+                }
+
+                // Check score
+                if ($score >= $threshold) {
+                    return ['success' => true, 'message' => '', 'score' => $score];
+                } else {
+                    \Log::warning("reCAPTCHA low score: $score for IP: " . request()->ip());
+                    return ['success' => false, 'message' => 'Phát hiện hoạt động đáng ngờ. Vui lòng thử lại.', 'score' => $score];
+                }
+            }
+
+            return ['success' => false, 'message' => 'Xác thực bảo mật thất bại. Vui lòng tải lại trang.', 'score' => 0];
+        } catch (\Exception $e) {
+            // If verification fails, allow through to not block legitimate users
+            \Log::error('reCAPTCHA verification error: ' . $e->getMessage());
+            return ['success' => true, 'message' => '', 'score' => 1.0];
+        }
     }
 }
 
