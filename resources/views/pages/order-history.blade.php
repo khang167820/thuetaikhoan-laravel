@@ -14,6 +14,7 @@ use App\Http\Controllers\OrderHistoryController;
     max-width: 1200px;
     margin: 0 auto;
     padding: 40px 20px;
+    min-height: calc(100vh - 200px);
 }
 .page-header {
     margin-bottom: 24px;

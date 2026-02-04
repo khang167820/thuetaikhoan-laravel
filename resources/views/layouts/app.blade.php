@@ -62,6 +62,7 @@
         }
         
         *, *::before, *::after { box-sizing: border-box; }
+        html { height: 100%; }
         body {
             margin: 0;
             font-family: 'Be Vietnam Pro', system-ui, sans-serif;
@@ -70,7 +71,11 @@
             color: var(--ink);
             background: var(--bg);
             transition: background 0.3s, color 0.3s;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
         }
+        .main-content { flex: 1; }
         a { color: inherit; text-decoration: none; }
         img { max-width: 100%; height: auto; }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
