@@ -3182,6 +3182,22 @@ function toggleServicesMenu() {
         list.classList.toggle('collapsed');
     }
 }
+
+// Mobile Theme Toggle
+function toggleMobileTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    
+    if (isDark) {
+        html.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+        updateThemeIcons(false);
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+        updateThemeIcons(true);
+    }
+}
 </script>
 
 
