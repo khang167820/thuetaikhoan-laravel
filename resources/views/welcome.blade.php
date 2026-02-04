@@ -2887,12 +2887,10 @@ function applyCouponCode() {
 
 function calculateCouponDiscount(code) {
     const btn = document.getElementById('pm-apply-coupon-btn');
-    const resultBox = document.getElementById('pm-coupon-result');
     const errorBox = document.getElementById('pm-coupon-error');
     
-    // Hide previous results
-    resultBox.style.display = 'none';
-    errorBox.style.display = 'none';
+    // Hide previous error
+    if (errorBox) errorBox.style.display = 'none';
     
     // Get current package price
     const service = servicePricesV2[currentServiceId];
@@ -2921,9 +2919,11 @@ function calculateCouponDiscount(code) {
             if (data.success) {
                 selectedCoupon = { code: data.coupon.code, value: data.discount_amount, type: data.coupon.discount_type };
                 
-                // Use updatePriceDisplay for combined calculation with points
+                // Update price summary with coupon
                 updatePriceDisplay();
             } else {
+                selectedCoupon = null;
+                updatePriceDisplay();
                 showCouponError(data.message || 'Mã giảm giá không hợp lệ.');
             }
         })
@@ -2946,11 +2946,9 @@ function showCouponError(message) {
 
 function removeCouponWelcome() {
     const couponCode = document.getElementById('pm-coupon-code');
-    const couponResult = document.getElementById('pm-coupon-result');
     const couponError = document.getElementById('pm-coupon-error');
     
     if (couponCode) couponCode.value = '';
-    if (couponResult) couponResult.style.display = 'none';
     if (couponError) couponError.style.display = 'none';
     document.querySelectorAll('.pm-coupon-item').forEach(item => item.classList.remove('selected'));
     selectedCoupon = null;
