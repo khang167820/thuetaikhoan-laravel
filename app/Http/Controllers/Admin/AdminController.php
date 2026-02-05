@@ -636,21 +636,28 @@ class AdminController extends Controller
     
     public function saveAdyConfig(Request $request)
     {
-        $keys = ['ady_api_key', 'ady_api_url', 'ady_enabled'];
+        $keys = ['ady_api_token', 'ady_api_url', 'ady_enabled', 'usd_to_vnd_rate', 'ady_markup_percent'];
         
         try {
             foreach ($keys as $key) {
-                if ($request->has($key)) {
-                    DB::table('settings')->updateOrInsert(
-                        ['key' => $key],
-                        ['value' => $request->input($key)]
-                    );
+                $value = $request->input($key);
+                // Handle checkbox - if not present means unchecked
+                if ($key === 'ady_enabled' && !$request->has($key)) {
+                    $value = '0';
                 }
+                
+                DB::table('settings')->updateOrInsert(
+                    ['key' => $key],
+                    ['value' => $value ?? '']
+                );
             }
         
+            // Clear ADY products cache so new settings take effect
+            \Illuminate\Support\Facades\Cache::forget('ady_products_laravel');
+            
             return back()->with('success', 'Đã lưu cấu hình ADY!');
         } catch (\Exception $e) {
-            return back()->with('error', 'Chưa tạo bảng settings. Vui lòng chạy migration.');
+            return back()->with('error', 'Lỗi: ' . $e->getMessage());
         }
     }
     
