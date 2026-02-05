@@ -191,33 +191,62 @@
 }
 
 .auth-header {
-    margin-bottom: 28px;
+    margin-bottom: 32px;
 }
 
-.auth-logo-wrap {
+/* Welcome badge */
+.auth-welcome-badge {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border: 1px solid #bbf7d0;
+    color: #166534;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 600;
     margin-bottom: 20px;
+    animation: fadeInDown 0.5s ease;
 }
 
-.auth-logo-svg {
-    width: 56px;
-    height: 56px;
-    filter: drop-shadow(0 4px 12px rgba(16, 185, 129, 0.3));
-    transition: transform 0.3s ease;
+.welcome-emoji {
+    font-size: 18px;
+    animation: wave 1.5s ease-in-out infinite;
 }
 
-.auth-logo-svg:hover {
-    transform: scale(1.08) rotate(-5deg);
+@keyframes wave {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(20deg); }
+    75% { transform: rotate(-10deg); }
 }
 
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Title with gradient */
 .auth-title {
-    font-size: 26px;
+    font-size: 32px;
     font-weight: 800;
-    color: #0f172a;
-    margin: 0 0 8px;
+    margin: 0 0 12px;
+    line-height: 1.2;
+    display: flex;
+    flex-direction: column;
 }
+
+.title-line1 {
+    color: #0f172a;
+}
+
+.title-line2 {
+    background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
 
 .auth-sub {
     color: #64748b;
@@ -492,7 +521,13 @@
     background: #1e293b;
 }
 
-[data-theme="dark"] .auth-title {
+[data-theme="dark"] .auth-welcome-badge {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border-color: #334155;
+    color: #4ade80;
+}
+
+[data-theme="dark"] .title-line1 {
     color: #f1f5f9;
 }
 
@@ -642,23 +677,15 @@
         <!-- Right Side - Form -->
         <div class="auth-card">
             <div class="auth-header">
-                <div class="auth-logo-wrap">
-                    <svg class="auth-logo-svg" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="logoGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#10b981"/>
-                                <stop offset="100%" style="stop-color:#059669"/>
-                            </linearGradient>
-                            <filter id="shadow2" x="-20%" y="-20%" width="140%" height="140%">
-                                <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#065f46" flood-opacity="0.3"/>
-                            </filter>
-                        </defs>
-                        <rect fill="url(#logoGrad2)" width="60" height="60" rx="14" filter="url(#shadow2)"/>
-                        <text x="30" y="42" fill="white" font-size="32" font-weight="800" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif">T</text>
-                    </svg>
+                <div class="auth-welcome-badge">
+                    <span class="welcome-emoji">👋</span>
+                    <span>Chào mừng bạn!</span>
                 </div>
-                <h1 class="auth-title">Tạo tài khoản mới</h1>
-                <p class="auth-sub">Chỉ mất 30 giây để bắt đầu</p>
+                <h1 class="auth-title">
+                    <span class="title-line1">Tạo tài khoản</span>
+                    <span class="title-line2">mới ngay</span>
+                </h1>
+                <p class="auth-sub">Chỉ mất 30 giây để bắt đầu hành trình của bạn</p>
             </div>
 
             <form class="auth-form" method="POST" action="/register" id="registerForm">
