@@ -79,9 +79,19 @@
                     $now = \Carbon\Carbon::now();
                     $isExpired = $now->greaterThan($expiresAt->addMinutes($gracePeriodMinutes));
                 }
+                
+                // Check if admin changed password
+                // So sánh password lưu trong order (assigned_password) với password hiện tại (current_password)
+                $passwordChanged = false;
+                if (!empty($order->assigned_password) && !empty($order->current_password)) {
+                    $passwordChanged = ($order->assigned_password !== $order->current_password);
+                }
+                
+                // Lấy password để hiển thị (ưu tiên assigned_password nếu có, fallback về current_password)
+                $displayPassword = $order->assigned_password ?? $order->current_password ?? null;
             @endphp
             
-            @if(in_array($order->status, ['paid', 'confirmed', 'completed']) && ($order->account_username || $order->account_password))
+            @if(in_array($order->status, ['paid', 'confirmed', 'completed']) && ($order->account_username || $displayPassword))
                 @if($isExpired)
                     {{-- Order has expired - hide credentials --}}
                     <div class="od-expired-box">
@@ -92,6 +102,38 @@
                             <strong>{{ \Carbon\Carbon::parse($order->expires_at)->format('d/m/Y H:i') }}</strong>.
                         </div>
                         <a href="/" class="od-btn od-btn-primary" style="margin-top: 16px;">Thuê lại tài khoản</a>
+                    </div>
+                @elseif($passwordChanged)
+                    {{-- Password was changed by admin - ask customer to contact support --}}
+                    <div class="od-password-changed-box">
+                        <div class="od-password-changed-icon">🔐</div>
+                        <div class="od-password-changed-title">Mật khẩu đã được thay đổi</div>
+                        <div class="od-password-changed-desc">
+                            Mật khẩu của tài khoản đã được admin thay đổi. Vui lòng liên hệ admin để được cấp lại mật khẩu mới.
+                        </div>
+                        <div class="od-account-list" style="margin-top: 16px;">
+                            <div class="od-acc-item">
+                                <span class="od-acc-label">Loại dịch vụ</span>
+                                <span class="od-acc-value">{{ $order->service_type ?? $order->account_type }}</span>
+                            </div>
+                            @if($order->account_username)
+                            <div class="od-acc-item">
+                                <span class="od-acc-label">Username</span>
+                                <span class="od-acc-value od-copy-target" onclick="copyText('{{ $order->account_username }}')">{{ $order->account_username }}</span>
+                            </div>
+                            @endif
+                            <div class="od-acc-item">
+                                <span class="od-acc-label">Mật khẩu</span>
+                                <span class="od-acc-value" style="color: #dc2626;">Đã thay đổi - Liên hệ Admin</span>
+                            </div>
+                            <div class="od-acc-item">
+                                <span class="od-acc-label">Hết hạn</span>
+                                <span class="od-acc-value">{{ \Carbon\Carbon::parse($order->expires_at)->format('d/m/Y H:i') }}</span>
+                            </div>
+                        </div>
+                        <a href="https://zalo.me/0832282999" target="_blank" class="od-btn od-btn-primary" style="margin-top: 16px; background: #0068ff;">
+                            📞 Liên hệ Zalo Admin
+                        </a>
                     </div>
                 @else
                     {{-- Order is active - show credentials --}}
@@ -109,10 +151,10 @@
                                 <span class="od-acc-value od-copy-target" onclick="copyText('{{ $order->account_username }}')">{{ $order->account_username }}</span>
                             </div>
                             @endif
-                            @if($order->account_password)
+                            @if($displayPassword)
                             <div class="od-acc-item">
                                 <span class="od-acc-label">Mật khẩu</span>
-                                <span class="od-acc-value od-copy-target" onclick="copyText('{{ $order->account_password }}')">{{ $order->account_password }}</span>
+                                <span class="od-acc-value od-copy-target" onclick="copyText('{{ $displayPassword }}')">{{ $displayPassword }}</span>
                             </div>
                             @endif
 
@@ -339,6 +381,47 @@
     line-height: 1.6;
 }
 [data-theme="dark"] .od-expired-desc { color: #f87171; }
+
+/* Password Changed Box - Amber warning style */
+.od-password-changed-box {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border: 2px solid #f59e0b;
+    border-radius: 12px;
+    padding: 32px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+[data-theme="dark"] .od-password-changed-box {
+    background: linear-gradient(135deg, #451a03 0%, #78350f 100%);
+    border-color: #f59e0b;
+}
+.od-password-changed-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+.od-password-changed-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #92400e;
+    margin-bottom: 8px;
+}
+[data-theme="dark"] .od-password-changed-title { color: #fcd34d; }
+.od-password-changed-desc {
+    font-size: 14px;
+    color: #b45309;
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
+[data-theme="dark"] .od-password-changed-desc { color: #fbbf24; }
+.od-password-changed-box .od-account-list {
+    background: rgba(255,255,255,0.5);
+    border-radius: 8px;
+    padding: 12px 16px;
+    text-align: left;
+}
+[data-theme="dark"] .od-password-changed-box .od-account-list {
+    background: rgba(0,0,0,0.2);
+}
 
 </style>
 

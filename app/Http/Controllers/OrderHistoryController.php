@@ -70,7 +70,8 @@ class OrderHistoryController extends Controller
                 'orders.*',
                 'accounts.type as account_type',
                 'accounts.username as account_username',
-                'accounts.password as account_password',
+                'accounts.password as current_password', // Password hiện tại trong accounts
+                'orders.assigned_password', // Password lúc cấp (lưu trong orders)
                 'prices.type as service_type',
                 'prices.price as original_price',
                 'prices.hours as price_hours'
