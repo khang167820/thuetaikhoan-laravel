@@ -29,6 +29,7 @@
             <tr>
                 <th>ID</th>
                 <th>Mã đơn</th>
+                <th>Người thuê</th>
                 <th>Dịch vụ</th>
                 <th>Thời gian</th>
                 <th>Số tiền</th>
@@ -42,6 +43,19 @@
             <tr>
                 <td>#{{ $order->id }}</td>
                 <td><strong>{{ $order->tracking_code }}</strong></td>
+                <td style="font-size: 11px;">
+                    @if($order->customer_email)
+                        <div style="color: var(--text-primary); font-weight: 500;">{{ Str::limit($order->customer_email, 22) }}</div>
+                    @endif
+                    @if($order->customer_ip)
+                        <div style="color: var(--text-dimmed); font-family: monospace; font-size: 10px;" title="{{ $order->customer_ip }}">
+                            🌐 {{ $order->customer_ip }}
+                        </div>
+                    @endif
+                    @if(!$order->customer_email && !$order->customer_ip)
+                        <span style="color: #64748b;">—</span>
+                    @endif
+                </td>
                 <td>{{ $order->service_type ?? 'N/A' }}</td>
                 <td>{{ $order->hours }} giờ</td>
                 <td style="color: #10b981; font-weight: 600;">{{ number_format($order->amount, 0, ',', '.') }}đ</td>
@@ -71,7 +85,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="8" style="text-align: center; color: #64748b; padding: 40px;">
+                <td colspan="9" style="text-align: center; color: #64748b; padding: 40px;">
                     Không có đơn hàng nào
                 </td>
             </tr>
