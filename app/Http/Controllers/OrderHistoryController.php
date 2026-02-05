@@ -140,12 +140,18 @@ class OrderHistoryController extends Controller
         // Apply status filter
         if ($filter !== 'all') {
             $query->where('orders.status', $filter);
+            
+            // For pending orders, only show those created within 24 hours
+            if ($filter === 'pending') {
+                $query->where('orders.created_at', '>=', now()->subHours(24));
+            }
         }
         
         // Paginate results
         $orders = $query->paginate(20)->withQueryString();
         
         // Get counts for each status
+        // For pending, only count orders from last 24 hours
         $statusCounts = DB::table('orders')
             ->where(function ($q) use ($user, $request) {
                 // TODO: Uncomment check user_id when migration is run
@@ -154,6 +160,14 @@ class OrderHistoryController extends Controller
                 
                 // Fallback to IP only
                 $q->where('ip_address', $request->ip());
+            })
+            ->where(function ($q) {
+                // Exclude old pending orders from count
+                $q->where('status', '!=', 'pending')
+                  ->orWhere(function ($q2) {
+                      $q2->where('status', 'pending')
+                         ->where('created_at', '>=', now()->subHours(24));
+                  });
             })
             ->select('status', DB::raw('count(*) as count'))
             ->groupBy('status')
