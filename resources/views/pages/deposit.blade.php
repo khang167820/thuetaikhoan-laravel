@@ -598,7 +598,7 @@
         </div>
         
         <div class="qr-card">
-            <h3 class="qr-card-title">🏦 Chuyển khoản ngân hàng <span class="vietqr-logo">VIETQR</span></h3>
+            <h3 class="qr-card-title">🏦 Chuyển khoản ngân hàng</h3>
             <div class="qr-wrapper">
                 <img src="" alt="QR Code" class="qr-image" id="qrImage">
             </div>
