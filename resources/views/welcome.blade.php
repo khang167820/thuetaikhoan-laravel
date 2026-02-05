@@ -2753,79 +2753,53 @@ function toggleFeatures(cardId) {
 
 <script>
 // ========== ENHANCED PRICE DATA ==========
+// Dynamic prices from database
 const servicePricesV2 = {
-    'unlocktool': {
-        name: 'UNLOCKTOOL',
-        packages: [
-            { hours: 6, name: 'Unlocktool 6 giờ', price: 15000, oldPrice: 25000, tags: ['special', 'promo'], specialTag: 'Tưng bừng khai trương' },
-            { hours: 12, name: 'Unlocktool 12 giờ', price: 19000, oldPrice: 29000, tags: ['flash-sale', 'promo'], discount: 34 },
-            { hours: 24, name: 'Unlocktool 1 ngày', price: 33000, oldPrice: 50000, tags: ['flash-sale', 'hot'] },
-            { hours: 48, name: 'Unlocktool 2 ngày', price: 43000, oldPrice: 80000, tags: ['flash-sale', 'promo'] },
-            { hours: 120, name: 'Unlocktool 5 ngày', price: 67000, oldPrice: 120000, tags: ['flash-sale', 'promo'] },
-            { hours: 168, name: 'Unlocktool 7 ngày', price: 96000, oldPrice: 160000, tags: [] },
-            { hours: 336, name: 'Unlocktool 14 ngày', price: 147000, oldPrice: 280000, tags: ['flash-sale', 'promo'] },
-            { hours: 720, name: 'Unlocktool 30 ngày', price: 249000, oldPrice: 268000, tags: ['flash-sale', 'promo'], discount: 7 }
-        ]
-    },
-    'vietmap': {
-        name: 'VIETMAP LIVE PRO',
-        packages: [
-            { hours: 12, name: 'Vietmap 12 giờ', price: 13000, oldPrice: 19000, tags: ['promo'], discount: 32 },
-            { hours: 24, name: 'Vietmap 1 ngày', price: 18000, oldPrice: 25000, tags: ['promo'], discount: 28 },
-            { hours: 72, name: 'Vietmap 3 ngày', price: 38000, oldPrice: 50000, tags: ['flash-sale'], discount: 24 },
-            { hours: 168, name: 'Vietmap 7 ngày', price: 58000, oldPrice: 80000, tags: ['hot'] },
-            { hours: 240, name: 'Vietmap 10 ngày', price: 80000, oldPrice: 100000, tags: ['flash-sale'], discount: 20 },
-            { hours: 480, name: 'Vietmap 20 ngày', price: 99000, oldPrice: 150000, tags: ['promo'], discount: 34 },
-            { hours: 720, name: 'Vietmap 30 ngày', price: 139000, oldPrice: 185000, tags: ['promo'], discount: 25 }
-        ]
-    },
-    'griffin': {
-        name: 'GRIFFIN-UNLOCKER',
-        packages: [
-            { hours: 6, name: 'Griffin 6 giờ', price: 27000, oldPrice: 100000, tags: ['special', 'promo'], specialTag: 'Tưng bừng khai trương', discount: 73 },
-            { hours: 12, name: 'Griffin 12 giờ', price: 120000, oldPrice: 180000, tags: ['promo'], discount: 33 },
-            { hours: 24, name: 'Griffin 1 ngày', price: 150000, oldPrice: 250000, tags: ['flash-sale'], discount: 40 }
-        ]
-    },
-    'amt': {
-        name: 'ANDROID MULTITOOL',
-        packages: [
-            { hours: 3, name: 'AMT 3 giờ', price: 15000, oldPrice: 30000, tags: ['special', 'hot'], specialTag: 'Tưng bừng khai trương', discount: 50 },
-            { hours: 6, name: 'AMT 6 giờ', price: 29000, oldPrice: 50000, tags: ['special', 'promo'], specialTag: 'Tưng bừng khai trương', discount: 42 },
-            { hours: 12, name: 'AMT 12 giờ', price: 39000, oldPrice: 60000, tags: ['special', 'promo'], specialTag: 'Tưng bừng khai trương', discount: 35 },
-            { hours: 24, name: 'AMT 1 ngày', price: 45000, oldPrice: 70000, tags: ['special', 'promo'], specialTag: 'Tưng bừng khai trương', discount: 36 }
-        ]
-    },
-    'kg-killer': {
-        name: 'KG KILLER TOOL',
-        packages: [
-            { hours: 4, name: 'KG Killer 4 giờ', price: 15000, oldPrice: 50000, tags: ['special', 'promo'], specialTag: 'Tưng bừng khai trương', discount: 70 }
-        ]
-    },
-    'samsung-tool': {
-        name: 'SAMSUNG TOOL',
-        packages: [
-            { hours: 48, name: 'Samsung Tool 2 ngày', price: 240000, oldPrice: 300000, tags: ['promo'], discount: 20, specialTag: 'Sẵn 12 Credits' }
-        ]
-    },
-    'dft': {
-        name: 'DFT PRO TOOL',
-        packages: [
-            { hours: 48, name: 'DFT Pro 2 ngày', price: 70000, oldPrice: 130000, tags: ['promo'], discount: 46 }
-        ]
-    },
-    'tsm': {
-        name: 'TSM TOOL',
-        packages: [
-            { hours: 4, name: 'TSM 4 giờ', price: 11000, oldPrice: 20000, tags: ['special', 'promo'], specialTag: 'Siêu hot', discount: 45 },
-            { hours: 12, name: 'TSM 12 giờ', price: 14900, oldPrice: 29000, tags: ['special', 'flash-sale'], specialTag: 'Siêu hot', discount: 49 },
-            { hours: 24, name: 'TSM 1 ngày', price: 20000, oldPrice: 30000, tags: ['hot', 'flash-sale'], discount: 33 },
-            { hours: 48, name: 'TSM 2 ngày', price: 27000, oldPrice: 29000, tags: ['flash-sale'] },
-            { hours: 72, name: 'TSM 3 ngày', price: 47000, oldPrice: 49000, tags: ['flash-sale'] },
-            { hours: 168, name: 'TSM 7 ngày', price: 87000, oldPrice: 90000, tags: ['flash-sale'] },
-            { hours: 720, name: 'TSM 30 ngày', price: 147000, oldPrice: 149000, tags: ['flash-sale'] }
-        ]
-    }
+    @php
+    $typeMapping = [
+        'Unlocktool' => 'unlocktool',
+        'Vietmap' => 'vietmap',
+        'Griffin' => 'griffin',
+        'AMT' => 'amt',
+        'TSMTool' => 'tsm',
+        'KGKiller' => 'kg-killer',
+        'SamsungTool' => 'samsung-tool',
+        'DFTPro' => 'dft'
+    ];
+    $displayNames = [
+        'Unlocktool' => 'UNLOCKTOOL',
+        'Vietmap' => 'VIETMAP LIVE PRO',
+        'Griffin' => 'GRIFFIN-UNLOCKER',
+        'AMT' => 'ANDROID MULTITOOL',
+        'TSMTool' => 'TSM TOOL',
+        'KGKiller' => 'KG KILLER TOOL',
+        'SamsungTool' => 'SAMSUNG TOOL',
+        'DFTPro' => 'DFT PRO TOOL'
+    ];
+    @endphp
+    @foreach($allPrices ?? [] as $type => $prices)
+        @php $jsKey = $typeMapping[$type] ?? strtolower($type); @endphp
+        '{{ $jsKey }}': {
+            name: '{{ $displayNames[$type] ?? strtoupper($type) }}',
+            packages: [
+                @foreach($prices as $price)
+                {
+                    id: {{ $price->id }},
+                    hours: {{ $price->hours }},
+                    name: '{{ $displayNames[$type] ?? $type }} {{ $price->hours >= 24 ? floor($price->hours / 24) . ' ngày' : $price->hours . ' giờ' }}',
+                    price: {{ $price->price }},
+                    oldPrice: {{ $price->original_price ?? $price->price }},
+                    tags: [
+                        @if($price->promo_badge) '{{ strtolower(str_replace(' ', '-', $price->promo_badge)) }}', @endif
+                        @if($price->promo_label) 'promo', @endif
+                    ],
+                    @if($price->promo_label) specialTag: '{{ $price->promo_label }}', @endif
+                    @if($price->discount_percent) discount: {{ $price->discount_percent }}, @endif
+                },
+                @endforeach
+            ]
+        },
+    @endforeach
 };
 
 let currentServiceId = null;

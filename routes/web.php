@@ -30,7 +30,13 @@ Route::get('/sitemap-services.xml', [SitemapController::class, 'services'])->nam
 Route::get('/sitemap-posts.xml', [SitemapController::class, 'posts'])->name('sitemap.posts');
 
 Route::get('/', function () {
-    return view('welcome');
+    // Fetch prices from database grouped by type
+    $allPrices = DB::table('prices')
+        ->orderBy('hours', 'asc')
+        ->get()
+        ->groupBy('type');
+    
+    return view('welcome', compact('allPrices'));
 });
 
 // Service pages
