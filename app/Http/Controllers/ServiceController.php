@@ -86,9 +86,18 @@ class ServiceController extends Controller
                 ['dot' => 'yellow', 'text' => 'Mở khóa màn hình'],
                 ['dot' => 'blue', 'text' => 'Bypass FRP'],
                 ['dot' => 'orange', 'text' => 'Flash firmware & Root', 'hidden' => true],
+                ['dot' => 'green', 'text' => 'Hỗ trợ Samsung, Xiaomi, Oppo...', 'hidden' => true],
             ],
-            'whyChoose' => [],
-            'faq' => [],
+            'whyChoose' => [
+                ['icon' => '🔓', 'title' => 'Mở khóa màn hình', 'desc' => 'Xóa mật khẩu, pattern, PIN trên Android dễ dàng'],
+                ['icon' => '🛡️', 'title' => 'Bypass FRP', 'desc' => 'Bypass Google Account (FRP) Samsung, Xiaomi, Oppo'],
+                ['icon' => '📱', 'title' => 'Flash Firmware', 'desc' => 'Flash ROM, Root, Recovery đa nền tảng'],
+                ['icon' => '⚡', 'title' => 'Tự động 24/7', 'desc' => 'Nhận tài khoản ngay sau khi thanh toán'],
+            ],
+            'faq' => [
+                ['q' => 'Android Multitool hỗ trợ những hãng nào?', 'a' => 'AMT hỗ trợ Samsung, Xiaomi, Oppo, Vivo, Realme và nhiều hãng Android khác.'],
+                ['q' => 'Có thể bypass FRP bằng AMT không?', 'a' => 'Có, AMT hỗ trợ bypass FRP (Google Account) trên nhiều dòng máy Android.'],
+            ],
         ],
         'TSMTool' => [
             'name' => 'TSM Tool',
