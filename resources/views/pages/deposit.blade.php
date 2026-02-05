@@ -736,17 +736,38 @@ document.addEventListener('DOMContentLoaded', function() {
         
         try {
             // Call API to create deposit in database
+            const csrfToken = document.querySelector('input[name="_token"]');
+            if (!csrfToken) {
+                alert('Lỗi bảo mật, vui lòng refresh trang');
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Tạo lệnh nạp tiền';
+                return;
+            }
+            
             const response = await fetch('/api/deposit/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                    'X-CSRF-TOKEN': csrfToken.value,
+                    'Accept': 'application/json'
                 },
+                credentials: 'same-origin',
                 body: JSON.stringify({
                     amount: amount,
                     method: paymentMethodInput.value
                 })
             });
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Response error:', response.status, errorText);
+                if (response.status === 401 || response.status === 419) {
+                    alert('Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.');
+                    window.location.href = '/login';
+                    return;
+                }
+                throw new Error('Server error: ' + response.status);
+            }
             
             const result = await response.json();
             
