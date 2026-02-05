@@ -7,8 +7,31 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+    /* Theme Variables */
+    :root {
+        --bg-primary: #0f172a;
+        --bg-secondary: #1e293b;
+        --bg-hover: #334155;
+        --border-color: #334155;
+        --text-primary: #f1f5f9;
+        --text-secondary: #e2e8f0;
+        --text-muted: #94a3b8;
+        --text-dimmed: #64748b;
+    }
+    
+    html.light-mode {
+        --bg-primary: #f8fafc;
+        --bg-secondary: #ffffff;
+        --bg-hover: #f1f5f9;
+        --border-color: #e2e8f0;
+        --text-primary: #0f172a;
+        --text-secondary: #1e293b;
+        --text-muted: #475569;
+        --text-dimmed: #64748b;
+    }
+    
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-secondary); min-height: 100vh; transition: background 0.3s, color 0.3s; }
     
     /* Layout */
     .admin-layout { display: flex; min-height: 100vh; }
@@ -16,8 +39,8 @@
     /* Sidebar */
     .admin-sidebar {
         width: 260px;
-        background: #1e293b;
-        border-right: 1px solid #334155;
+        background: var(--bg-secondary);
+        border-right: 1px solid var(--border-color);
         display: flex;
         flex-direction: column;
         position: fixed;
@@ -25,21 +48,22 @@
         left: 0;
         bottom: 0;
         z-index: 100;
+        transition: background 0.3s, border-color 0.3s;
     }
     .admin-logo {
         padding: 20px 24px;
-        border-bottom: 1px solid #334155;
+        border-bottom: 1px solid var(--border-color);
         display: flex;
         align-items: center;
         gap: 12px;
     }
     .admin-logo img { width: 40px; height: 40px; border-radius: 10px; }
-    .admin-logo-text { font-size: 16px; font-weight: 700; color: #f1f5f9; }
-    .admin-logo-sub { font-size: 11px; color: #64748b; }
+    .admin-logo-text { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+    .admin-logo-sub { font-size: 11px; color: var(--text-dimmed); }
     
     .admin-nav { padding: 16px 12px; flex: 1; overflow-y: auto; }
     .admin-nav-section { margin-bottom: 24px; }
-    .admin-nav-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #64748b; padding: 0 12px; margin-bottom: 8px; }
+    .admin-nav-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dimmed); padding: 0 12px; margin-bottom: 8px; }
     
     .admin-nav-item {
         display: flex;
@@ -48,13 +72,13 @@
         padding: 12px 16px;
         border-radius: 10px;
         text-decoration: none;
-        color: #94a3b8;
+        color: var(--text-muted);
         font-size: 14px;
         font-weight: 500;
         transition: all 0.2s;
         margin-bottom: 4px;
     }
-    .admin-nav-item:hover { background: #334155; color: #f1f5f9; }
+    .admin-nav-item:hover { background: var(--bg-hover); color: var(--text-primary); }
     .admin-nav-item.active { background: #3b82f6; color: #fff; }
     .admin-nav-item svg { width: 20px; height: 20px; }
     .admin-nav-badge { background: #ef4444; color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 10px; margin-left: auto; }
@@ -63,8 +87,8 @@
     .admin-main { flex: 1; margin-left: 260px; min-height: 100vh; }
     
     .admin-header {
-        background: #1e293b;
-        border-bottom: 1px solid #334155;
+        background: var(--bg-secondary);
+        border-bottom: 1px solid var(--border-color);
         padding: 16px 24px;
         display: flex;
         justify-content: space-between;
@@ -72,15 +96,16 @@
         position: sticky;
         top: 0;
         z-index: 50;
+        transition: background 0.3s, border-color 0.3s;
     }
-    .admin-header-title { font-size: 18px; font-weight: 700; }
+    .admin-header-title { font-size: 18px; font-weight: 700; color: var(--text-primary); }
     .admin-header-user {
         display: flex;
         align-items: center;
         gap: 12px;
     }
-    .admin-header-user span { font-size: 13px; color: #94a3b8; }
-    .admin-header-user strong { color: #f1f5f9; }
+    .admin-header-user span { font-size: 13px; color: var(--text-muted); }
+    .admin-header-user strong { color: var(--text-primary); }
     .admin-logout {
         padding: 8px 16px;
         background: #dc2626;
@@ -93,33 +118,52 @@
         text-decoration: none;
     }
     
+    /* Theme Toggle Button */
+    .theme-toggle {
+        padding: 8px 12px;
+        background: var(--bg-hover);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--text-muted);
+        transition: all 0.2s;
+    }
+    .theme-toggle:hover { background: var(--border-color); color: var(--text-primary); }
+    .theme-toggle svg { width: 16px; height: 16px; }
+    
     .admin-content { padding: 24px; }
     
     /* Cards */
     .admin-card {
-        background: #1e293b;
+        background: var(--bg-secondary);
         border-radius: 16px;
         padding: 20px;
-        border: 1px solid #334155;
+        border: 1px solid var(--border-color);
         margin-bottom: 20px;
+        transition: background 0.3s, border-color 0.3s;
     }
     .admin-card-title {
         font-size: 14px;
         font-weight: 600;
-        color: #94a3b8;
+        color: var(--text-muted);
         margin-bottom: 16px;
     }
     
     /* Stats Grid */
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
     .stat-card {
-        background: #1e293b;
-        border: 1px solid #334155;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
         border-radius: 16px;
         padding: 20px;
         display: flex;
         align-items: flex-start;
         gap: 16px;
+        transition: background 0.3s, border-color 0.3s;
     }
     .stat-icon {
         width: 48px;
@@ -135,16 +179,16 @@
     .stat-icon.orange { background: rgba(249, 115, 22, 0.15); }
     .stat-icon.purple { background: rgba(139, 92, 246, 0.15); }
     .stat-info { flex: 1; }
-    .stat-label { font-size: 12px; color: #64748b; margin-bottom: 4px; }
-    .stat-value { font-size: 24px; font-weight: 700; color: #f1f5f9; }
-    .stat-sub { font-size: 11px; color: #64748b; margin-top: 4px; }
+    .stat-label { font-size: 12px; color: var(--text-dimmed); margin-bottom: 4px; }
+    .stat-value { font-size: 24px; font-weight: 700; color: var(--text-primary); }
+    .stat-sub { font-size: 11px; color: var(--text-dimmed); margin-top: 4px; }
     
     /* Tables */
     .admin-table { width: 100%; border-collapse: collapse; }
-    .admin-table th, .admin-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #334155; }
-    .admin-table th { font-size: 11px; font-weight: 600; text-transform: uppercase; color: #64748b; background: #0f172a; }
-    .admin-table td { font-size: 13px; color: #e2e8f0; }
-    .admin-table tr:hover { background: #334155/30; }
+    .admin-table th, .admin-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border-color); }
+    .admin-table th { font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-dimmed); background: var(--bg-primary); }
+    .admin-table td { font-size: 13px; color: var(--text-secondary); }
+    .admin-table tr:hover { background: var(--bg-hover); }
     
     /* Badges */
     .badge { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
@@ -161,20 +205,21 @@
     .btn-primary:hover { background: #2563eb; }
     .btn-success { background: #10b981; color: #fff; }
     .btn-danger { background: #dc2626; color: #fff; }
-    .btn-secondary { background: #334155; color: #e2e8f0; }
+    .btn-secondary { background: var(--bg-hover); color: var(--text-secondary); }
     .btn-sm { padding: 6px 12px; font-size: 11px; }
     
     /* Forms */
     .form-group { margin-bottom: 16px; }
-    .form-label { display: block; font-size: 12px; font-weight: 600; color: #94a3b8; margin-bottom: 6px; }
+    .form-label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
     .form-input, .form-select {
         width: 100%;
         padding: 10px 14px;
-        background: #0f172a;
-        border: 1px solid #334155;
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
         border-radius: 8px;
-        color: #e2e8f0;
+        color: var(--text-secondary);
         font-size: 13px;
+        transition: background 0.3s, border-color 0.3s, color 0.3s;
     }
     .form-input:focus, .form-select:focus { outline: none; border-color: #3b82f6; }
     
@@ -184,13 +229,13 @@
     
     /* Pagination */
     .pagination { display: flex; gap: 4px; justify-content: center; margin-top: 20px; flex-wrap: wrap; align-items: center; }
-    .pagination a, .pagination span { padding: 8px 14px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #94a3b8; font-size: 12px; text-decoration: none; }
-    .pagination a:hover { background: #334155; color: #f1f5f9; }
+    .pagination a, .pagination span { padding: 8px 14px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-muted); font-size: 12px; text-decoration: none; }
+    .pagination a:hover { background: var(--bg-hover); color: var(--text-primary); }
     .pagination .active, .pagination .active span { background: #3b82f6; border-color: #3b82f6; color: #fff; }
     .pagination svg { width: 14px; height: 14px; display: inline-block; }
     .pagination nav { display: flex; align-items: center; gap: 8px; }
     .pagination nav > div { display: flex; align-items: center; gap: 8px; }
-    .pagination nav > div:first-child { display: none; } /* Hide "Showing X to Y" on small screens */
+    .pagination nav > div:first-child { display: none; }
     .pagination nav > div:last-child { display: flex; align-items: center; }
     .pagination nav span[aria-disabled="true"] svg, 
     .pagination nav a svg { width: 16px; height: 16px; }
@@ -198,11 +243,11 @@
     /* Fix Laravel Tailwind Pagination */
     nav[role="navigation"] { display: flex; justify-content: center; align-items: center; gap: 4px; flex-wrap: wrap; }
     nav[role="navigation"] > div { display: flex; align-items: center; gap: 8px; }
-    nav[role="navigation"] > div:first-child { font-size: 13px; color: #94a3b8; }
+    nav[role="navigation"] > div:first-child { font-size: 13px; color: var(--text-muted); }
     nav[role="navigation"] span[aria-current="page"] span { background: #3b82f6; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; }
-    nav[role="navigation"] a { padding: 8px 14px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #94a3b8; font-size: 12px; text-decoration: none; }
-    nav[role="navigation"] a:hover { background: #334155; color: #f1f5f9; }
-    nav[role="navigation"] span[aria-disabled="true"] { padding: 8px 14px; background: #0f172a; border: 1px solid #334155; border-radius: 6px; color: #475569; font-size: 12px; cursor: not-allowed; }
+    nav[role="navigation"] a { padding: 8px 14px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-muted); font-size: 12px; text-decoration: none; }
+    nav[role="navigation"] a:hover { background: var(--bg-hover); color: var(--text-primary); }
+    nav[role="navigation"] span[aria-disabled="true"] { padding: 8px 14px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-dimmed); font-size: 12px; cursor: not-allowed; }
     nav[role="navigation"] svg { width: 16px; height: 16px; }
     
     /* Alerts */
@@ -217,6 +262,29 @@
         .stats-grid { grid-template-columns: 1fr; }
     }
     </style>
+    <script>
+    // Theme toggle functionality
+    function toggleTheme() {
+        const html = document.documentElement;
+        const isLight = html.classList.toggle('light-mode');
+        localStorage.setItem('admin-theme', isLight ? 'light' : 'dark');
+        updateThemeIcon();
+    }
+    function updateThemeIcon() {
+        const btn = document.getElementById('theme-btn');
+        if (!btn) return;
+        const isLight = document.documentElement.classList.contains('light-mode');
+        btn.innerHTML = isLight 
+            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> Tối'
+            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg> Sáng';
+    }
+    // Apply saved theme on load
+    (function() {
+        const saved = localStorage.getItem('admin-theme');
+        if (saved === 'light') document.documentElement.classList.add('light-mode');
+    })();
+    document.addEventListener('DOMContentLoaded', updateThemeIcon);
+    </script>
 </head>
 <body>
     <div class="admin-layout">
@@ -340,13 +408,16 @@
                         <div style="position: relative;">
                             <input type="text" name="q" placeholder="Tìm kiếm đơn hàng, user, tài khoản..." 
                                    value="{{ request('q') }}"
-                                   style="width: 100%; padding: 10px 16px 10px 40px; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: #f1f5f9; font-size: 13px;">
+                                   style="width: 100%; padding: 10px 16px 10px 40px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary); font-size: 13px;">
                             <svg style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: #64748b;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
                         </div>
                     </form>
                 </div>
                 
                 <div class="admin-header-user">
+                    <button id="theme-btn" class="theme-toggle" onclick="toggleTheme()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg> Sáng
+                    </button>
                     <span>Xin chào, <strong>{{ session('admin_username', 'Admin') }}</strong></span>
                     <form action="{{ route('admin.logout') }}" method="POST" style="margin:0;">
                         @csrf
