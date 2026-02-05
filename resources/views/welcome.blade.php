@@ -1399,7 +1399,7 @@ foreach($allPrices ?? [] as $type => $prices) {
         <p class="hero-subtitle">
             Hệ thống cho thuê tài khoản UnlockTool, Vietmap, Griffin, Samsung Tool và hơn 20+ công cụ GSM khác. Nhận tài khoản ngay sau khi thanh toán!
         </p>
-        <form class="search-modern" action="/search" method="GET">
+        <form class="search-modern" action="/ord-services" method="GET">
             <input type="text" name="q" placeholder="Tìm kiếm: Mua sơ đồ, Unlocktool, Tool FRP, Credits, Bypass A12+...">
             <button type="submit">Tìm kiếm</button>
         </form>
