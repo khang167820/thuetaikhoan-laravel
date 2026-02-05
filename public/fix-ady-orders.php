@@ -27,11 +27,12 @@ try {
         'price_vnd' => "ALTER TABLE ady_orders ADD COLUMN price_vnd BIGINT NULL DEFAULT 0 AFTER price_usd",
         'fields' => "ALTER TABLE ady_orders ADD COLUMN fields TEXT NULL AFTER price_vnd",
         'customer_email' => "ALTER TABLE ady_orders ADD COLUMN customer_email VARCHAR(255) NULL AFTER fields",
+        'result' => "ALTER TABLE ady_orders ADD COLUMN result TEXT NULL",
         'ady_order_uuid' => "ALTER TABLE ady_orders ADD COLUMN ady_order_uuid VARCHAR(255) NULL AFTER status",
-        'error' => "ALTER TABLE ady_orders ADD COLUMN error TEXT NULL AFTER result",
-        'ip_address' => "ALTER TABLE ady_orders ADD COLUMN ip_address VARCHAR(45) NULL AFTER error",
-        'paid_at' => "ALTER TABLE ady_orders ADD COLUMN paid_at TIMESTAMP NULL AFTER ip_address",
-        'completed_at' => "ALTER TABLE ady_orders ADD COLUMN completed_at TIMESTAMP NULL AFTER paid_at",
+        'error' => "ALTER TABLE ady_orders ADD COLUMN error TEXT NULL",
+        'ip_address' => "ALTER TABLE ady_orders ADD COLUMN ip_address VARCHAR(45) NULL",
+        'paid_at' => "ALTER TABLE ady_orders ADD COLUMN paid_at TIMESTAMP NULL",
+        'completed_at' => "ALTER TABLE ady_orders ADD COLUMN completed_at TIMESTAMP NULL",
     ];
     
     foreach ($columns as $col => $sql) {
