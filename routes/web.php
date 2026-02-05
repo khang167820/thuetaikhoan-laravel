@@ -36,7 +36,18 @@ Route::get('/', function () {
         ->get()
         ->groupBy('type');
     
-    return view('welcome', compact('allPrices'));
+    // Check which services have available accounts
+    $serviceTypes = ['Unlocktool', 'Vietmap', 'Griffin', 'AMT', 'TSMTool', 'KGKiller', 'SamsungTool', 'DFTPro'];
+    $availableServices = [];
+    foreach ($serviceTypes as $type) {
+        $count = DB::table('accounts')
+            ->where('type', $type)
+            ->where('is_available', 1)
+            ->count();
+        $availableServices[$type] = $count > 0;
+    }
+    
+    return view('welcome', compact('allPrices', 'availableServices'));
 });
 
 // Service pages

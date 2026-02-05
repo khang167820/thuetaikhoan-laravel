@@ -1451,6 +1451,7 @@ foreach($allPrices ?? [] as $type => $prices) {
             </article>
 
             <!-- CARD: Griffin Premium -->
+            @if($availableServices['Griffin'] ?? false)
             <article class="fo-card-compact">
                 <span class="fo-badge-compact purple">Premium</span>
                 <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
@@ -1477,6 +1478,7 @@ foreach($allPrices ?? [] as $type => $prices) {
                     <span class="fo-price-old-compact">{{ number_format($cardPrices['griffin']['oldPrice'] ?? 100000, 0, ',', '.') }}₫</span>
                 </button>
             </article>
+            @endif
 
             <!-- CARD: Android Multitool -->
             <article class="fo-card-compact">
