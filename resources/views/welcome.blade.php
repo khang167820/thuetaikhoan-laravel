@@ -599,6 +599,32 @@
             cursor: pointer;
         }
 
+        /* ===== SOLD OUT STATE ===== */
+        .fo-card-compact.sold-out {
+            opacity: 0.6;
+            filter: grayscale(40%);
+            pointer-events: none;
+        }
+        .fo-card-compact.sold-out .fo-badge-compact {
+            background: #6b7280 !important;
+        }
+        .fo-card-compact.sold-out .fo-cta-compact {
+            background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%) !important;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .fo-card-compact.sold-out .fo-cta-compact:hover {
+            transform: none;
+        }
+        .fo-badge-compact.sold-out-badge {
+            background: #dc2626 !important;
+            animation: pulse-sold-out 2s infinite;
+        }
+        @keyframes pulse-sold-out {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
         /* ===== FAST ORDER BLOCK ===== */
         .fast-order-wrap {
             background: #fff;
@@ -1399,9 +1425,12 @@ foreach($allPrices ?? [] as $type => $prices) {
     <div class="fast-order">
         <div class="fast-order-grid">
             <!-- CARD: UnlockTool -->
-            @if($availableServices['Unlocktool'] ?? false)
-            <article class="fo-card-compact">
+            <article class="fo-card-compact {{ !($availableServices['Unlocktool'] ?? false) ? 'sold-out' : '' }}">
+                @if(!($availableServices['Unlocktool'] ?? false))
+                <span class="fo-badge-compact sold-out-badge">Hết tài khoản</span>
+                @else
                 <span class="fo-badge-compact">Flash Sale</span>
+                @endif
                 <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
                 <div class="fo-logo-compact">
                     <img src="/images/services/unlocktool.png" alt="UnlockTool">
@@ -1419,17 +1448,25 @@ foreach($allPrices ?? [] as $type => $prices) {
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
+                @if($availableServices['Unlocktool'] ?? false)
                 <button type="button" onclick="openPriceModal('unlocktool')" class="fo-cta-compact">
                     <span class="fo-price-compact">{{ number_format($cardPrices['unlocktool']['display'] ?? 10000, 0, ',', '.') }} VND</span>
                     <span class="fo-price-old-compact">{{ number_format($cardPrices['unlocktool']['oldPrice'] ?? 25000, 0, ',', '.') }}₫</span>
                 </button>
+                @else
+                <button type="button" class="fo-cta-compact" disabled>
+                    <span class="fo-price-compact">HẾT TÀI KHOẢN</span>
+                </button>
+                @endif
             </article>
-            @endif
 
             <!-- CARD: Vietmap Live PRO -->
-            @if($availableServices['Vietmap'] ?? false)
-            <article class="fo-card-compact">
+            <article class="fo-card-compact {{ !($availableServices['Vietmap'] ?? false) ? 'sold-out' : '' }}">
+                @if(!($availableServices['Vietmap'] ?? false))
+                <span class="fo-badge-compact sold-out-badge">Hết tài khoản</span>
+                @else
                 <span class="fo-badge-compact green">Hot</span>
+                @endif
                 <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
                 <div class="fo-logo-compact">
                     <img src="/images/services/vietmap.png" alt="Vietmap Live">
@@ -1447,17 +1484,25 @@ foreach($allPrices ?? [] as $type => $prices) {
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
+                @if($availableServices['Vietmap'] ?? false)
                 <button type="button" onclick="openPriceModal('vietmap')" class="fo-cta-compact green">
                     <span class="fo-price-compact">{{ number_format($cardPrices['vietmap']['display'] ?? 8000, 0, ',', '.') }} VND</span>
                     <span class="fo-price-old-compact">{{ number_format($cardPrices['vietmap']['oldPrice'] ?? 19000, 0, ',', '.') }}₫</span>
                 </button>
+                @else
+                <button type="button" class="fo-cta-compact" disabled>
+                    <span class="fo-price-compact">HẾT TÀI KHOẢN</span>
+                </button>
+                @endif
             </article>
-            @endif
 
             <!-- CARD: Griffin Premium -->
-            @if($availableServices['Griffin'] ?? false)
-            <article class="fo-card-compact">
+            <article class="fo-card-compact {{ !($availableServices['Griffin'] ?? false) ? 'sold-out' : '' }}">
+                @if(!($availableServices['Griffin'] ?? false))
+                <span class="fo-badge-compact sold-out-badge">Hết tài khoản</span>
+                @else
                 <span class="fo-badge-compact purple">Premium</span>
+                @endif
                 <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
                 <div class="fo-logo-compact">
                     <img src="/images/services/griffin.png" alt="Griffin-Unlocker">
@@ -1477,17 +1522,25 @@ foreach($allPrices ?? [] as $type => $prices) {
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
+                @if($availableServices['Griffin'] ?? false)
                 <button type="button" onclick="openPriceModal('griffin')" class="fo-cta-compact blue">
                     <span class="fo-price-compact">{{ number_format($cardPrices['griffin']['display'] ?? 42000, 0, ',', '.') }} VND</span>
                     <span class="fo-price-old-compact">{{ number_format($cardPrices['griffin']['oldPrice'] ?? 100000, 0, ',', '.') }}₫</span>
                 </button>
+                @else
+                <button type="button" class="fo-cta-compact" disabled>
+                    <span class="fo-price-compact">HẾT TÀI KHOẢN</span>
+                </button>
+                @endif
             </article>
-            @endif
 
             <!-- CARD: Android Multitool -->
-            @if($availableServices['AMT'] ?? false)
-            <article class="fo-card-compact">
+            <article class="fo-card-compact {{ !($availableServices['AMT'] ?? false) ? 'sold-out' : '' }}">
+                @if(!($availableServices['AMT'] ?? false))
+                <span class="fo-badge-compact sold-out-badge">Hết tài khoản</span>
+                @else
                 <span class="fo-badge-compact orange">Flash Sale</span>
+                @endif
                 <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
                 <div class="fo-logo-compact">
                     <img src="/images/services/amt.svg" alt="Android Multitool">
@@ -1506,17 +1559,25 @@ foreach($allPrices ?? [] as $type => $prices) {
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
+                @if($availableServices['AMT'] ?? false)
                 <button type="button" onclick="openPriceModal('amt')" class="fo-cta-compact orange">
                     <span class="fo-price-compact">{{ number_format($cardPrices['amt']['display'] ?? 9000, 0, ',', '.') }} VND</span>
                     <span class="fo-price-old-compact">{{ number_format($cardPrices['amt']['oldPrice'] ?? 30000, 0, ',', '.') }}₫</span>
                 </button>
+                @else
+                <button type="button" class="fo-cta-compact" disabled>
+                    <span class="fo-price-compact">HẾT TÀI KHOẢN</span>
+                </button>
+                @endif
             </article>
-            @endif
 
             <!-- CARD: KG Killer Tool -->
-            @if($availableServices['KGKiller'] ?? false)
-            <article class="fo-card-compact">
+            <article class="fo-card-compact {{ !($availableServices['KGKiller'] ?? false) ? 'sold-out' : '' }}">
+                @if(!($availableServices['KGKiller'] ?? false))
+                <span class="fo-badge-compact sold-out-badge">Hết tài khoản</span>
+                @else
                 <span class="fo-badge-compact">Flash Sale</span>
+                @endif
                 <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
                 <div class="fo-logo-compact">
                     <img src="/images/services/kg-killer.png" alt="KG Killer Tool">
@@ -1535,17 +1596,25 @@ foreach($allPrices ?? [] as $type => $prices) {
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
+                @if($availableServices['KGKiller'] ?? false)
                 <button type="button" onclick="openPriceModal('kg-killer')" class="fo-cta-compact">
                     <span class="fo-price-compact">{{ number_format($cardPrices['kg-killer']['display'] ?? 8000, 0, ',', '.') }} VND</span>
                     <span class="fo-price-old-compact">{{ number_format($cardPrices['kg-killer']['oldPrice'] ?? 35000, 0, ',', '.') }}₫</span>
                 </button>
+                @else
+                <button type="button" class="fo-cta-compact" disabled>
+                    <span class="fo-price-compact">HẾT TÀI KHOẢN</span>
+                </button>
+                @endif
             </article>
-            @endif
 
             <!-- CARD: Samsung Tool -->
-            @if($availableServices['SamsungTool'] ?? false)
-            <article class="fo-card-compact">
+            <article class="fo-card-compact {{ !($availableServices['SamsungTool'] ?? false) ? 'sold-out' : '' }}">
+                @if(!($availableServices['SamsungTool'] ?? false))
+                <span class="fo-badge-compact sold-out-badge">Hết tài khoản</span>
+                @else
                 <span class="fo-badge-compact orange">Hot</span>
+                @endif
                 <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
                 <div class="fo-logo-compact">
                     <img src="/images/services/samsung-tool.png" alt="Samsung Tool">
@@ -1563,17 +1632,25 @@ foreach($allPrices ?? [] as $type => $prices) {
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
+                @if($availableServices['SamsungTool'] ?? false)
                 <button type="button" onclick="openPriceModal('samsung-tool')" class="fo-cta-compact orange">
                     <span class="fo-price-compact">{{ number_format($cardPrices['samsung-tool']['display'] ?? 162000, 0, ',', '.') }} VND</span>
                     <span class="fo-price-old-compact">{{ number_format($cardPrices['samsung-tool']['oldPrice'] ?? 250000, 0, ',', '.') }}₫</span>
                 </button>
+                @else
+                <button type="button" class="fo-cta-compact" disabled>
+                    <span class="fo-price-compact">HẾT TÀI KHOẢN</span>
+                </button>
+                @endif
             </article>
-            @endif
 
             <!-- CARD: DFT Pro Tool -->
-            @if($availableServices['DFTPro'] ?? false)
-            <article class="fo-card-compact">
+            <article class="fo-card-compact {{ !($availableServices['DFTPro'] ?? false) ? 'sold-out' : '' }}">
+                @if(!($availableServices['DFTPro'] ?? false))
+                <span class="fo-badge-compact sold-out-badge">Hết tài khoản</span>
+                @else
                 <span class="fo-badge-compact blue">New</span>
+                @endif
                 <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
                 <div class="fo-logo-compact">
                     <img src="/images/services/dft-pro.png" alt="DFT Pro Tool">
@@ -1591,17 +1668,25 @@ foreach($allPrices ?? [] as $type => $prices) {
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
+                @if($availableServices['DFTPro'] ?? false)
                 <button type="button" onclick="openPriceModal('dft')" class="fo-cta-compact blue">
                     <span class="fo-price-compact">{{ number_format($cardPrices['dft']['display'] ?? 65000, 0, ',', '.') }} VND</span>
                     <span class="fo-price-old-compact">{{ number_format($cardPrices['dft']['oldPrice'] ?? 130000, 0, ',', '.') }}₫</span>
                 </button>
+                @else
+                <button type="button" class="fo-cta-compact" disabled>
+                    <span class="fo-price-compact">HẾT TÀI KHOẢN</span>
+                </button>
+                @endif
             </article>
-            @endif
 
             <!-- CARD: TSM Tool -->
-            @if($availableServices['TSMTool'] ?? false)
-            <article class="fo-card-compact">
+            <article class="fo-card-compact {{ !($availableServices['TSMTool'] ?? false) ? 'sold-out' : '' }}">
+                @if(!($availableServices['TSMTool'] ?? false))
+                <span class="fo-badge-compact sold-out-badge">Hết tài khoản</span>
+                @else
                 <span class="fo-badge-compact">Flash Sale</span>
+                @endif
                 <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
                 <div class="fo-logo-compact">
                     <img src="/images/services/tsm.png" alt="TSM Tool">
@@ -1622,12 +1707,17 @@ foreach($allPrices ?? [] as $type => $prices) {
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
+                @if($availableServices['TSMTool'] ?? false)
                 <button type="button" onclick="openPriceModal('tsm')" class="fo-cta-compact">
                     <span class="fo-price-compact">{{ number_format($cardPrices['tsm']['display'] ?? 2000, 0, ',', '.') }} VND</span>
                     <span class="fo-price-old-compact">{{ number_format($cardPrices['tsm']['oldPrice'] ?? 25000, 0, ',', '.') }}₫</span>
                 </button>
+                @else
+                <button type="button" class="fo-cta-compact" disabled>
+                    <span class="fo-price-compact">HẾT TÀI KHOẢN</span>
+                </button>
+                @endif
             </article>
-            @endif
         </div>
     </div>
 </div>
