@@ -475,9 +475,53 @@
 [data-theme="dark"] .history-table th { background: #1e293b; }
 [data-theme="dark"] .history-table td { border-color: #334155; color: var(--ink); }
 
-@media (max-width: 480px) {
+@media (max-width: 640px) {
     .amount-grid { grid-template-columns: repeat(2, 1fr); }
     .payment-methods { grid-template-columns: 1fr 1fr; }
+    
+    /* History Table Mobile - Card Layout */
+    .history-table {
+        border: none;
+        background: transparent;
+    }
+    .history-table thead {
+        display: none;
+    }
+    .history-table tbody {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    .history-table tr {
+        display: block;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 16px;
+    }
+    .history-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px 0;
+        border-top: none;
+        font-size: 13px;
+    }
+    .history-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #64748b;
+        font-size: 12px;
+    }
+    .history-table td:first-child {
+        border-bottom: 1px solid #f1f5f9;
+        padding-bottom: 10px;
+        margin-bottom: 6px;
+    }
+    [data-theme="dark"] .history-table tr {
+        background: var(--bg-card);
+        border-color: #334155;
+    }
 }
 </style>
 @endsection
@@ -607,17 +651,15 @@
                     <th>Số tiền</th>
                     <th>Phương thức</th>
                     <th>Trạng thái</th>
-                    <th>Mã GD</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($deposits as $dep)
                 <tr>
-                    <td>{{ \Carbon\Carbon::parse($dep->created_at)->format('d/m/Y H:i') }}</td>
-                    <td style="font-weight: 600;">{{ number_format($dep->amount, 0, ',', '.') }}đ</td>
-                    <td>🏦 Ngân hàng</td>
-                    <td class="status-{{ $dep->status }}">{{ $dep->status == 'success' ? '✅ Hoàn thành' : '⏳ Đang xử lý' }}</td>
-                    <td style="font-size: 11px; color: #94a3b8;">{{ $dep->note ?? '-' }}</td>
+                    <td data-label="Thời gian">{{ \Carbon\Carbon::parse($dep->created_at)->format('d/m/Y H:i') }}</td>
+                    <td data-label="Số tiền" style="font-weight: 600; color: #10b981;">{{ number_format($dep->amount, 0, ',', '.') }}đ</td>
+                    <td data-label="Phương thức">🏦 Ngân hàng</td>
+                    <td data-label="Trạng thái" class="status-{{ $dep->status }}">{{ $dep->status == 'success' ? '✅ Thành công' : '⏳ Đang xử lý' }}</td>
                 </tr>
                 @endforeach
             </tbody>
