@@ -98,9 +98,18 @@ class AdminController extends Controller
         
         $order->save();
         
-        // Auto-allocate account when changing to 'paid' from 'pending'
-        // This ensures customers get their accounts immediately after admin confirms payment
+        // Auto-allocate account when:
+        // 1. Changing from pending to paid, OR
+        // 2. Order is paid/completed but has no account allocated yet
+        $shouldAllocate = false;
+        
         if ($oldStatus === 'pending' && $newStatus === 'paid') {
+            $shouldAllocate = true;
+        } elseif (in_array($newStatus, ['paid', 'completed']) && empty($order->account_id)) {
+            $shouldAllocate = true;
+        }
+        
+        if ($shouldAllocate) {
             $allocationResult = \App\Services\AccountAllocationService::allocateAccount($order);
             
             if ($allocationResult['success']) {
