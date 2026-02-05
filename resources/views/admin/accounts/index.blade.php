@@ -115,17 +115,17 @@
                             @php
                                 $expiresAt = \Carbon\Carbon::parse($account->rental_expires_at);
                                 $isExpired = $expiresAt->isPast();
-                                $remaining = $expiresAt->diffForHumans();
                             @endphp
                             <div style="color: {{ $isExpired ? '#ef4444' : '#10b981' }}; font-weight: 600;">
                                 {{ $expiresAt->format('d/m H:i') }}
                             </div>
-                            <div style="font-size: 11px; color: {{ $isExpired ? '#ef4444' : '#64748b' }};">
-                                {{ $isExpired ? 'Đã hết hạn' : 'Còn ' . $remaining }}
+                            <div class="countdown" data-expires="{{ $expiresAt->toIso8601String() }}" 
+                                 style="font-size: 11px; font-weight: 600; color: {{ $isExpired ? '#ef4444' : '#10b981' }};">
+                                {{ $isExpired ? 'Đã hết hạn' : 'Đang tính...' }}
                             </div>
                             @if($account->renter_email ?? null)
                                 <div style="font-size: 10px; color: #94a3b8; margin-top: 2px;">
-                                    {{ Str::limit($account->renter_email, 20) }}
+                                    📧 {{ Str::limit($account->renter_email, 18) }}
                                 </div>
                             @endif
                         @else
@@ -214,5 +214,45 @@ function editAccount(account) {
 function closeEditModal() {
     document.getElementById('editModal').style.display = 'none';
 }
+
+// Real-time countdown
+function updateCountdowns() {
+    document.querySelectorAll('.countdown').forEach(el => {
+        const expires = new Date(el.dataset.expires);
+        const now = new Date();
+        const diff = expires - now;
+        
+        if (diff <= 0) {
+            el.textContent = '⏱️ Đã hết hạn';
+            el.style.color = '#ef4444';
+            return;
+        }
+        
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        
+        // Color based on urgency
+        if (hours < 1) {
+            el.style.color = '#f59e0b'; // Warning - less than 1 hour
+        } else if (hours < 3) {
+            el.style.color = '#eab308'; // Yellow - less than 3 hours
+        } else {
+            el.style.color = '#10b981'; // Green - plenty of time
+        }
+        
+        if (hours > 0) {
+            el.textContent = `⏱️ Còn ${hours}h ${minutes}p ${seconds}s`;
+        } else if (minutes > 0) {
+            el.textContent = `⚡ Còn ${minutes}p ${seconds}s`;
+        } else {
+            el.textContent = `🔥 Còn ${seconds}s`;
+        }
+    });
+}
+
+// Update every second
+updateCountdowns();
+setInterval(updateCountdowns, 1000);
 </script>
 @endsection
