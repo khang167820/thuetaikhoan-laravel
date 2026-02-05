@@ -61,29 +61,83 @@
             <div class="success-col">
                 <!-- Account Info -->
                 @if($order->account)
-                <div class="account-info">
-                    <h3>Tài khoản đã cấp</h3>
-                    <div class="detail-row account-row">
-                        <span class="detail-label">Tài khoản</span>
-                        <div class="account-input-group">
-                            <input type="text" value="{{ $order->account->username }}" readonly onclick="this.select()">
-                            <button type="button" onclick="copyToClipboard('{{ $order->account->username }}', this)">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                            </button>
+                @php
+                    // Check if order has expired
+                    $isExpired = false;
+                    $gracePeriodMinutes = 30;
+                    
+                    if ($order->expires_at) {
+                        $expiresAt = \Carbon\Carbon::parse($order->expires_at);
+                        $now = \Carbon\Carbon::now();
+                        $isExpired = $now->greaterThan($expiresAt->addMinutes($gracePeriodMinutes));
+                    }
+                    
+                    // Check if admin changed password
+                    $passwordChanged = false;
+                    if (!empty($order->assigned_password) && !empty($order->account->password)) {
+                        $passwordChanged = ($order->assigned_password !== $order->account->password);
+                    }
+                    
+                    // Get display password
+                    $displayPassword = $order->assigned_password ?? $order->account->password ?? null;
+                @endphp
+                
+                @if($isExpired)
+                    {{-- Order has expired --}}
+                    <div class="account-info account-expired">
+                        <div class="expired-notice">
+                            <span class="expired-icon">🔒</span>
+                            <h3>Đơn hàng đã hết hạn</h3>
+                            <p>Thông tin tài khoản không còn khả dụng.</p>
                         </div>
                     </div>
-                    @if($order->account->password)
-                    <div class="detail-row account-row">
-                        <span class="detail-label">Mật khẩu</span>
-                        <div class="account-input-group">
-                            <input type="text" value="{{ $order->account->password }}" readonly onclick="this.select()">
-                            <button type="button" onclick="copyToClipboard('{{ $order->account->password }}', this)">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                            </button>
+                @elseif($passwordChanged)
+                    {{-- Password was changed by admin --}}
+                    <div class="account-info account-changed">
+                        <div class="changed-notice">
+                            <span class="changed-icon">🔐</span>
+                            <h3>Mật khẩu đã thay đổi</h3>
+                            <p>Vui lòng liên hệ admin để được cấp lại mật khẩu mới.</p>
                         </div>
+                        <div class="detail-row account-row">
+                            <span class="detail-label">Tài khoản</span>
+                            <div class="account-input-group">
+                                <input type="text" value="{{ $order->account->username }}" readonly onclick="this.select()">
+                                <button type="button" onclick="copyToClipboard('{{ $order->account->username }}', this)">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <a href="https://zalo.me/0832282999" target="_blank" class="btn-zalo">
+                            📞 Liên hệ Zalo Admin
+                        </a>
                     </div>
-                    @endif
-                </div>
+                @else
+                    {{-- Normal display --}}
+                    <div class="account-info">
+                        <h3>Tài khoản đã cấp</h3>
+                        <div class="detail-row account-row">
+                            <span class="detail-label">Tài khoản</span>
+                            <div class="account-input-group">
+                                <input type="text" value="{{ $order->account->username }}" readonly onclick="this.select()">
+                                <button type="button" onclick="copyToClipboard('{{ $order->account->username }}', this)">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                        @if($displayPassword)
+                        <div class="detail-row account-row">
+                            <span class="detail-label">Mật khẩu</span>
+                            <div class="account-input-group">
+                                <input type="text" value="{{ $displayPassword }}" readonly onclick="this.select()">
+                                <button type="button" onclick="copyToClipboard('{{ $displayPassword }}', this)">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                        @endif
+                    </div>
+                @endif
                 @endif
 
                 <!-- Action Buttons -->
@@ -366,6 +420,86 @@
 [data-theme="dark"] .account-info { background: #1e293b; border-color: #475569; }
 [data-theme="dark"] .account-info h3 { color: #e2e8f0; }
 [data-theme="dark"] .account-input-group input { background: #0f172a; border-color: #334155; color: #f1f5f9; }
+
+/* Expired Order Styles */
+.account-expired {
+    background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%) !important;
+    border-color: #fca5a5 !important;
+    border-top-color: #dc2626 !important;
+}
+.account-expired .expired-notice {
+    text-align: center;
+    padding: 20px 0;
+}
+.account-expired .expired-icon {
+    font-size: 36px;
+    display: block;
+    margin-bottom: 12px;
+}
+.account-expired h3 {
+    color: #dc2626 !important;
+    margin: 0 0 8px 0;
+}
+.account-expired p {
+    color: #991b1b;
+    margin: 0;
+    font-size: 14px;
+}
+[data-theme="dark"] .account-expired {
+    background: linear-gradient(135deg, #450a0a 0%, #7f1d1d 100%) !important;
+    border-color: #dc2626 !important;
+}
+[data-theme="dark"] .account-expired h3 { color: #fca5a5 !important; }
+[data-theme="dark"] .account-expired p { color: #f87171; }
+
+/* Password Changed Styles */
+.account-changed {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%) !important;
+    border-color: #f59e0b !important;
+    border-top-color: #d97706 !important;
+}
+.account-changed .changed-notice {
+    text-align: center;
+    padding: 16px 0;
+    margin-bottom: 16px;
+    border-bottom: 1px dashed #fbbf24;
+}
+.account-changed .changed-icon {
+    font-size: 36px;
+    display: block;
+    margin-bottom: 12px;
+}
+.account-changed h3 {
+    color: #d97706 !important;
+    margin: 0 0 8px 0;
+}
+.account-changed p {
+    color: #92400e;
+    margin: 0;
+    font-size: 14px;
+}
+.btn-zalo {
+    display: block;
+    text-align: center;
+    padding: 12px 20px;
+    background: #0068ff;
+    color: #fff !important;
+    font-weight: 600;
+    border-radius: 10px;
+    text-decoration: none;
+    margin-top: 16px;
+    transition: all 0.2s;
+}
+.btn-zalo:hover {
+    background: #0055cc;
+    transform: translateY(-2px);
+}
+[data-theme="dark"] .account-changed {
+    background: linear-gradient(135deg, #451a03 0%, #78350f 100%) !important;
+    border-color: #f59e0b !important;
+}
+[data-theme="dark"] .account-changed h3 { color: #fcd34d !important; }
+[data-theme="dark"] .account-changed p { color: #fbbf24; }
 </style>
 
 <script>
