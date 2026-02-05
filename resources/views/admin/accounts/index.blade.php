@@ -275,13 +275,8 @@ function updateCountdowns() {
             el.classList.add('urgent');
         }
         
-        if (hours > 0) {
-            el.textContent = `⏱️ ${hours}h ${String(minutes).padStart(2,'0')}p`;
-        } else if (minutes > 0) {
-            el.textContent = `⏱️ ${minutes}p ${String(seconds).padStart(2,'0')}s`;
-        } else {
-            el.textContent = `⏱️ ${seconds}s`;
-        }
+        // Always show full format: Xh XXp XXs
+        el.textContent = `⏱️ ${hours}h ${String(minutes).padStart(2,'0')}p ${String(seconds).padStart(2,'0')}s`;
     });
 }
 
