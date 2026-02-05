@@ -65,6 +65,8 @@ Route::middleware('throttle:30,1')->group(function () {
     Route::get('/ord-services', [OrdServicesController::class, 'index'])->name('ord-services');
     Route::get('/ord-checkout', [OrdCheckoutController::class, 'show'])->name('ord-checkout');
     Route::post('/ord-checkout', [OrdCheckoutController::class, 'submit'])->name('ord-checkout.submit');
+    Route::post('/api/pay-with-balance', [OrdCheckoutController::class, 'payWithBalance'])->name('ord-checkout.pay-balance');
+    Route::get('/api/check-payment', [OrdCheckoutController::class, 'checkPayment'])->name('ord-checkout.check-payment');
     Route::get('/don-ady', [OrdCheckoutController::class, 'orderResult'])->name('ady-order.result');
 });
 
