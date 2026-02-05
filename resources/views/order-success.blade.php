@@ -138,6 +138,18 @@
                         @endif
                     </div>
                 @endif
+                @else
+                    {{-- No account allocated yet --}}
+                    <div class="account-info account-pending">
+                        <div class="pending-notice">
+                            <span class="pending-icon">⏳</span>
+                            <h3>Đang chờ cấp tài khoản</h3>
+                            <p>Hệ thống đang xử lý đơn hàng của bạn. Vui lòng đợi trong giây lát hoặc liên hệ admin nếu chờ quá 5 phút.</p>
+                        </div>
+                        <a href="https://zalo.me/0832282999" target="_blank" class="btn-zalo">
+                            📞 Liên hệ Zalo Admin
+                        </a>
+                    </div>
                 @endif
 
                 <!-- Action Buttons -->
@@ -500,6 +512,37 @@
 }
 [data-theme="dark"] .account-changed h3 { color: #fcd34d !important; }
 [data-theme="dark"] .account-changed p { color: #fbbf24; }
+
+/* Pending Account Styles */
+.account-pending {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%) !important;
+    border-color: #3b82f6 !important;
+    border-top-color: #1d4ed8 !important;
+}
+.account-pending .pending-notice {
+    text-align: center;
+    padding: 20px 0;
+}
+.account-pending .pending-icon {
+    font-size: 36px;
+    display: block;
+    margin-bottom: 12px;
+}
+.account-pending h3 {
+    color: #1d4ed8 !important;
+    margin: 0 0 8px 0;
+}
+.account-pending p {
+    color: #1e40af;
+    margin: 0;
+    font-size: 14px;
+}
+[data-theme="dark"] .account-pending {
+    background: linear-gradient(135deg, #1e3a5f 0%, #1e40af 100%) !important;
+    border-color: #3b82f6 !important;
+}
+[data-theme="dark"] .account-pending h3 { color: #93c5fd !important; }
+[data-theme="dark"] .account-pending p { color: #60a5fa; }
 </style>
 
 <script>
