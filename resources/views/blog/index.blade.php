@@ -4,157 +4,566 @@
 
 @section('content')
 <style>
+/* ===============================================
+   PREMIUM BLOG PAGE STYLES
+   =============================================== */
+
+/* Hero Section */
 .blog-hero {
     background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #020617 100%);
-    padding: 60px 0;
+    padding: 80px 0 60px;
     text-align: center;
     color: #fff;
+    position: relative;
+    overflow: hidden;
 }
-.blog-hero h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 12px; }
-.blog-hero p { font-size: 1.1rem; opacity: 0.9; max-width: 600px; margin: 0 auto 24px; }
 
+.blog-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(249, 115, 22, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 40%);
+    animation: floatBg 15s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes floatBg {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(2%, 2%); }
+}
+
+.blog-hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.blog-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(249, 115, 22, 0.2);
+    border: 1px solid rgba(249, 115, 22, 0.3);
+    color: #fb923c;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.blog-hero h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    line-height: 1.2;
+}
+
+.blog-hero h1 span {
+    background: linear-gradient(135deg, #f97316 0%, #fb923c 50%, #fbbf24 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.blog-hero p {
+    font-size: 1.1rem;
+    opacity: 0.85;
+    margin: 0 0 28px;
+    line-height: 1.6;
+}
+
+/* Search Box */
 .blog-search {
-    max-width: 500px;
+    max-width: 520px;
     margin: 0 auto;
     display: flex;
-    gap: 10px;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px;
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
+
 .blog-search input {
     flex: 1;
     padding: 14px 20px;
     border: none;
-    border-radius: 12px;
+    border-radius: 10px;
     font-size: 15px;
+    background: #fff;
+    outline: none;
 }
+
+.blog-search input:focus {
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+}
+
 .blog-search button {
-    padding: 14px 24px;
+    padding: 14px 28px;
     background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
     color: #fff;
     border: none;
-    border-radius: 12px;
+    border-radius: 10px;
     font-weight: 700;
     cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.blog-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 20px;
+.blog-search button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(249, 115, 22, 0.4);
 }
+
+/* Container */
+.blog-container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 50px 20px;
+}
+
 .blog-layout {
     display: grid;
-    grid-template-columns: 1fr 280px;
+    grid-template-columns: 1fr 300px;
     gap: 40px;
 }
-@media (max-width: 900px) {
-    .blog-layout { grid-template-columns: 1fr; }
+
+/* Category Heading */
+.category-heading {
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f1f5f9;
 }
 
+.category-heading h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+}
+
+.category-heading h2 span {
+    color: #f97316;
+}
+
+/* Blog Grid */
 .blog-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 28px;
 }
 
+/* Blog Card */
 .blog-card {
     background: #fff;
-    border-radius: 16px;
+    border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    transition: all 0.3s;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    transition: all 0.4s ease;
     text-decoration: none;
+    border: 1px solid #f1f5f9;
+    display: flex;
+    flex-direction: column;
 }
+
 .blog-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+    border-color: #e5e7eb;
 }
+
 .blog-card-img {
-    height: 160px;
+    height: 180px;
     background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     color: #fff;
-    font-size: 48px;
+    font-size: 56px;
+    position: relative;
+    overflow: hidden;
 }
-.blog-card-body { padding: 20px; }
+
+.blog-card-img::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
+}
+
+.blog-card-img span {
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    transition: transform 0.3s ease;
+}
+
+.blog-card:hover .blog-card-img span {
+    transform: scale(1.15) rotate(-5deg);
+}
+
+.blog-card-body {
+    padding: 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
 .blog-card-category {
-    display: inline-block;
-    background: #fef3c7;
-    color: #d97706;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    margin-bottom: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 14px;
+    width: fit-content;
 }
+
+/* Category Colors */
+.blog-card-category.cat-huong-dan { background: #dbeafe; color: #1d4ed8; }
+.blog-card-category.cat-review { background: #fef3c7; color: #d97706; }
+.blog-card-category.cat-top-list { background: #f3e8ff; color: #9333ea; }
+.blog-card-category.cat-so-sanh { background: #fce7f3; color: #db2777; }
+.blog-card-category.cat-default { background: #f1f5f9; color: #475569; }
+
 .blog-card-title {
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 700;
     color: #1f2937;
-    line-height: 1.4;
-    margin-bottom: 10px;
+    line-height: 1.5;
+    margin-bottom: 0;
+    flex: 1;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    transition: color 0.2s ease;
 }
+
+.blog-card:hover .blog-card-title {
+    color: #f97316;
+}
+
 .blog-card-meta {
     display: flex;
     gap: 16px;
     font-size: 13px;
+    color: #9ca3af;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #f3f4f6;
+}
+
+.blog-card-meta span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 80px 40px;
+    background: #fff;
+    border-radius: 20px;
+    border: 2px dashed #e5e7eb;
+}
+
+.empty-state-icon {
+    font-size: 72px;
+    margin-bottom: 20px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.empty-state h3 {
+    color: #1f2937;
+    margin-bottom: 8px;
+    font-size: 1.25rem;
+}
+
+.empty-state p {
     color: #6b7280;
 }
 
+/* Sidebar */
 .blog-sidebar-box {
     background: #fff;
-    border-radius: 16px;
+    border-radius: 20px;
     padding: 24px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
     margin-bottom: 24px;
+    border: 1px solid #f1f5f9;
 }
+
 .blog-sidebar-title {
     font-size: 1.1rem;
     font-weight: 700;
     color: #1f2937;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
     border-bottom: 3px solid #f97316;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
-.category-list { list-style: none; padding: 0; margin: 0; }
-.category-list li { padding: 10px 0; border-bottom: 1px solid #f3f4f6; }
-.category-list li:last-child { border-bottom: none; }
+
+.category-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category-list li {
+    transition: all 0.2s ease;
+}
+
+.category-list li:not(:last-child) {
+    border-bottom: 1px solid #f3f4f6;
+}
+
 .category-list a {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     text-decoration: none;
     color: #4b5563;
     font-size: 14px;
-}
-.category-list a:hover { color: #3b82f6; }
-.category-count {
-    background: #f3f4f6;
-    padding: 2px 10px;
-    border-radius: 10px;
-    font-size: 12px;
+    padding: 14px 0;
+    transition: all 0.2s ease;
 }
 
+.category-list a:hover {
+    color: #f97316;
+    padding-left: 8px;
+}
+
+.category-count {
+    background: #f3f4f6;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+    transition: all 0.2s ease;
+}
+
+.category-list a:hover .category-count {
+    background: #fff7ed;
+    color: #f97316;
+}
+
+/* CTA Box */
+.cta-box {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    color: #fff;
+    border: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-box::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%);
+}
+
+.cta-box-content {
+    position: relative;
+    z-index: 1;
+}
+
+.cta-box h3 {
+    font-size: 1.15rem;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cta-box p {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 18px;
+    line-height: 1.5;
+}
+
+.cta-btn {
+    display: block;
+    background: #fff;
+    color: #ea580c;
+    padding: 14px;
+    text-align: center;
+    border-radius: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Pagination */
 .pagination-wrapper {
     display: flex;
     justify-content: center;
-    margin-top: 40px;
+    margin-top: 50px;
+}
+
+/* ===============================================
+   DARK MODE
+   =============================================== */
+[data-theme="dark"] .blog-hero {
+    background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+}
+
+[data-theme="dark"] .blog-container {
+    background: transparent;
+}
+
+[data-theme="dark"] .blog-search input {
+    background: #1e293b;
+    color: #f1f5f9;
+}
+
+[data-theme="dark"] .category-heading {
+    border-color: #334155;
+}
+
+[data-theme="dark"] .category-heading h2 {
+    color: #f1f5f9;
+}
+
+[data-theme="dark"] .blog-card {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .blog-card:hover {
+    border-color: #475569;
+}
+
+[data-theme="dark"] .blog-card-title {
+    color: #f1f5f9;
+}
+
+[data-theme="dark"] .blog-card-meta {
+    color: #64748b;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .empty-state {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .empty-state h3 {
+    color: #f1f5f9;
+}
+
+[data-theme="dark"] .empty-state p {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .blog-sidebar-box {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .blog-sidebar-title {
+    color: #f1f5f9;
+}
+
+[data-theme="dark"] .category-list li {
+    border-color: #334155;
+}
+
+[data-theme="dark"] .category-list a {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .category-count {
+    background: #334155;
+    color: #94a3b8;
+}
+
+/* ===============================================
+   RESPONSIVE
+   =============================================== */
+@media (max-width: 1024px) {
+    .blog-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .blog-sidebar-box {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .blog-hero {
+        padding: 60px 0 50px;
+    }
+    
+    .blog-hero h1 {
+        font-size: 2rem;
+    }
+    
+    .blog-search {
+        flex-direction: column;
+    }
+    
+    .blog-search button {
+        justify-content: center;
+    }
+    
+    .blog-grid {
+        grid-template-columns: 1fr;
+    }
 }
 </style>
 
 <!-- Hero -->
 <section class="blog-hero">
-    <div class="container">
-        <h1>📚 Blog & Hướng dẫn</h1>
-        <p>Tin tức, hướng dẫn sử dụng tool GSM, mẹo xóa FRP, và nhiều kiến thức hữu ích khác</p>
+    <div class="blog-hero-content">
+        <div class="blog-hero-badge">
+            <span>📚</span> Blog & Hướng dẫn GSM
+        </div>
+        <h1>Tin tức & <span>Kiến thức</span> hữu ích</h1>
+        <p>Hướng dẫn sử dụng tool GSM, mẹo xóa FRP, review tool và nhiều kiến thức chuyên ngành khác</p>
         
         <form action="{{ route('blog.index') }}" method="GET" class="blog-search">
-            <input type="text" name="q" placeholder="Tìm kiếm bài viết..." value="{{ request('q') }}">
-            <button type="submit">🔍 Tìm</button>
+            <input type="text" name="q" placeholder="🔍 Tìm kiếm bài viết..." value="{{ request('q') }}">
+            <button type="submit">Tìm kiếm</button>
         </form>
     </div>
 </section>
@@ -165,16 +574,16 @@
         <!-- Posts Grid -->
         <div>
             @if(isset($category))
-                <h2 style="margin-bottom: 24px; color: #1f2937;">
-                    Danh mục: <span style="color: #3b82f6;">{{ $category }}</span>
-                </h2>
+                <div class="category-heading">
+                    <h2>Danh mục: <span>{{ $category }}</span></h2>
+                </div>
             @endif
             
             @if($posts->isEmpty())
-                <div style="text-align: center; padding: 60px; background: #fff; border-radius: 16px;">
-                    <div style="font-size: 64px; margin-bottom: 16px;">📭</div>
-                    <h3 style="color: #1f2937; margin-bottom: 8px;">Không tìm thấy bài viết</h3>
-                    <p style="color: #6b7280;">Thử tìm kiếm với từ khóa khác</p>
+                <div class="empty-state">
+                    <div class="empty-state-icon">📭</div>
+                    <h3>Không tìm thấy bài viết</h3>
+                    <p>Thử tìm kiếm với từ khóa khác hoặc xem tất cả bài viết</p>
                 </div>
             @else
                 <div class="blog-grid">
@@ -184,11 +593,19 @@
                             @php
                                 $icons = ['📱', '🔓', '💻', '🔧', '📦', '⚙️', '🛠️', '📡'];
                                 $icon = $icons[crc32($post->slug) % count($icons)];
+                                
+                                // Category class
+                                $catLower = strtolower($post->category);
+                                $catClass = 'cat-default';
+                                if (str_contains($catLower, 'hướng dẫn')) $catClass = 'cat-huong-dan';
+                                elseif (str_contains($catLower, 'review')) $catClass = 'cat-review';
+                                elseif (str_contains($catLower, 'top')) $catClass = 'cat-top-list';
+                                elseif (str_contains($catLower, 'so sánh')) $catClass = 'cat-so-sanh';
                             @endphp
-                            {{ $icon }}
+                            <span>{{ $icon }}</span>
                         </div>
                         <div class="blog-card-body">
-                            <span class="blog-card-category">{{ $post->category }}</span>
+                            <span class="blog-card-category {{ $catClass }}">{{ $post->category }}</span>
                             <h3 class="blog-card-title">{{ $post->title }}</h3>
                             <div class="blog-card-meta">
                                 <span>👁 {{ number_format($post->views) }}</span>
@@ -223,12 +640,14 @@
             </div>
             
             <!-- CTA -->
-            <div class="blog-sidebar-box" style="background: linear-gradient(135deg, #f97316, #ea580c); color: #fff;">
-                <h3 style="font-size: 1.1rem; margin-bottom: 10px;">🔓 Thuê Tool GSM</h3>
-                <p style="font-size: 14px; opacity: 0.9; margin-bottom: 16px;">Giá chỉ từ 10.000đ - Nhận tài khoản ngay!</p>
-                <a href="/" style="display: block; background: #fff; color: #ea580c; padding: 12px; text-align: center; border-radius: 10px; font-weight: 700; text-decoration: none;">
-                    Xem dịch vụ →
-                </a>
+            <div class="blog-sidebar-box cta-box">
+                <div class="cta-box-content">
+                    <h3>🔓 Thuê Tool GSM</h3>
+                    <p>Giá chỉ từ 10.000đ - Nhận tài khoản tự động 24/7!</p>
+                    <a href="/" class="cta-btn">
+                        Xem dịch vụ →
+                    </a>
+                </div>
             </div>
         </aside>
     </div>
