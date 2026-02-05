@@ -288,58 +288,77 @@ class CheckoutController extends Controller
         ]);
 
         $code = $request->input('code');
-        $user = Auth::user();
 
-        // Find pending order
-        $order = Order::byCode($code)->pending()->first();
-        
-        if (!$order) {
-            return response()->json([
-                'success' => false,
-                'error' => 'Đơn hàng không tồn tại hoặc đã được thanh toán',
-            ], 404);
-        }
-
-        // Check balance
-        if ($user->balance < $order->amount) {
-            return response()->json([
-                'success' => false,
-                'error' => 'Số dư không đủ. Cần ' . number_format($order->amount, 0, ',', '.') . 'đ, bạn có ' . number_format($user->balance, 0, ',', '.') . 'đ',
-                'balance' => $user->balance,
-                'required' => $order->amount,
-            ], 400);
-        }
-
-        // Deduct balance and mark order as paid
         try {
             \DB::beginTransaction();
             
+            // Lock user row to prevent race condition
+            $user = \App\Models\User::where('id', Auth::id())
+                ->lockForUpdate()
+                ->first();
+
+            // Find pending order with lock
+            $order = Order::byCode($code)
+                ->pending()
+                ->lockForUpdate()
+                ->first();
+            
+            if (!$order) {
+                \DB::rollBack();
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Đơn hàng không tồn tại hoặc đã được thanh toán',
+                ], 404);
+            }
+
+            // Check balance
+            if ($user->balance < $order->amount) {
+                \DB::rollBack();
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Số dư không đủ. Cần ' . number_format($order->amount, 0, ',', '.') . 'đ, bạn có ' . number_format($user->balance, 0, ',', '.') . 'đ',
+                    'balance' => $user->balance,
+                    'required' => $order->amount,
+                ], 400);
+            }
+
             // Deduct user balance
             $user->balance = $user->balance - $order->amount;
             $user->save();
             
-            // Update order
-            $order->account_id = $user->id;
+            // Mark order as paid (user_id for tracking who paid)
+            $order->user_id = $user->id;
             $order->status = Order::STATUS_PAID;
             $order->paid_at = now();
             $order->save();
             
             \DB::commit();
             
+            // Allocate account automatically after payment
+            $allocationResult = \App\Services\AccountAllocationService::allocateAccount($order);
+            
+            if (!$allocationResult['success']) {
+                // Payment successful but allocation failed - admin needs to handle manually
+                \Log::warning("Payment successful but allocation failed for order: {$order->tracking_code}. Error: {$allocationResult['error']}");
+            }
+            
             return response()->json([
                 'success' => true,
                 'message' => 'Thanh toán thành công!',
                 'tracking_code' => $order->tracking_code,
                 'new_balance' => $user->balance,
+                'account_allocated' => $allocationResult['success'],
             ]);
         } catch (\Exception $e) {
             \DB::rollBack();
+            \Log::error("Payment error: " . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'error' => 'Có lỗi xảy ra, vui lòng thử lại',
             ], 500);
         }
     }
+
 
     /**
      * Show order success page

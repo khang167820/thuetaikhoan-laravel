@@ -155,6 +155,70 @@ foreach ($txList as $tx) {
             file_put_contents($logFile, date('Y-m-d H:i:s') . " | ERROR: " . $e->getMessage() . "\n", FILE_APPEND);
         }
     }
+    
+    // Handle order payment (GH...)
+    if (preg_match('/^GH/i', $tracking)) {
+        try {
+            DB::beginTransaction();
+
+            // Find pending order
+            $order = DB::table('orders')
+                ->where('tracking_code', $tracking)
+                ->where('status', 'pending')
+                ->lockForUpdate()
+                ->first();
+
+            if (!$order) {
+                DB::rollBack();
+                file_put_contents($logFile, date('Y-m-d H:i:s') . " | ORDER NOT FOUND: {$tracking}\n", FILE_APPEND);
+                continue;
+            }
+
+            // Check amount
+            if ($amount < $order->amount) {
+                DB::rollBack();
+                file_put_contents($logFile, date('Y-m-d H:i:s') . " | ORDER UNDERPAID: Expected {$order->amount}, Got {$amount}\n", FILE_APPEND);
+                continue;
+            }
+
+            // Update order status to paid
+            DB::table('orders')
+                ->where('id', $order->id)
+                ->update([
+                    'status' => 'paid',
+                    'paid_at' => now()
+                ]);
+
+            DB::commit();
+
+            // Auto-allocate account using the service
+            $orderModel = \App\Models\Order::find($order->id);
+            if ($orderModel) {
+                $allocationResult = \App\Services\AccountAllocationService::allocateAccount($orderModel);
+                
+                if ($allocationResult['success']) {
+                    file_put_contents($logFile, date('Y-m-d H:i:s') . " | ORDER COMPLETED: {$tracking}, Account allocated\n", FILE_APPEND);
+                } else {
+                    file_put_contents($logFile, date('Y-m-d H:i:s') . " | ORDER PAID BUT ALLOCATION FAILED: {$tracking}, Error: {$allocationResult['error']}\n", FILE_APPEND);
+                }
+            }
+
+            $updated[] = [
+                'type' => 'order',
+                'order_id' => $order->id,
+                'tracking_code' => $tracking,
+                'amount' => $amount,
+                'status' => 'paid'
+            ];
+
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " | ORDER PAID: {$tracking}, Amount={$amount}\n", FILE_APPEND);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " | ORDER ERROR: " . $e->getMessage() . "\n", FILE_APPEND);
+        }
+    }
 }
 
 echo json_encode(['ok' => true, 'updated' => $updated]);
+
