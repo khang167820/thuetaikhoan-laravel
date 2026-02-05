@@ -217,6 +217,23 @@
     transform: scale(1.15) rotate(-5deg);
 }
 
+/* Blog card with real image */
+.blog-card-img.has-image {
+    background: #1e293b;
+    padding: 0;
+}
+
+.blog-card-img.has-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.blog-card:hover .blog-card-img.has-image img {
+    transform: scale(1.08);
+}
+
 .blog-card-body {
     padding: 24px;
     flex: 1;
@@ -589,21 +606,44 @@
                 <div class="blog-grid">
                     @foreach($posts as $post)
                     <a href="{{ route('blog.show', $post->slug) }}" class="blog-card">
+                        @php
+                            $icons = ['📱', '🔓', '💻', '🔧', '📦', '⚙️', '🛠️', '📡'];
+                            $icon = $icons[crc32($post->slug) % count($icons)];
+                            
+                            // Category class
+                            $catLower = strtolower($post->category);
+                            $catClass = 'cat-default';
+                            if (str_contains($catLower, 'hướng dẫn')) $catClass = 'cat-huong-dan';
+                            elseif (str_contains($catLower, 'review')) $catClass = 'cat-review';
+                            elseif (str_contains($catLower, 'top')) $catClass = 'cat-top-list';
+                            elseif (str_contains($catLower, 'so sánh')) $catClass = 'cat-so-sanh';
+                            
+                            // Check for image - priority: thumbnail_image from DB > slug-based image file
+                            $hasImage = false;
+                            $imagePath = '';
+                            
+                            if (!empty($post->thumbnail_image)) {
+                                $hasImage = true;
+                                $imagePath = $post->thumbnail_image;
+                            } else {
+                                // Try slug-based image
+                                $slugImage = '/images/blog/' . $post->slug . '.png';
+                                if (file_exists(public_path('images/blog/' . $post->slug . '.png'))) {
+                                    $hasImage = true;
+                                    $imagePath = $slugImage;
+                                }
+                            }
+                        @endphp
+                        
+                        @if($hasImage)
+                        <div class="blog-card-img has-image">
+                            <img src="{{ $imagePath }}" alt="{{ $post->title }}" loading="lazy">
+                        </div>
+                        @else
                         <div class="blog-card-img">
-                            @php
-                                $icons = ['📱', '🔓', '💻', '🔧', '📦', '⚙️', '🛠️', '📡'];
-                                $icon = $icons[crc32($post->slug) % count($icons)];
-                                
-                                // Category class
-                                $catLower = strtolower($post->category);
-                                $catClass = 'cat-default';
-                                if (str_contains($catLower, 'hướng dẫn')) $catClass = 'cat-huong-dan';
-                                elseif (str_contains($catLower, 'review')) $catClass = 'cat-review';
-                                elseif (str_contains($catLower, 'top')) $catClass = 'cat-top-list';
-                                elseif (str_contains($catLower, 'so sánh')) $catClass = 'cat-so-sanh';
-                            @endphp
                             <span>{{ $icon }}</span>
                         </div>
+                        @endif
                         <div class="blog-card-body">
                             <span class="blog-card-category {{ $catClass }}">{{ $post->category }}</span>
                             <h3 class="blog-card-title">{{ $post->title }}</h3>
