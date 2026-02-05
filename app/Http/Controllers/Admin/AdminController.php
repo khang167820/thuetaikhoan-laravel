@@ -551,17 +551,33 @@ class AdminController extends Controller
     
     public function adyProducts(Request $request)
     {
-        try {
-            $products = DB::table('ady_product_mapping')
-                ->orderBy('id', 'desc')
-                ->paginate(20)
-                ->withQueryString();
-        } catch (\Exception $e) {
-            // Table doesn't exist yet - return empty paginator
-            $products = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 20);
-        }
+        $adyService = new \App\Services\AdyService();
+        $category = $request->get('category');
+        $search = $request->get('search');
+        $page = (int) $request->get('page', 1);
+        $perPage = 50;
         
-        return view('admin.ady.products', compact('products'));
+        $result = $adyService->getProductsByCategory($category, $search);
+        $allProducts = array_values($result['products'] ?? []);
+        $categories = $result['categories'] ?? [];
+        $total = count($allProducts);
+        
+        // Manual pagination
+        $offset = ($page - 1) * $perPage;
+        $items = array_slice($allProducts, $offset, $perPage);
+        
+        $products = new \Illuminate\Pagination\LengthAwarePaginator(
+            $items,
+            $total,
+            $perPage,
+            $page,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
+        
+        $apiError = $result['api_error'] ?? null;
+        $fromCache = $result['from_cache'] ?? false;
+        
+        return view('admin.ady.products', compact('products', 'categories', 'category', 'search', 'total', 'apiError', 'fromCache'));
     }
     
     // ==================== ADY ORDERS ====================
