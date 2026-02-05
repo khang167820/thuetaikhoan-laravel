@@ -79,14 +79,16 @@ class ServiceController extends Controller
         'AMT' => [
             'name' => 'Android Multitool',
             'slug' => 'thue-amt',
-            'description' => 'Tool đa năng cho Android',
+            'description' => 'Tool đa năng cho Android: mở khóa màn hình, Bypass FRP, Flash firmware & Root, Wipe data/cache, khởi động lại linh hoạt, kiểm tra thông tin thiết bị',
             'logo' => '/images/services/amt.svg',
             'color' => '#ec4899',
             'features' => [
-                ['dot' => 'yellow', 'text' => 'Mở khóa màn hình'],
+                ['dot' => 'orange', 'text' => 'Mở khóa màn hình'],
                 ['dot' => 'blue', 'text' => 'Bypass FRP'],
-                ['dot' => 'orange', 'text' => 'Flash firmware & Root', 'hidden' => true],
-                ['dot' => 'green', 'text' => 'Hỗ trợ Samsung, Xiaomi, Oppo...', 'hidden' => true],
+                ['dot' => 'green', 'text' => 'Flash firmware & Root', 'hidden' => true],
+                ['dot' => 'purple', 'text' => 'Wipe data / cache', 'hidden' => true],
+                ['dot' => 'yellow', 'text' => 'Khởi động lại linh hoạt', 'hidden' => true],
+                ['dot' => 'red', 'text' => 'Kiểm tra thông tin thiết bị', 'hidden' => true],
             ],
             'whyChoose' => [
                 ['icon' => '🔓', 'title' => 'Mở khóa màn hình', 'desc' => 'Xóa mật khẩu, pattern, PIN trên Android dễ dàng'],
