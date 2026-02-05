@@ -206,17 +206,30 @@ class AdminController extends Controller
             $currentType = 'Unlocktool';
         }
         
+        // Join with orders to get rental info
         $accounts = DB::table('accounts')
-            ->where('type', $currentType)
+            ->leftJoin('orders', function($join) {
+                $join->on('accounts.id', '=', 'orders.account_id')
+                    ->where('orders.status', '=', 'completed')
+                    ->whereNotNull('orders.expires_at')
+                    ->where('orders.expires_at', '>', now());
+            })
+            ->select(
+                'accounts.*',
+                'orders.tracking_code as rental_order_code',
+                'orders.expires_at as rental_expires_at',
+                'orders.customer_email as renter_email'
+            )
+            ->where('accounts.type', $currentType)
             ->orderByRaw("
                 CASE 
-                    WHEN is_available = 0 AND (note IS NULL OR note = '') THEN 1
-                    WHEN is_available = 0 AND note IS NOT NULL AND note != '' THEN 2
-                    WHEN is_available = 1 AND note IS NOT NULL AND note != '' THEN 3
+                    WHEN accounts.is_available = 0 AND (accounts.note IS NULL OR accounts.note = '') THEN 1
+                    WHEN accounts.is_available = 0 AND accounts.note IS NOT NULL AND accounts.note != '' THEN 2
+                    WHEN accounts.is_available = 1 AND accounts.note IS NOT NULL AND accounts.note != '' THEN 3
                     ELSE 4
                 END
             ")
-            ->orderBy('id', 'desc')
+            ->orderBy('accounts.id', 'desc')
             ->paginate(50)
             ->withQueryString();
         

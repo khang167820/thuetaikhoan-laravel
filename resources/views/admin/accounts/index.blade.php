@@ -111,10 +111,25 @@
                         @endif
                     </td>
                     <td style="font-size: 12px;">
-                        @if(isset($account->expires_at) && $account->expires_at)
-                            {{ \Carbon\Carbon::parse($account->expires_at)->format('d/m/Y H:i') }}
+                        @if(!($account->is_available ?? true) && isset($account->rental_expires_at) && $account->rental_expires_at)
+                            @php
+                                $expiresAt = \Carbon\Carbon::parse($account->rental_expires_at);
+                                $isExpired = $expiresAt->isPast();
+                                $remaining = $expiresAt->diffForHumans();
+                            @endphp
+                            <div style="color: {{ $isExpired ? '#ef4444' : '#10b981' }}; font-weight: 600;">
+                                {{ $expiresAt->format('d/m H:i') }}
+                            </div>
+                            <div style="font-size: 11px; color: {{ $isExpired ? '#ef4444' : '#64748b' }};">
+                                {{ $isExpired ? 'Đã hết hạn' : 'Còn ' . $remaining }}
+                            </div>
+                            @if($account->renter_email ?? null)
+                                <div style="font-size: 10px; color: #94a3b8; margin-top: 2px;">
+                                    {{ Str::limit($account->renter_email, 20) }}
+                                </div>
+                            @endif
                         @else
-                            —
+                            <span style="color: #64748b;">—</span>
                         @endif
                     </td>
                     <td>
