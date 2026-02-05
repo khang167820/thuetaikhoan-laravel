@@ -123,7 +123,7 @@ foreach ($txList as $tx) {
                 ->where('id', $deposit->id)
                 ->update([
                     'status' => 'success',
-                    'updated_at' => now()
+                    'completed_at' => now()
                 ]);
 
             // Add balance to user
