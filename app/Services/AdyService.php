@@ -386,10 +386,11 @@ class AdyService
 
     /**
      * Process order for a user (deduct balance, place ADY order, save to DB)
+     * SECURITY: Price is calculated internally from API, never trust client input
      */
-    public function processOrder(int $userId, string $productUuid, array $fields, int $priceVnd): array
+    public function processOrder(int $userId, string $productUuid, array $fields): array
     {
-        // Get product info
+        // Get product info - CRITICAL: Always get price from API, never from user input
         $productsData = $this->getProducts();
         $products = $productsData['products'] ?? [];
         $product = $products[$productUuid] ?? null;
@@ -400,6 +401,13 @@ class AdyService
         
         $priceUsd = (float)($product['price'] ?? 0);
         $productName = $product['name'] ?? 'Unknown';
+        
+        // SECURITY: Calculate price internally, never trust user-provided price
+        $priceVnd = $this->convertUsdToVnd($priceUsd);
+        
+        if ($priceVnd <= 0) {
+            return ['success' => false, 'error' => 'Lỗi: Giá sản phẩm không hợp lệ'];
+        }
         
         // Check user balance
         $user = DB::table('users')->where('id', $userId)->first();

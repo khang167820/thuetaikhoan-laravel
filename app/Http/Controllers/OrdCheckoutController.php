@@ -100,8 +100,6 @@ class OrdCheckoutController extends Controller
             ]);
         }
         
-        $priceVnd = $this->adyService->convertUsdToVnd((float)($product['price'] ?? 0));
-        
         // Build fields for ADY API
         $fields = [
             'IMEI' => $imei,
@@ -114,12 +112,11 @@ class OrdCheckoutController extends Controller
         // Remove empty fields
         $fields = array_filter($fields, fn($v) => $v !== '' && $v !== null);
         
-        // Process order
+        // Process order - SECURITY: Price is calculated internally by processOrder()
         $result = $this->adyService->processOrder(
             Auth::id(),
             $uuid,
-            $fields,
-            $priceVnd
+            $fields
         );
         
         if ($result['success']) {
