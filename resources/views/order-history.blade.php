@@ -83,12 +83,22 @@
                 <div class="oh-item-status {{ $statusClass }}">{{ $statusText }}</div>
                 
                 @if(($order->status === 'paid' || $order->status === 'completed') && $order->account_username && $order->account_password)
-                <div class="oh-item-cred">
-                    <span class="oh-cred-label">Tài khoản:</span>
-                    <span class="oh-cred-value" onclick="copyToClipboard('{{ $order->account_username }}')">{{ $order->account_username }}</span>
-                    <span class="oh-cred-sep">/</span>
-                    <span class="oh-cred-value" onclick="copyToClipboard('{{ $order->account_password }}')">{{ $order->account_password }}</span>
-                </div>
+                    @php
+                        $isExpired = $order->expires_at && \Carbon\Carbon::parse($order->expires_at)->isPast();
+                    @endphp
+                    @if($isExpired)
+                    <div class="oh-item-cred oh-cred-expired">
+                        <span class="oh-cred-label">⏰ Đã hết hạn thuê</span>
+                        <span class="oh-cred-expired-text">Tài khoản không còn khả dụng</span>
+                    </div>
+                    @else
+                    <div class="oh-item-cred">
+                        <span class="oh-cred-label">Tài khoản:</span>
+                        <span class="oh-cred-value" onclick="copyToClipboard('{{ $order->account_username }}')">{{ $order->account_username }}</span>
+                        <span class="oh-cred-sep">/</span>
+                        <span class="oh-cred-value" onclick="copyToClipboard('{{ $order->account_password }}')">{{ $order->account_password }}</span>
+                    </div>
+                    @endif
                 @endif
             </div>
             @endforeach
@@ -260,6 +270,18 @@
 }
 .oh-cred-value:hover { background: #059669; color: #fff; }
 .oh-cred-sep { color: #a7f3d0; }
+
+/* Expired credentials */
+.oh-cred-expired {
+    background: #fef2f2 !important;
+    border: 1px dashed #fecaca;
+}
+.oh-cred-expired .oh-cred-label { color: #dc2626; }
+.oh-cred-expired-text { 
+    color: #991b1b; 
+    font-size: 11px; 
+    font-style: italic;
+}
 
 /* Empty State */
 .oh-empty { text-align: center; padding: 60px 20px; background: #fff; border-radius: 16px; }
