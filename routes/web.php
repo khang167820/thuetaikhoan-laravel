@@ -21,6 +21,7 @@ Route::get('/account', [AccountController::class, 'index'])->name('account');
 Route::get('/deposit', [DepositController::class, 'index'])->name('deposit');
 Route::get('/deposit/success', [DepositController::class, 'success'])->name('deposit.success');
 Route::get('/api/deposit/check', [DepositController::class, 'checkStatus'])->name('api.deposit.check');
+Route::post('/api/deposit/create', [DepositController::class, 'create'])->name('api.deposit.create');
 
 // Sitemap Routes
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap.index');

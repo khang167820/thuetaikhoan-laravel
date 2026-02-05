@@ -721,7 +721,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Form submit
-    depositForm.addEventListener('submit', function(e) {
+    depositForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         const amount = parseInt(amountSelected.value);
@@ -730,29 +730,60 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Generate deposit code
-        const userId = {{ $user->id ?? 0 }};
-        const timestamp = Date.now();
-        const depositCode = 'NAP' + timestamp + (userId > 0 ? userId : '');
+        // Disable button while processing
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'Đang xử lý...';
         
-        // Generate QR URL
-        const qrUrl = 'https://img.vietqr.io/image/' + bankInfo.bin + '-' + bankInfo.account + 
-            '-compact.png?amount=' + amount + '&addInfo=' + depositCode + '&accountName=' + encodeURIComponent(bankInfo.owner);
-        
-        // Update QR section
-        document.getElementById('qrImage').src = qrUrl;
-        document.getElementById('displayAmount').innerText = amount.toLocaleString('vi-VN') + ' VND';
-        document.getElementById('displayCode').innerHTML = depositCode + ' <button class="copy-btn" onclick="copyText(\'' + depositCode + '\')">Copy</button>';
-        
-        // Show QR section
-        createOrderSection.style.display = 'none';
-        qrSection.classList.add('active');
-        
-        // Scroll to top
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        
-        // Start polling for deposit status
-        startPolling(amount);
+        try {
+            // Call API to create deposit in database
+            const response = await fetch('/api/deposit/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                },
+                body: JSON.stringify({
+                    amount: amount,
+                    method: paymentMethodInput.value
+                })
+            });
+            
+            const result = await response.json();
+            
+            if (!result.success) {
+                alert(result.message || 'Có lỗi xảy ra');
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Tạo lệnh nạp tiền';
+                return;
+            }
+            
+            const depositCode = result.transaction_id;
+            
+            // Generate QR URL
+            const qrUrl = 'https://img.vietqr.io/image/' + bankInfo.bin + '-' + bankInfo.account + 
+                '-compact.png?amount=' + amount + '&addInfo=' + depositCode + '&accountName=' + encodeURIComponent(bankInfo.owner);
+            
+            // Update QR section
+            document.getElementById('qrImage').src = qrUrl;
+            document.getElementById('displayAmount').innerText = amount.toLocaleString('vi-VN') + ' VND';
+            document.getElementById('displayCode').innerHTML = depositCode + ' <button class="copy-btn" onclick="copyText(\'' + depositCode + '\')">Copy</button>';
+            
+            // Show QR section
+            createOrderSection.style.display = 'none';
+            qrSection.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Start polling for deposit status
+            startPolling(amount);
+            
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Có lỗi xảy ra, vui lòng thử lại');
+            submitBtn.disabled = false;
+            submitBtn.innerText = 'Tạo lệnh nạp tiền';
+        }
     });
     
     // Polling for deposit success

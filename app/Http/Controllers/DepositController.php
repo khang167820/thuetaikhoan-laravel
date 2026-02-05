@@ -79,4 +79,45 @@ class DepositController extends Controller
         
         return view('pages.deposit-success', compact('user', 'amount'));
     }
+    
+    /**
+     * Create a new deposit request
+     * This saves the deposit to database so webhook can find it
+     */
+    public function create(Request $request)
+    {
+        if (!Auth::check()) {
+            return response()->json(['success' => false, 'message' => 'Chưa đăng nhập']);
+        }
+        
+        $user = Auth::user();
+        $amount = (int) $request->input('amount', 0);
+        $method = $request->input('method', 'bank');
+        
+        if ($amount < 10000) {
+            return response()->json(['success' => false, 'message' => 'Số tiền tối thiểu là 10,000đ']);
+        }
+        
+        // Generate unique transaction ID
+        $transactionId = 'NAP' . time() . $user->id;
+        
+        // Save to database
+        $depositId = DB::table('deposits')->insertGetId([
+            'user_id' => $user->id,
+            'amount' => $amount,
+            'method' => $method,
+            'status' => 'pending',
+            'transaction_id' => $transactionId,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        
+        return response()->json([
+            'success' => true,
+            'deposit_id' => $depositId,
+            'transaction_id' => $transactionId,
+            'amount' => $amount,
+        ]);
+    }
 }
+
