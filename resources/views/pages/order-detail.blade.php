@@ -69,31 +69,58 @@
             </div>
 
             {{-- Account Info Box --}}
-            @if(in_array($order->status, ['paid', 'confirmed', 'completed']) && ($order->account_username || $order->account_password))
-            <div class="od-account-box">
-                <div class="od-account-title">Tài khoản đã cấp</div>
+            @php
+                // Check if order has expired
+                $isExpired = false;
+                $gracePeriodMinutes = 30; // Allow viewing password for 30 minutes after expiry
                 
-                <div class="od-account-list">
-                    <div class="od-acc-item">
-                        <span class="od-acc-label">Loại dịch vụ</span>
-                        <span class="od-acc-value">{{ $order->service_type ?? $order->account_type }}</span>
+                if ($order->expires_at) {
+                    $expiresAt = \Carbon\Carbon::parse($order->expires_at);
+                    $now = \Carbon\Carbon::now();
+                    $isExpired = $now->greaterThan($expiresAt->addMinutes($gracePeriodMinutes));
+                }
+            @endphp
+            
+            @if(in_array($order->status, ['paid', 'confirmed', 'completed']) && ($order->account_username || $order->account_password))
+                @if($isExpired)
+                    {{-- Order has expired - hide credentials --}}
+                    <div class="od-expired-box">
+                        <div class="od-expired-icon">🔒</div>
+                        <div class="od-expired-title">Đơn hàng đã hết hạn</div>
+                        <div class="od-expired-desc">
+                            Thông tin tài khoản không còn khả dụng vì đơn hàng đã hết hạn vào 
+                            <strong>{{ \Carbon\Carbon::parse($order->expires_at)->format('d/m/Y H:i') }}</strong>.
+                        </div>
+                        <a href="/" class="od-btn od-btn-primary" style="margin-top: 16px;">Thuê lại tài khoản</a>
                     </div>
-                    @if($order->account_username)
-                    <div class="od-acc-item">
-                        <span class="od-acc-label">Username</span>
-                        <span class="od-acc-value od-copy-target" onclick="copyText('{{ $order->account_username }}')">{{ $order->account_username }}</span>
-                    </div>
-                    @endif
-                    @if($order->account_password)
-                    <div class="od-acc-item">
-                        <span class="od-acc-label">Mật khẩu</span>
-                        <span class="od-acc-value od-copy-target" onclick="copyText('{{ $order->account_password }}')">{{ $order->account_password }}</span>
-                    </div>
-                    @endif
+                @else
+                    {{-- Order is active - show credentials --}}
+                    <div class="od-account-box">
+                        <div class="od-account-title">Tài khoản đã cấp</div>
+                        
+                        <div class="od-account-list">
+                            <div class="od-acc-item">
+                                <span class="od-acc-label">Loại dịch vụ</span>
+                                <span class="od-acc-value">{{ $order->service_type ?? $order->account_type }}</span>
+                            </div>
+                            @if($order->account_username)
+                            <div class="od-acc-item">
+                                <span class="od-acc-label">Username</span>
+                                <span class="od-acc-value od-copy-target" onclick="copyText('{{ $order->account_username }}')">{{ $order->account_username }}</span>
+                            </div>
+                            @endif
+                            @if($order->account_password)
+                            <div class="od-acc-item">
+                                <span class="od-acc-label">Mật khẩu</span>
+                                <span class="od-acc-value od-copy-target" onclick="copyText('{{ $order->account_password }}')">{{ $order->account_password }}</span>
+                            </div>
+                            @endif
 
-                </div>
-            </div>
+                        </div>
+                    </div>
+                @endif
             @endif
+
 
             {{-- Actions --}}
             <div class="od-actions">
@@ -282,6 +309,36 @@
 .od-btn-outline { border: 2px solid #d1d5db; color: #111827; }
 .od-btn-outline:hover { border-color: #9ca3af; background: #f3f4f6; }
 
+/* Expired Order Box */
+.od-expired-box {
+    background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+    border: 2px solid #fca5a5;
+    border-radius: 12px;
+    padding: 32px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+[data-theme="dark"] .od-expired-box {
+    background: linear-gradient(135deg, #450a0a 0%, #7f1d1d 100%);
+    border-color: #dc2626;
+}
+.od-expired-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+.od-expired-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #991b1b;
+    margin-bottom: 8px;
+}
+[data-theme="dark"] .od-expired-title { color: #fca5a5; }
+.od-expired-desc {
+    font-size: 14px;
+    color: #b91c1c;
+    line-height: 1.6;
+}
+[data-theme="dark"] .od-expired-desc { color: #f87171; }
 
 </style>
 
