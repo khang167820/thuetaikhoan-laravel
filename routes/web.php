@@ -19,6 +19,7 @@ use App\Http\Controllers\SitemapController;
 // Account & Deposit Routes
 Route::get('/account', [AccountController::class, 'index'])->name('account');
 Route::get('/deposit', [DepositController::class, 'index'])->name('deposit');
+Route::get('/deposit/success', [DepositController::class, 'success'])->name('deposit.success');
 Route::get('/api/deposit/check', [DepositController::class, 'checkStatus'])->name('api.deposit.check');
 
 // Sitemap Routes

@@ -64,4 +64,19 @@ class DepositController extends Controller
             'balance' => $user->balance,
         ]);
     }
+    
+    /**
+     * Show deposit success page
+     */
+    public function success(Request $request)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('deposit');
+        }
+        
+        $user = Auth::user();
+        $amount = $request->query('amount', 0);
+        
+        return view('pages.deposit-success', compact('user', 'amount'));
+    }
 }

@@ -750,7 +750,40 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        // Start polling for deposit status
+        startPolling(amount);
     });
+    
+    // Polling for deposit success
+    let pollingInterval = null;
+    let currentBalance = {{ $user->balance ?? 0 }};
+    
+    function startPolling(amount) {
+        // Poll every 3 seconds for 5 minutes
+        let pollCount = 0;
+        const maxPolls = 100; // 5 minutes / 3 seconds
+        
+        pollingInterval = setInterval(function() {
+            pollCount++;
+            if (pollCount > maxPolls) {
+                clearInterval(pollingInterval);
+                return;
+            }
+            
+            fetch('/api/deposit/check')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.balance > currentBalance) {
+                        // Deposit successful! Redirect to success page
+                        clearInterval(pollingInterval);
+                        const depositedAmount = data.balance - currentBalance;
+                        window.location.href = '/deposit/success?amount=' + depositedAmount;
+                    }
+                })
+                .catch(err => console.log('Polling error:', err));
+        }, 3000);
+    }
 });
 
 function copyText(text, btn) {
