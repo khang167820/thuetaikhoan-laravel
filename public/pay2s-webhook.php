@@ -79,9 +79,11 @@ foreach ($txList as $tx) {
         continue;
     }
 
-    // Extract tracking code
+    // Extract tracking code - support both NAP (deposits) and GH (orders)
     $tracking = '';
     if (preg_match('/(NAP\d+)/i', $content, $m)) {
+        $tracking = strtoupper($m[1]);
+    } elseif (preg_match('/(GH\d+)/i', $content, $m)) {
         $tracking = strtoupper($m[1]);
     }
 
