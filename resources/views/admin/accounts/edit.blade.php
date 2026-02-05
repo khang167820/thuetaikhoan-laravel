@@ -10,15 +10,17 @@
 @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
 .input-group { display: flex; gap: 8px; }
 .input-group .form-input { flex: 1; }
-.btn-copy { padding: 10px 16px; background: #475569; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 12px; white-space: nowrap; }
-.btn-copy:hover { background: #64748b; }
+.btn-copy { padding: 10px 16px; background: var(--bg-hover); color: var(--text-secondary); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; font-size: 12px; white-space: nowrap; }
+.btn-copy:hover { background: var(--border-color); color: var(--text-primary); }
 .btn-suggest { padding: 10px 16px; background: #8b5cf6; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 12px; white-space: nowrap; }
 .btn-suggest:hover { background: #7c3aed; }
 .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 30px; }
-.form-note { font-size: 11px; color: #64748b; margin-top: 4px; }
+.form-note { font-size: 11px; color: var(--text-dimmed); margin-top: 4px; }
+.readonly-input { background: var(--bg-hover) !important; }
+.status-box { padding: 10px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; font-size: 13px; }
 </style>
 
-<a href="{{ route('admin.accounts') }}" style="color: #94a3b8; margin-bottom: 20px; display: inline-block;">← Quay lại danh sách</a>
+<a href="{{ route('admin.accounts') }}" style="color: var(--text-muted); margin-bottom: 20px; display: inline-block;">← Quay lại danh sách</a>
 
 <div class="admin-card edit-form">
     <form action="{{ route('admin.accounts.update', $account->id) }}" method="POST" id="updateForm">
@@ -28,8 +30,8 @@
             <div class="form-group">
                 <label class="form-label">Tên đăng nhập</label>
                 <div class="input-group">
-                    <input type="text" name="username" id="username" class="form-input" 
-                           value="{{ $account->username }}" readonly style="background: #334155;">
+                    <input type="text" name="username" id="username" class="form-input readonly-input" 
+                           value="{{ $account->username }}" readonly>
                     <button type="button" class="btn-copy" onclick="copyText('username')">Copy TK</button>
                 </div>
                 <div class="form-note">Không cho phép sửa tên đăng nhập</div>
@@ -77,7 +79,7 @@
             
             <div class="form-group">
                 <label class="form-label">Trạng thái hiện tại</label>
-                <div style="padding: 10px; background: #0f172a; border-radius: 8px; font-size: 13px;">
+                <div class="status-box">
                     @php $status = $account->status ?? ($account->is_available ?? 0); @endphp
                     @if($status == 'available' || $status == 1 || ($account->is_available ?? false))
                         <span style="color: #10b981;">🟢 Chờ thuê (Có sẵn)</span>
