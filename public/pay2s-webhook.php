@@ -122,7 +122,7 @@ foreach ($txList as $tx) {
             DB::table('deposits')
                 ->where('id', $deposit->id)
                 ->update([
-                    'status' => 'success',
+                    'status' => 'completed',
                     'completed_at' => now()
                 ]);
 
