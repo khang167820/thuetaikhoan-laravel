@@ -1714,6 +1714,17 @@
                 <p class="ady-extra-card-desc">Bypass Hello Screen, FRP A12+, kích hoạt iPhone/iPad qua server</p>
                 <span class="ady-extra-card-link">Xem dịch vụ Bypass A12+ →</span>
             </a>
+            <a href="/ord-services?cat=Phan%20mem%20mo%20khoa" class="ady-extra-card">
+                <div class="ady-extra-card-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 9.9-1"/>
+                    </svg>
+                </div>
+                <h3 class="ady-extra-card-title">Phần mềm mở khóa</h3>
+                <p class="ady-extra-card-desc">UnlockTool, Griffin, DFT, TSM, Samsung Tool và các phần mềm unlock điện thoại</p>
+                <span class="ady-extra-card-link">Xem phần mềm mở khóa →</span>
+            </a>
         </div>
     </div>
 </section>
