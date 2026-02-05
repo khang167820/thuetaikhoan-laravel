@@ -116,16 +116,30 @@
                                 $expiresAt = \Carbon\Carbon::parse($account->rental_expires_at);
                                 $isExpired = $expiresAt->isPast();
                             @endphp
-                            <div style="color: {{ $isExpired ? '#ef4444' : '#10b981' }}; font-weight: 600;">
-                                {{ $expiresAt->format('d/m H:i') }}
-                            </div>
+                            {{-- Countdown timer --}}
                             <div class="countdown" data-expires="{{ $expiresAt->toIso8601String() }}" 
-                                 style="font-size: 11px; font-weight: 600; color: {{ $isExpired ? '#ef4444' : '#10b981' }};">
-                                {{ $isExpired ? 'Đã hết hạn' : 'Đang tính...' }}
+                                 style="font-size: 13px; font-weight: 700; color: {{ $isExpired ? '#ef4444' : '#10b981' }}; margin-bottom: 4px;">
+                                {{ $isExpired ? '⏱️ Đã hết hạn' : 'Đang tính...' }}
                             </div>
+                            {{-- Expires time --}}
+                            <div style="color: {{ $isExpired ? '#ef4444' : '#64748b' }}; font-size: 11px;">
+                                Hết lúc: {{ $expiresAt->format('H:i d/m') }}
+                            </div>
+                            {{-- Order code --}}
+                            @if($account->rental_order_code ?? null)
+                                <div style="font-size: 10px; color: #3b82f6; margin-top: 2px;">
+                                    📋 {{ $account->rental_order_code }}
+                                </div>
+                            @endif
+                            {{-- Renter info --}}
                             @if($account->renter_email ?? null)
                                 <div style="font-size: 10px; color: #94a3b8; margin-top: 2px;">
-                                    📧 {{ Str::limit($account->renter_email, 18) }}
+                                    ✉️ {{ Str::limit($account->renter_email, 18) }}
+                                </div>
+                            @endif
+                            @if($account->renter_ip ?? null)
+                                <div style="font-size: 10px; color: #64748b; font-family: monospace;">
+                                    🌐 {{ $account->renter_ip }}
                                 </div>
                             @endif
                         @else
