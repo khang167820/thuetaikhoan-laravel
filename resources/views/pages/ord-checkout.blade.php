@@ -6,7 +6,7 @@
 @section('content')
 <style>
 .ord-checkout-section {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
     min-height: 80vh;
     padding: 20px 0 60px;
 }
@@ -20,7 +20,7 @@
     align-items: center;
     gap: 8px;
     font-size: 13px;
-    color: #94a3b8;
+    color: #64748b;
     margin-bottom: 16px;
     flex-wrap: wrap;
 }
@@ -28,11 +28,10 @@
 .checkout-breadcrumb a:hover { text-decoration: underline; }
 
 .checkout-card {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    background: white;
     border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
     overflow: hidden;
-    border: 1px solid #334155;
 }
 .checkout-header {
     background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
@@ -53,19 +52,20 @@
 
 .product-summary {
     padding: 24px;
-    background: #0f172a;
+    background: #f8fafc;
 }
 .product-name-box {
-    background: #1e293b;
+    background: white;
     padding: 16px;
     border-radius: 12px;
     margin-bottom: 16px;
     border-left: 4px solid #f97316;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 .product-name-box h3 {
     font-size: 16px;
     font-weight: 700;
-    color: #f1f5f9;
+    color: #1e293b;
     margin: 0 0 10px;
     line-height: 1.5;
 }
@@ -76,10 +76,10 @@
 }
 .product-meta span {
     font-size: 13px;
-    color: #94a3b8;
+    color: #64748b;
 }
 .product-meta span strong {
-    color: #f1f5f9;
+    color: #1e293b;
 }
 
 .price-balance-row {
@@ -97,15 +97,15 @@
     color: white;
 }
 .balance-box {
-    background: #1e293b;
-    border: 1px solid #334155;
+    background: white;
+    border: 2px solid #e2e8f0;
 }
 .price-box .label, .balance-box .label {
     font-size: 12px;
     opacity: 0.9;
     margin-bottom: 4px;
 }
-.balance-box .label { color: #94a3b8; }
+.balance-box .label { color: #64748b; }
 .price-box .amount {
     font-size: 24px;
     font-weight: 800;
@@ -113,7 +113,7 @@
 .balance-box .amount {
     font-size: 24px;
     font-weight: 800;
-    color: #60a5fa;
+    color: #3b82f6;
 }
 .balance-box.sufficient .amount { color: #10b981; }
 .balance-box.insufficient .amount { color: #ef4444; }
@@ -124,7 +124,7 @@
 .order-form h3 {
     font-size: 16px;
     font-weight: 600;
-    color: #f1f5f9;
+    color: #1e293b;
     margin: 0 0 16px;
     display: flex;
     align-items: center;
@@ -137,7 +137,7 @@
     display: block;
     font-size: 13px;
     font-weight: 500;
-    color: #94a3b8;
+    color: #475569;
     margin-bottom: 6px;
 }
 .form-group label .required {
@@ -147,9 +147,9 @@
 .form-group textarea {
     width: 100%;
     padding: 14px 16px;
-    border: 2px solid #334155;
-    background: #0f172a;
-    color: #f1f5f9;
+    border: 2px solid #e2e8f0;
+    background: white;
+    color: #1e293b;
     border-radius: 10px;
     font-size: 14px;
     transition: all 0.2s;
@@ -159,11 +159,11 @@
 .form-group textarea:focus {
     outline: none;
     border-color: #f97316;
-    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
 }
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-    color: #64748b;
+    color: #94a3b8;
 }
 .form-group textarea {
     resize: vertical;
