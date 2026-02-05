@@ -65,6 +65,7 @@ Route::middleware('throttle:30,1')->group(function () {
     Route::get('/ord-services', [OrdServicesController::class, 'index'])->name('ord-services');
     Route::get('/ord-checkout', [OrdCheckoutController::class, 'show'])->name('ord-checkout');
     Route::post('/ord-checkout', [OrdCheckoutController::class, 'submit'])->name('ord-checkout.submit');
+    Route::get('/don-ady', [OrdCheckoutController::class, 'orderResult'])->name('ady-order.result');
 });
 
 // Blog routes

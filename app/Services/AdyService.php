@@ -274,4 +274,272 @@ class AdyService
             'Khác' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>',
         ];
     }
+
+    /**
+     * Get ADY account balance
+     */
+    public function getBalance(): array
+    {
+        $result = $this->callApi('GET', '/api/reseller/v1/account');
+        
+        if (isset($result['error'])) {
+            return ['success' => false, 'error' => $result['error']];
+        }
+        
+        if (isset($result['status']) && $result['status'] === 'success' && isset($result['data'])) {
+            return [
+                'success' => true,
+                'balance' => (float)($result['data']['balance'] ?? 0),
+                'currency' => $result['data']['currency'] ?? 'USD',
+                'name' => $result['data']['name'] ?? '',
+                'email' => $result['data']['email'] ?? ''
+            ];
+        }
+        
+        return ['success' => false, 'error' => 'Invalid response format'];
+    }
+
+    /**
+     * Place order on ADY-Unlocker
+     * @param string $productUuid UUID sản phẩm
+     * @param array $fields Các trường dữ liệu theo yêu cầu sản phẩm
+     * @param string|null $referenceId ID tham chiếu (tracking code)
+     * @param string|null $feedbackUrl URL nhận webhook
+     */
+    public function placeOrder(string $productUuid, array $fields = [], ?string $referenceId = null, ?string $feedbackUrl = null): array
+    {
+        $orderFields = $fields;
+        
+        if ($referenceId) {
+            $orderFields['reference_id'] = $referenceId;
+        }
+        if ($feedbackUrl) {
+            $orderFields['feedback_url'] = $feedbackUrl;
+        }
+        
+        // API format: array of products
+        $data = [
+            [
+                'product_uuid' => $productUuid,
+                'fields' => [$orderFields]
+            ]
+        ];
+        
+        $result = $this->callApi('POST', '/api/reseller/v1/order', $data);
+        
+        if (isset($result['error'])) {
+            return ['success' => false, 'error' => $result['error']];
+        }
+        
+        if (isset($result['status']) && $result['status'] === 'success' && isset($result['data'])) {
+            $orderData = $result['data'][0] ?? [];
+            return [
+                'success' => true,
+                'order_uuid' => $orderData['order_uuid'] ?? null,
+                'amount' => $orderData['amount'] ?? 0,
+                'currency' => $orderData['currency_code'] ?? 'USD',
+                'reference_id' => $orderData['reference_id'] ?? $referenceId,
+                'message' => $result['message'] ?? ''
+            ];
+        }
+        
+        if (isset($result['status']) && $result['status'] === 'error') {
+            return ['success' => false, 'error' => $result['message'] ?? 'Unknown error', 'data' => $result['data'] ?? null];
+        }
+        
+        return ['success' => false, 'error' => 'Invalid response format', 'raw' => $result];
+    }
+
+    /**
+     * Check order status
+     */
+    public function getOrderStatus(string $orderUuid): array
+    {
+        $result = $this->callApi('GET', '/api/reseller/v1/order', ['order_uuid' => $orderUuid]);
+        
+        if (isset($result['error'])) {
+            return ['success' => false, 'error' => $result['error']];
+        }
+        
+        if (isset($result['status']) && $result['status'] === 'success' && isset($result['data'])) {
+            $orderData = $result['data'];
+            
+            // Decode base64 result if present
+            $resultText = $orderData['replay'] ?? null;
+            if ($resultText) {
+                $decoded = base64_decode($resultText, true);
+                $resultText = ($decoded !== false) ? $decoded : $resultText;
+            }
+            
+            return [
+                'success' => true,
+                'status' => $orderData['status'] ?? 'unknown',
+                'result' => $resultText,
+                'quantity' => $orderData['quantity'] ?? 1,
+                'date' => $orderData['date'] ?? null,
+                'date_completed' => $orderData['date_completed'] ?? null
+            ];
+        }
+        
+        return ['success' => false, 'error' => 'Invalid response format'];
+    }
+
+    /**
+     * Process order for a user (deduct balance, place ADY order, save to DB)
+     */
+    public function processOrder(int $userId, string $productUuid, array $fields, int $priceVnd): array
+    {
+        // Get product info
+        $productsData = $this->getProducts();
+        $products = $productsData['products'] ?? [];
+        $product = $products[$productUuid] ?? null;
+        
+        if (!$product) {
+            return ['success' => false, 'error' => 'Sản phẩm không tồn tại'];
+        }
+        
+        $priceUsd = (float)($product['price'] ?? 0);
+        $productName = $product['name'] ?? 'Unknown';
+        
+        // Check user balance
+        $user = DB::table('users')->where('id', $userId)->first();
+        if (!$user) {
+            return ['success' => false, 'error' => 'User không tồn tại'];
+        }
+        
+        if ($user->balance < $priceVnd) {
+            return ['success' => false, 'error' => 'Số dư không đủ. Cần ' . number_format($priceVnd) . 'đ, hiện có ' . number_format($user->balance) . 'đ'];
+        }
+        
+        // Generate tracking code
+        $trackingCode = 'ADY' . date('dmy') . rand(1000, 9999);
+        
+        // Webhook URL
+        $feedbackUrl = url('/api/ady-webhook');
+        
+        DB::beginTransaction();
+        try {
+            // Deduct balance
+            DB::table('users')->where('id', $userId)->decrement('balance', $priceVnd);
+            
+            // Save order to ady_orders table
+            $orderId = DB::table('ady_orders')->insertGetId([
+                'user_id' => $userId,
+                'tracking_code' => $trackingCode,
+                'product_uuid' => $productUuid,
+                'product_name' => $productName,
+                'price_usd' => $priceUsd,
+                'price_vnd' => $priceVnd,
+                'fields' => json_encode($fields),
+                'status' => 'pending',
+                'created_at' => now(),
+            ]);
+            
+            // Place order on ADY
+            $result = $this->placeOrder($productUuid, $fields, $trackingCode, $feedbackUrl);
+            
+            if ($result['success']) {
+                // Update with ADY order UUID
+                DB::table('ady_orders')->where('id', $orderId)->update([
+                    'ady_order_uuid' => $result['order_uuid'],
+                    'status' => 'processing',
+                ]);
+                
+                DB::commit();
+                
+                return [
+                    'success' => true,
+                    'order_id' => $orderId,
+                    'tracking_code' => $trackingCode,
+                    'ady_order_uuid' => $result['order_uuid'],
+                    'message' => 'Đặt hàng thành công! Đang xử lý...'
+                ];
+            } else {
+                // ADY order failed - refund
+                DB::table('users')->where('id', $userId)->increment('balance', $priceVnd);
+                DB::table('ady_orders')->where('id', $orderId)->update([
+                    'status' => 'failed',
+                    'error' => $result['error'] ?? 'Unknown error',
+                ]);
+                
+                DB::commit();
+                
+                return ['success' => false, 'error' => 'Lỗi đặt hàng ADY: ' . ($result['error'] ?? 'Unknown')];
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('ADY Order Error: ' . $e->getMessage());
+            return ['success' => false, 'error' => 'Lỗi hệ thống: ' . $e->getMessage()];
+        }
+    }
+
+    /**
+     * Handle webhook from ADY
+     */
+    public function handleWebhook(array $data): array
+    {
+        $referenceId = $data['reference_id'] ?? '';
+        $adyOrderId = $data['order_id'] ?? '';
+        $status = $data['status'] ?? '';
+        $result = $data['replay'] ?? '';
+        
+        if (empty($referenceId) && empty($adyOrderId)) {
+            return ['success' => false, 'error' => 'Missing reference_id or order_id'];
+        }
+        
+        // Find order
+        $order = null;
+        if (!empty($referenceId)) {
+            $order = DB::table('ady_orders')->where('tracking_code', $referenceId)->first();
+        }
+        if (!$order && !empty($adyOrderId)) {
+            $order = DB::table('ady_orders')->where('ady_order_uuid', $adyOrderId)->first();
+        }
+        
+        if (!$order) {
+            return ['success' => false, 'error' => 'Order not found'];
+        }
+        
+        // Decode base64 result
+        $decodedResult = '';
+        if (!empty($result)) {
+            $decoded = base64_decode($result, true);
+            $decodedResult = ($decoded !== false) ? $decoded : $result;
+        }
+        
+        // Map status
+        $newStatus = 'processing';
+        switch (strtolower($status)) {
+            case 'success':
+            case 'completed':
+                $newStatus = 'completed';
+                break;
+            case 'rejected':
+            case 'failed':
+            case 'error':
+                $newStatus = 'failed';
+                break;
+            case 'processing':
+            case 'pending':
+                $newStatus = 'processing';
+                break;
+        }
+        
+        // Update order
+        DB::table('ady_orders')->where('id', $order->id)->update([
+            'status' => $newStatus,
+            'result' => $decodedResult,
+            'ady_order_uuid' => $adyOrderId ?: $order->ady_order_uuid,
+            'completed_at' => ($newStatus === 'completed') ? now() : null,
+        ]);
+        
+        Log::info("ADY Webhook: Order #{$order->id} updated to {$newStatus}");
+        
+        return [
+            'success' => true,
+            'order_id' => $order->id,
+            'status' => $newStatus,
+            'has_result' => !empty($decodedResult)
+        ];
+    }
 }
