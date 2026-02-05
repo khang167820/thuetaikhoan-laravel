@@ -4,9 +4,9 @@
  * Access: https://staging.thuetaikhoan.net/fix-session.php
  */
 
-require __DIR__.'/../laravel/bootstrap/autoload.php' ?? require __DIR__.'/../thuetaikhoan-laravel/vendor/autoload.php';
-
-$app = require_once __DIR__.'/../laravel/bootstrap/app.php' ?? require_once __DIR__.'/../thuetaikhoan-laravel/bootstrap/app.php';
+// Correct path for Hostinger structure
+require __DIR__.'/../vendor/autoload.php';
+$app = require_once __DIR__.'/../bootstrap/app.php';
 
 echo "<h1>🔧 Session Configuration Check</h1>";
 echo "<pre>";
