@@ -31,6 +31,21 @@
     text-align: center;
     margin-bottom: 30px;
 }
+.auth-logo-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+.auth-logo-svg {
+    width: 64px;
+    height: 64px;
+    filter: drop-shadow(0 4px 12px rgba(30, 64, 175, 0.25));
+    transition: transform 0.3s ease;
+}
+.auth-logo-svg:hover {
+    transform: scale(1.05) rotate(-3deg);
+}
 .auth-logo {
     width: 60px;
     height: 60px;
@@ -202,7 +217,21 @@
 <div class="auth-wrap">
     <div class="auth-card">
         <div class="auth-header">
-            <img src="/images/services/logo.png" alt="Logo" class="auth-logo" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 60 60%22><rect fill=%22%231e40af%22 width=%2260%22 height=%2260%22 rx=%2216%22/><text x=%2230%22 y=%2240%22 fill=%22white%22 font-size=%2230%22 text-anchor=%22middle%22>T</text></svg>'">
+            <div class="auth-logo-wrap">
+                <svg class="auth-logo-svg" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#3b82f6"/>
+                            <stop offset="100%" style="stop-color:#1d4ed8"/>
+                        </linearGradient>
+                        <filter id="shadow1" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#1e40af" flood-opacity="0.3"/>
+                        </filter>
+                    </defs>
+                    <rect fill="url(#logoGrad1)" width="60" height="60" rx="14" filter="url(#shadow1)"/>
+                    <text x="30" y="42" fill="white" font-size="32" font-weight="800" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif">T</text>
+                </svg>
+            </div>
             <h1 class="auth-title">Đăng nhập</h1>
             <p class="auth-sub">Chào mừng bạn quay trở lại</p>
         </div>
