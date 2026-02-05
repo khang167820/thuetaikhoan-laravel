@@ -162,7 +162,6 @@
 function copyText(inputId) {
     const input = document.getElementById(inputId);
     navigator.clipboard.writeText(input.value);
-    alert('Đã copy: ' + input.value);
 }
 
 function suggestPassword() {

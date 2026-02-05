@@ -201,7 +201,6 @@
 <script>
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text);
-    alert('Đã copy: ' + text);
 }
 
 function editAccount(account) {
