@@ -1325,7 +1325,40 @@
 </head>
 <body>
 
+@php
+// Calculate minimum prices after all discounts for card display
+// Formula: min_price - 3000 (points) - 2000 (coupon) = display_price
+$pointsDiscount = 3000;
+$couponDiscount = 2000;
+$totalDiscount = $pointsDiscount + $couponDiscount;
 
+$cardPrices = [];
+$typeMapping = [
+    'Unlocktool' => 'unlocktool',
+    'Vietmap' => 'vietmap', 
+    'Griffin' => 'griffin',
+    'AMT' => 'amt',
+    'TSMTool' => 'tsm',
+    'KGKiller' => 'kg-killer',
+    'SamsungTool' => 'samsung-tool',
+    'DFTPro' => 'dft'
+];
+
+foreach($allPrices ?? [] as $type => $prices) {
+    $jsKey = $typeMapping[$type] ?? strtolower($type);
+    $minPrice = $prices->min('price');
+    $minOldPrice = $prices->where('price', $minPrice)->first()->original_price ?? $minPrice;
+    
+    // Apply max discounts
+    $displayPrice = max(1000, $minPrice - $totalDiscount);
+    
+    $cardPrices[$jsKey] = [
+        'original' => $minPrice,
+        'display' => $displayPrice,
+        'oldPrice' => $minOldPrice
+    ];
+}
+@endphp
 <!-- SHARED HEADER -->
 @include('partials.header')
 
@@ -1386,8 +1419,8 @@
                     <span class="expand-text">Xem thêm</span>
                 </button>
                 <button type="button" onclick="openPriceModal('unlocktool')" class="fo-cta-compact">
-                    <span class="fo-price-compact">10.000 VND</span>
-                    <span class="fo-price-old-compact">25.000₫</span>
+                    <span class="fo-price-compact">{{ number_format($cardPrices['unlocktool']['display'] ?? 10000, 0, ',', '.') }} VND</span>
+                    <span class="fo-price-old-compact">{{ number_format($cardPrices['unlocktool']['oldPrice'] ?? 25000, 0, ',', '.') }}₫</span>
                 </button>
             </article>
 
@@ -1412,8 +1445,8 @@
                     <span class="expand-text">Xem thêm</span>
                 </button>
                 <button type="button" onclick="openPriceModal('vietmap')" class="fo-cta-compact green">
-                    <span class="fo-price-compact">8.000 VND</span>
-                    <span class="fo-price-old-compact">19.000₫</span>
+                    <span class="fo-price-compact">{{ number_format($cardPrices['vietmap']['display'] ?? 8000, 0, ',', '.') }} VND</span>
+                    <span class="fo-price-old-compact">{{ number_format($cardPrices['vietmap']['oldPrice'] ?? 19000, 0, ',', '.') }}₫</span>
                 </button>
             </article>
 
@@ -1440,8 +1473,8 @@
                     <span class="expand-text">Xem thêm</span>
                 </button>
                 <button type="button" onclick="openPriceModal('griffin')" class="fo-cta-compact blue">
-                    <span class="fo-price-compact">42.000 VND</span>
-                    <span class="fo-price-old-compact">100.000₫</span>
+                    <span class="fo-price-compact">{{ number_format($cardPrices['griffin']['display'] ?? 42000, 0, ',', '.') }} VND</span>
+                    <span class="fo-price-old-compact">{{ number_format($cardPrices['griffin']['oldPrice'] ?? 100000, 0, ',', '.') }}₫</span>
                 </button>
             </article>
 
@@ -1467,8 +1500,8 @@
                     <span class="expand-text">Xem thêm</span>
                 </button>
                 <button type="button" onclick="openPriceModal('amt')" class="fo-cta-compact orange">
-                    <span class="fo-price-compact">9.000 VND</span>
-                    <span class="fo-price-old-compact">30.000₫</span>
+                    <span class="fo-price-compact">{{ number_format($cardPrices['amt']['display'] ?? 9000, 0, ',', '.') }} VND</span>
+                    <span class="fo-price-old-compact">{{ number_format($cardPrices['amt']['oldPrice'] ?? 30000, 0, ',', '.') }}₫</span>
                 </button>
             </article>
 
@@ -1494,8 +1527,8 @@
                     <span class="expand-text">Xem thêm</span>
                 </button>
                 <button type="button" onclick="openPriceModal('kg-killer')" class="fo-cta-compact">
-                    <span class="fo-price-compact">8.000 VND</span>
-                    <span class="fo-price-old-compact">35.000₫</span>
+                    <span class="fo-price-compact">{{ number_format($cardPrices['kg-killer']['display'] ?? 8000, 0, ',', '.') }} VND</span>
+                    <span class="fo-price-old-compact">{{ number_format($cardPrices['kg-killer']['oldPrice'] ?? 35000, 0, ',', '.') }}₫</span>
                 </button>
             </article>
 
@@ -1520,8 +1553,8 @@
                     <span class="expand-text">Xem thêm</span>
                 </button>
                 <button type="button" onclick="openPriceModal('samsung-tool')" class="fo-cta-compact orange">
-                    <span class="fo-price-compact">162.000 VND</span>
-                    <span class="fo-price-old-compact">250.000₫</span>
+                    <span class="fo-price-compact">{{ number_format($cardPrices['samsung-tool']['display'] ?? 162000, 0, ',', '.') }} VND</span>
+                    <span class="fo-price-old-compact">{{ number_format($cardPrices['samsung-tool']['oldPrice'] ?? 250000, 0, ',', '.') }}₫</span>
                 </button>
             </article>
 
@@ -1546,8 +1579,8 @@
                     <span class="expand-text">Xem thêm</span>
                 </button>
                 <button type="button" onclick="openPriceModal('dft')" class="fo-cta-compact blue">
-                    <span class="fo-price-compact">105.000 VND</span>
-                    <span class="fo-price-old-compact">130.000₫</span>
+                    <span class="fo-price-compact">{{ number_format($cardPrices['dft']['display'] ?? 65000, 0, ',', '.') }} VND</span>
+                    <span class="fo-price-old-compact">{{ number_format($cardPrices['dft']['oldPrice'] ?? 130000, 0, ',', '.') }}₫</span>
                 </button>
             </article>
 
@@ -1575,8 +1608,8 @@
                     <span class="expand-text">Xem thêm</span>
                 </button>
                 <button type="button" onclick="openPriceModal('tsm')" class="fo-cta-compact">
-                    <span class="fo-price-compact">6.000 VND</span>
-                    <span class="fo-price-old-compact">25.000₫</span>
+                    <span class="fo-price-compact">{{ number_format($cardPrices['tsm']['display'] ?? 2000, 0, ',', '.') }} VND</span>
+                    <span class="fo-price-old-compact">{{ number_format($cardPrices['tsm']['oldPrice'] ?? 25000, 0, ',', '.') }}₫</span>
                 </button>
             </article>
         </div>
