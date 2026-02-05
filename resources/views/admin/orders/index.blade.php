@@ -44,15 +44,22 @@
                 <td>#{{ $order->id }}</td>
                 <td><strong>{{ $order->tracking_code }}</strong></td>
                 <td style="font-size: 11px;">
-                    @if($order->customer_email)
-                        <div style="color: var(--text-primary); font-weight: 500;">{{ Str::limit($order->customer_email, 22) }}</div>
-                    @endif
-                    @if($order->customer_ip)
-                        <div style="color: var(--text-dimmed); font-family: monospace; font-size: 10px;" title="{{ $order->customer_ip }}">
-                            🌐 {{ $order->customer_ip }}
+                    @if($order->user)
+                        <div style="color: var(--primary); font-weight: 500;" title="Tài khoản đăng nhập">
+                            👤 {{ Str::limit($order->user->name ?? $order->user->email, 20) }}
                         </div>
                     @endif
-                    @if(!$order->customer_email && !$order->customer_ip)
+                    @if($order->customer_email)
+                        <div style="color: var(--text-primary); font-weight: 500;">
+                            ✉️ {{ Str::limit($order->customer_email, 22) }}
+                        </div>
+                    @endif
+                    @if($order->ip_address)
+                        <div style="color: var(--text-dimmed); font-family: monospace; font-size: 10px;" title="{{ $order->ip_address }}">
+                            🌐 {{ $order->ip_address }}
+                        </div>
+                    @endif
+                    @if(!$order->customer_email && !$order->ip_address && !$order->user)
                         <span style="color: #64748b;">—</span>
                     @endif
                 </td>
