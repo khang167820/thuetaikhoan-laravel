@@ -1399,6 +1399,7 @@ foreach($allPrices ?? [] as $type => $prices) {
     <div class="fast-order">
         <div class="fast-order-grid">
             <!-- CARD: UnlockTool -->
+            @if($availableServices['Unlocktool'] ?? false)
             <article class="fo-card-compact">
                 <span class="fo-badge-compact">Flash Sale</span>
                 <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
@@ -1423,8 +1424,10 @@ foreach($allPrices ?? [] as $type => $prices) {
                     <span class="fo-price-old-compact">{{ number_format($cardPrices['unlocktool']['oldPrice'] ?? 25000, 0, ',', '.') }}₫</span>
                 </button>
             </article>
+            @endif
 
             <!-- CARD: Vietmap Live PRO -->
+            @if($availableServices['Vietmap'] ?? false)
             <article class="fo-card-compact">
                 <span class="fo-badge-compact green">Hot</span>
                 <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
@@ -1449,6 +1452,7 @@ foreach($allPrices ?? [] as $type => $prices) {
                     <span class="fo-price-old-compact">{{ number_format($cardPrices['vietmap']['oldPrice'] ?? 19000, 0, ',', '.') }}₫</span>
                 </button>
             </article>
+            @endif
 
             <!-- CARD: Griffin Premium -->
             @if($availableServices['Griffin'] ?? false)
@@ -1481,6 +1485,7 @@ foreach($allPrices ?? [] as $type => $prices) {
             @endif
 
             <!-- CARD: Android Multitool -->
+            @if($availableServices['AMT'] ?? false)
             <article class="fo-card-compact">
                 <span class="fo-badge-compact orange">Flash Sale</span>
                 <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
@@ -1506,8 +1511,10 @@ foreach($allPrices ?? [] as $type => $prices) {
                     <span class="fo-price-old-compact">{{ number_format($cardPrices['amt']['oldPrice'] ?? 30000, 0, ',', '.') }}₫</span>
                 </button>
             </article>
+            @endif
 
             <!-- CARD: KG Killer Tool -->
+            @if($availableServices['KGKiller'] ?? false)
             <article class="fo-card-compact">
                 <span class="fo-badge-compact">Flash Sale</span>
                 <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
@@ -1533,8 +1540,10 @@ foreach($allPrices ?? [] as $type => $prices) {
                     <span class="fo-price-old-compact">{{ number_format($cardPrices['kg-killer']['oldPrice'] ?? 35000, 0, ',', '.') }}₫</span>
                 </button>
             </article>
+            @endif
 
             <!-- CARD: Samsung Tool -->
+            @if($availableServices['SamsungTool'] ?? false)
             <article class="fo-card-compact">
                 <span class="fo-badge-compact orange">Hot</span>
                 <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
@@ -1559,8 +1568,10 @@ foreach($allPrices ?? [] as $type => $prices) {
                     <span class="fo-price-old-compact">{{ number_format($cardPrices['samsung-tool']['oldPrice'] ?? 250000, 0, ',', '.') }}₫</span>
                 </button>
             </article>
+            @endif
 
             <!-- CARD: DFT Pro Tool -->
+            @if($availableServices['DFTPro'] ?? false)
             <article class="fo-card-compact">
                 <span class="fo-badge-compact blue">New</span>
                 <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
@@ -1585,8 +1596,10 @@ foreach($allPrices ?? [] as $type => $prices) {
                     <span class="fo-price-old-compact">{{ number_format($cardPrices['dft']['oldPrice'] ?? 130000, 0, ',', '.') }}₫</span>
                 </button>
             </article>
+            @endif
 
             <!-- CARD: TSM Tool -->
+            @if($availableServices['TSMTool'] ?? false)
             <article class="fo-card-compact">
                 <span class="fo-badge-compact">Flash Sale</span>
                 <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
@@ -1614,6 +1627,7 @@ foreach($allPrices ?? [] as $type => $prices) {
                     <span class="fo-price-old-compact">{{ number_format($cardPrices['tsm']['oldPrice'] ?? 25000, 0, ',', '.') }}₫</span>
                 </button>
             </article>
+            @endif
         </div>
     </div>
 </div>
