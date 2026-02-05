@@ -4,6 +4,26 @@
 @section('page-title', 'Quản lý Tài khoản')
 
 @section('content')
+<style>
+    @keyframes pulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.9; transform: scale(1.02); }
+    }
+    @keyframes countdown-glow {
+        0%, 100% { text-shadow: 0 0 5px currentColor; }
+        50% { text-shadow: 0 0 15px currentColor, 0 0 25px currentColor; }
+    }
+    .countdown.urgent {
+        animation: countdown-glow 1s infinite;
+    }
+    .rental-card {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .rental-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+</style>
 <!-- Tab loại tài khoản -->
 <div style="margin-bottom: 20px; display: flex; gap: 8px; flex-wrap: wrap;">
     @foreach($allowedTypes as $type)
@@ -86,21 +106,25 @@
             </thead>
             <tbody>
                 @forelse($accounts as $account)
-                <tr>
-                    <td>{{ $account->id }}</td>
+                <tr style="transition: background 0.2s;" onmouseover="this.style.background='rgba(59,130,246,0.05)'" onmouseout="this.style.background=''">
+                    <td style="font-weight: 600; color: #64748b;">{{ $account->id }}</td>
                     <td>
-                        <div style="font-weight: 600; color: #3b82f6;">{{ $account->username }}</div>
-                        <div style="font-size: 12px; color: #64748b;">MK: {{ $account->password }}</div>
-                        <div style="margin-top: 6px; display: flex; gap: 4px;">
-                            <button class="btn btn-sm btn-secondary" onclick="copyToClipboard('{{ $account->username }}')">Copy TK</button>
-                            <button class="btn btn-sm btn-secondary" onclick="copyToClipboard('{{ $account->password }}')">Copy MK</button>
+                        <div style="font-weight: 700; color: #1e40af; font-size: 13px; margin-bottom: 2px;">{{ $account->username }}</div>
+                        <div style="font-size: 12px; color: #64748b; font-family: 'Consolas', monospace; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; display: inline-block;">{{ $account->password }}</div>
+                        <div style="margin-top: 8px; display: flex; gap: 4px;">
+                            <button class="btn btn-sm btn-secondary" onclick="copyToClipboard('{{ $account->username }}')" style="font-size: 10px; padding: 4px 8px;">📋 TK</button>
+                            <button class="btn btn-sm btn-secondary" onclick="copyToClipboard('{{ $account->password }}')" style="font-size: 10px; padding: 4px 8px;">🔑 MK</button>
                         </div>
                     </td>
                     <td>
                         @if($account->is_available ?? false)
-                            <span class="badge badge-active">Chờ thuê</span>
+                            <span style="background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; display: inline-block; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);">
+                                ✅ SẴN SÀNG
+                            </span>
                         @else
-                            <span class="badge badge-pending">Đang thuê</span>
+                            <span style="background: linear-gradient(135deg, #f97316, #ea580c); color: white; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; display: inline-block; box-shadow: 0 2px 4px rgba(249, 115, 22, 0.3); animation: pulse 2s infinite;">
+                                🔥 ĐANG THUÊ
+                            </span>
                         @endif
                     </td>
                     <td>
@@ -110,40 +134,49 @@
                             <span style="color: #64748b;">—</span>
                         @endif
                     </td>
-                    <td style="font-size: 12px;">
+                    <td>
                         @if(!($account->is_available ?? true) && isset($account->rental_expires_at) && $account->rental_expires_at)
                             @php
                                 $expiresAt = \Carbon\Carbon::parse($account->rental_expires_at);
                                 $isExpired = $expiresAt->isPast();
+                                $diffMinutes = now()->diffInMinutes($expiresAt, false);
                             @endphp
-                            {{-- Countdown timer --}}
-                            <div class="countdown" data-expires="{{ $expiresAt->toIso8601String() }}" 
-                                 style="font-size: 13px; font-weight: 700; color: {{ $isExpired ? '#ef4444' : '#10b981' }}; margin-bottom: 4px;">
-                                {{ $isExpired ? '⏱️ Đã hết hạn' : 'Đang tính...' }}
+                            <div style="background: {{ $isExpired ? 'linear-gradient(135deg, #fef2f2, #fee2e2)' : 'linear-gradient(135deg, #f0fdf4, #dcfce7)' }}; 
+                                        border: 1px solid {{ $isExpired ? '#fecaca' : '#bbf7d0' }};
+                                        border-radius: 10px; 
+                                        padding: 10px 12px;
+                                        min-width: 160px;">
+                                {{-- Countdown timer - prominent --}}
+                                <div class="countdown" data-expires="{{ $expiresAt->toIso8601String() }}" 
+                                     style="font-size: 15px; font-weight: 800; color: {{ $isExpired ? '#dc2626' : '#16a34a' }}; margin-bottom: 6px; letter-spacing: -0.5px;">
+                                    {{ $isExpired ? '⏱️ HẾT HẠN' : '⏳ Đang tính...' }}
+                                </div>
+                                {{-- Expires time --}}
+                                <div style="color: {{ $isExpired ? '#b91c1c' : '#15803d' }}; font-size: 11px; font-weight: 500; margin-bottom: 8px;">
+                                    🕐 {{ $expiresAt->format('H:i - d/m/Y') }}
+                                </div>
+                                {{-- Order code --}}
+                                @if($account->rental_order_code ?? null)
+                                    <div style="font-size: 11px; color: #2563eb; font-weight: 600; background: #eff6ff; padding: 3px 6px; border-radius: 4px; display: inline-block; margin-bottom: 4px;">
+                                        📋 {{ $account->rental_order_code }}
+                                    </div>
+                                @endif
+                                {{-- Renter info --}}
+                                <div style="border-top: 1px dashed {{ $isExpired ? '#fecaca' : '#bbf7d0' }}; margin-top: 6px; padding-top: 6px;">
+                                    @if($account->renter_email ?? null)
+                                        <div style="font-size: 10px; color: #475569; margin-bottom: 2px;" title="{{ $account->renter_email }}">
+                                            ✉️ {{ Str::limit($account->renter_email, 20) }}
+                                        </div>
+                                    @endif
+                                    @if($account->renter_ip ?? null)
+                                        <div style="font-size: 9px; color: #64748b; font-family: 'Consolas', monospace;" title="{{ $account->renter_ip }}">
+                                            🌐 {{ Str::limit($account->renter_ip, 22) }}
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
-                            {{-- Expires time --}}
-                            <div style="color: {{ $isExpired ? '#ef4444' : '#64748b' }}; font-size: 11px;">
-                                Hết lúc: {{ $expiresAt->format('H:i d/m') }}
-                            </div>
-                            {{-- Order code --}}
-                            @if($account->rental_order_code ?? null)
-                                <div style="font-size: 10px; color: #3b82f6; margin-top: 2px;">
-                                    📋 {{ $account->rental_order_code }}
-                                </div>
-                            @endif
-                            {{-- Renter info --}}
-                            @if($account->renter_email ?? null)
-                                <div style="font-size: 10px; color: #94a3b8; margin-top: 2px;">
-                                    ✉️ {{ Str::limit($account->renter_email, 18) }}
-                                </div>
-                            @endif
-                            @if($account->renter_ip ?? null)
-                                <div style="font-size: 10px; color: #64748b; font-family: monospace;">
-                                    🌐 {{ $account->renter_ip }}
-                                </div>
-                            @endif
                         @else
-                            <span style="color: #64748b;">—</span>
+                            <span style="color: #94a3b8; font-style: italic;">Chưa có đơn thuê</span>
                         @endif
                     </td>
                     <td>
@@ -229,7 +262,7 @@ function closeEditModal() {
     document.getElementById('editModal').style.display = 'none';
 }
 
-// Real-time countdown
+// Real-time countdown with enhanced visuals
 function updateCountdowns() {
     document.querySelectorAll('.countdown').forEach(el => {
         const expires = new Date(el.dataset.expires);
@@ -237,8 +270,10 @@ function updateCountdowns() {
         const diff = expires - now;
         
         if (diff <= 0) {
-            el.textContent = '⏱️ Đã hết hạn';
-            el.style.color = '#ef4444';
+            el.textContent = '⛔ ĐÃ HẾT HẠN';
+            el.style.color = '#dc2626';
+            el.style.fontSize = '14px';
+            el.classList.remove('urgent');
             return;
         }
         
@@ -246,21 +281,32 @@ function updateCountdowns() {
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
         
-        // Color based on urgency
+        // Styling based on urgency
         if (hours < 1) {
-            el.style.color = '#f59e0b'; // Warning - less than 1 hour
+            el.style.color = '#dc2626'; // Red - urgent
+            el.style.fontSize = '16px';
+            el.classList.add('urgent');
+        } else if (hours < 2) {
+            el.style.color = '#ea580c'; // Orange 
+            el.style.fontSize = '15px';
+            el.classList.remove('urgent');
         } else if (hours < 3) {
-            el.style.color = '#eab308'; // Yellow - less than 3 hours
+            el.style.color = '#d97706'; // Amber
+            el.style.fontSize = '15px';
+            el.classList.remove('urgent');
         } else {
-            el.style.color = '#10b981'; // Green - plenty of time
+            el.style.color = '#16a34a'; // Green - plenty of time
+            el.style.fontSize = '15px';
+            el.classList.remove('urgent');
         }
         
+        // Format time remaining
         if (hours > 0) {
-            el.textContent = `⏱️ Còn ${hours}h ${minutes}p ${seconds}s`;
+            el.textContent = `⏱️ ${hours}h ${String(minutes).padStart(2,'0')}p ${String(seconds).padStart(2,'0')}s`;
         } else if (minutes > 0) {
-            el.textContent = `⚡ Còn ${minutes}p ${seconds}s`;
+            el.textContent = `⚡ ${minutes}p ${String(seconds).padStart(2,'0')}s`;
         } else {
-            el.textContent = `🔥 Còn ${seconds}s`;
+            el.textContent = `🔥 ${seconds}s còn lại!`;
         }
     });
 }
