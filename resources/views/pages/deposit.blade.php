@@ -631,8 +631,8 @@
                 <h4>⚠️ Lưu ý quan trọng:</h4>
                 <ul>
                     <li>Nhập đúng nội dung chuyển khoản để được cộng tiền tự động</li>
-                    <li>Hệ thống sẽ tự động cộng tiền trong vòng 1-5 phút sau khi nhận được tiền</li>
-                    <li>Nếu sau 10 phút chưa nhận được tiền, vui lòng liên hệ hỗ trợ</li>
+                    <li>Hệ thống sẽ tự động cộng tiền sau <strong>30 giây đến 2 phút</strong></li>
+                    <li>Nếu sau 5 phút chưa nhận được tiền, vui lòng liên hệ hỗ trợ</li>
                 </ul>
             </div>
             
