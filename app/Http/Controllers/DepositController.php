@@ -109,7 +109,6 @@ class DepositController extends Controller
             'status' => 'pending',
             'transaction_id' => $transactionId,
             'created_at' => now(),
-            'updated_at' => now(),
         ]);
         
         return response()->json([
