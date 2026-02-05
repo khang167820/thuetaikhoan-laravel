@@ -237,32 +237,46 @@ class AdminController extends Controller
             $currentType = 'Unlocktool';
         }
         
-        // Join with orders to get rental info (for accounts that are rented)
+        // Simple query for accounts - no complex joins
         $accounts = DB::table('accounts')
-            ->leftJoin('orders', function($join) {
-                $join->on('accounts.id', '=', 'orders.account_id')
-                    ->where('orders.status', '=', 'completed')
-                    ->whereNotNull('orders.expires_at');
-            })
-            ->select(
-                'accounts.*',
-                'orders.tracking_code as rental_order_code',
-                'orders.expires_at as rental_expires_at',
-                'orders.customer_email as renter_email',
-                'orders.ip_address as renter_ip'
-            )
-            ->where('accounts.type', $currentType)
+            ->where('type', $currentType)
             ->orderByRaw("
                 CASE 
-                    WHEN accounts.is_available = 0 AND (accounts.note IS NULL OR accounts.note = '') THEN 1
-                    WHEN accounts.is_available = 0 AND accounts.note IS NOT NULL AND accounts.note != '' THEN 2
-                    WHEN accounts.is_available = 1 AND accounts.note IS NOT NULL AND accounts.note != '' THEN 3
-                    ELSE 4
+                    WHEN is_available = 0 THEN 1
+                    ELSE 2
                 END
             ")
-            ->orderBy('accounts.id', 'desc')
+            ->orderBy('id', 'desc')
             ->paginate(50)
             ->withQueryString();
+        
+        // Get rental info for rented accounts only (efficient separate query)
+        $rentedAccountIds = collect($accounts->items())
+            ->where('is_available', 0)
+            ->pluck('id')
+            ->toArray();
+        
+        $rentalInfo = [];
+        if (!empty($rentedAccountIds)) {
+            $rentalInfo = DB::table('orders')
+                ->whereIn('account_id', $rentedAccountIds)
+                ->where('status', 'completed')
+                ->whereNotNull('expires_at')
+                ->select('account_id', 'tracking_code', 'expires_at', 'customer_email', 'ip_address')
+                ->get()
+                ->keyBy('account_id');
+        }
+        
+        // Attach rental info to accounts
+        foreach ($accounts as $account) {
+            if (isset($rentalInfo[$account->id])) {
+                $rental = $rentalInfo[$account->id];
+                $account->rental_order_code = $rental->tracking_code;
+                $account->rental_expires_at = $rental->expires_at;
+                $account->renter_email = $rental->customer_email;
+                $account->renter_ip = $rental->ip_address;
+            }
+        }
         
         // Get stats
         $stats = [
