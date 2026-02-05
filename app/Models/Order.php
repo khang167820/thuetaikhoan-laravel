@@ -25,6 +25,7 @@ class Order extends Model
         'user_id',
         'tracking_code',
         'account_id',
+        'assigned_password', // Password tại thời điểm cấp
         'price_id',
         'coupon_id',
         'service_type',
