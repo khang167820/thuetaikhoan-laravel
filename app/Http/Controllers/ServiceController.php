@@ -80,7 +80,7 @@ class ServiceController extends Controller
             'name' => 'Android Multitool',
             'slug' => 'thue-amt',
             'description' => 'Tool đa năng cho Android',
-            'logo' => '/images/services/amt.png',
+            'logo' => '/images/services/amt.svg',
             'color' => '#ec4899',
             'features' => [
                 ['dot' => 'yellow', 'text' => 'Mở khóa màn hình'],
