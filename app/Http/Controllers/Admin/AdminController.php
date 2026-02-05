@@ -110,11 +110,19 @@ class AdminController extends Controller
         }
         
         if ($shouldAllocate) {
+            // Refresh order to ensure all relationships are loaded
+            $order->refresh();
+            $order->load('price');
+            
+            // Log allocation attempt
+            \Log::info("Admin allocation attempt for order: {$order->tracking_code}, service_type: {$order->service_type}, price_type: " . ($order->price?->type ?? 'null'));
+            
             $allocationResult = \App\Services\AccountAllocationService::allocateAccount($order);
             
             if ($allocationResult['success']) {
                 return back()->with('success', 'Đã thanh toán & cấp tài khoản thành công!');
             } else {
+                \Log::warning("Admin allocation failed for order: {$order->tracking_code}, error: {$allocationResult['error']}");
                 return back()->with('warning', 'Đã thanh toán nhưng không thể cấp tài khoản: ' . $allocationResult['error']);
             }
         }
