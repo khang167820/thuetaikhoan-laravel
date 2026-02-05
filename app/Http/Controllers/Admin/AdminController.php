@@ -86,15 +86,29 @@ class AdminController extends Controller
     public function updateOrderStatus(Request $request, $id)
     {
         $order = Order::findOrFail($id);
-        $order->status = $request->status;
+        $oldStatus = $order->status;
+        $newStatus = $request->status;
+        $order->status = $newStatus;
         
-        if ($request->status === 'paid') {
+        if ($newStatus === 'paid') {
             $order->paid_at = now();
-        } elseif ($request->status === 'completed') {
+        } elseif ($newStatus === 'completed') {
             $order->completed_at = now();
         }
         
         $order->save();
+        
+        // Auto-allocate account when changing to 'paid' from 'pending'
+        // This ensures customers get their accounts immediately after admin confirms payment
+        if ($oldStatus === 'pending' && $newStatus === 'paid') {
+            $allocationResult = \App\Services\AccountAllocationService::allocateAccount($order);
+            
+            if ($allocationResult['success']) {
+                return back()->with('success', 'Đã thanh toán & cấp tài khoản thành công!');
+            } else {
+                return back()->with('warning', 'Đã thanh toán nhưng không thể cấp tài khoản: ' . $allocationResult['error']);
+            }
+        }
         
         return back()->with('success', 'Cập nhật trạng thái đơn hàng thành công!');
     }
