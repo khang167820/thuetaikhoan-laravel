@@ -78,19 +78,21 @@ class OrdCheckoutController extends Controller
      */
     public function submit(Request $request)
     {
-        $request->validate([
-            'uuid' => 'required|string',
-            'imei' => 'nullable|string|max:100',
-            'serial' => 'nullable|string|max:100',
-            'email' => 'required|email',
-            'notes' => 'nullable|string|max:500',
-        ]);
-        
-        $uuid = $request->input('uuid');
-        $email = $request->input('email');
-        $imei = $request->input('imei', '');
-        $serial = $request->input('serial', '');
-        $notes = $request->input('notes', '');
+        try {
+            // Manual validation for better JSON error response
+            $uuid = $request->input('uuid');
+            $email = $request->input('email');
+            $imei = $request->input('imei', '');
+            $serial = $request->input('serial', '');
+            $notes = $request->input('notes', '');
+            
+            if (empty($uuid)) {
+                return response()->json(['success' => false, 'error' => 'Thiếu mã sản phẩm']);
+            }
+            
+            if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                return response()->json(['success' => false, 'error' => 'Email không hợp lệ']);
+            }
         
         // Get product to calculate price
         $productsData = $this->adyService->getProducts();
@@ -134,7 +136,6 @@ class OrdCheckoutController extends Controller
             $attempts++;
         }
         
-        try {
             // Create pending order
             $orderId = DB::table('ady_orders')->insertGetId([
                 'user_id' => Auth::id(), // null for guests
