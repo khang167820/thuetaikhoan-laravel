@@ -445,7 +445,7 @@
                             </form>
                             <button class="pass-btn" onclick="promptChangePassword({{ $account->id }}, '{{ $account->password }}')">Đổi pass</button>
                         </div>
-                        <div class="action-note">Hết hạn License: {{ $account->expires_at ? date('d/m/Y', strtotime($account->expires_at)) : '-' }}</div>
+                        <div class="action-note">Ngày kích hoạt: -</div>
                     </div>
                 </td>
             </tr>
