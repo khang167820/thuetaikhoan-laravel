@@ -14,9 +14,42 @@ $response = $kernel->handle(
 use Illuminate\Support\Facades\DB;
 
 echo "<h1>Import Legacy Blogs</h1>";
-echo "<pre>";
 
-$blogDir = __DIR__ . '/../../public_html/blog';
+// Try to find blog directory with various paths
+$possiblePaths = [
+    '/home/u620980434/domains/thuetaikhoan.net/public_html/blog',  // Hostinger absolute
+    __DIR__ . '/../blog',                                           // If blog folder is in Laravel root
+    __DIR__ . '/../../public_html/blog',                           // Original path
+    __DIR__ . '/blog',                                              // If blog is in public folder
+    '/home/u620980434/blog',                                        // Alternative
+];
+
+$blogDir = null;
+echo "<h3>🔍 Finding blog directory...</h3>";
+echo "<pre>";
+foreach ($possiblePaths as $path) {
+    $exists = is_dir($path);
+    $count = $exists ? count(glob($path . '/*.php')) : 0;
+    echo "Path: $path\n";
+    echo "  Exists: " . ($exists ? 'YES' : 'NO') . "\n";
+    echo "  PHP files: $count\n\n";
+    
+    if ($exists && $count > 10 && $blogDir === null) {
+        $blogDir = $path;
+        echo "  >>> USING THIS PATH <<<\n\n";
+    }
+}
+
+if (!$blogDir) {
+    echo "</pre>";
+    echo "<h2 style='color:red'>❌ Could not find blog directory!</h2>";
+    echo "<p>Please check the paths above and update the script.</p>";
+    exit;
+}
+
+echo "Selected: $blogDir\n";
+echo "</pre>";
+
 $files = glob($blogDir . '/*.php');
 
 // Exclude special files
