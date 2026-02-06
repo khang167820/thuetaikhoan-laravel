@@ -144,11 +144,9 @@ function copyText(inputId, btn) {
 }
 
 function suggestPassword() {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
-    let password = '';
-    for (let i = 0; i < 10; i++) {
-        password += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
+    // Generate random 3 digits from 100 to 999
+    const randomNum = Math.floor(Math.random() * 900) + 100;
+    const password = 'Unlock' + randomNum;
     document.getElementById('password').value = password;
 }
 
