@@ -339,15 +339,20 @@ class AdminController extends Controller
     
     public function toggleAccount($id)
     {
+        $account = DB::table('accounts')->where('id', $id)->first();
+        
         DB::table('accounts')->where('id', $id)->update([
             'is_available' => DB::raw('1 - is_available')
         ]);
         
-        return back()->with('success', 'Đã cập nhật trạng thái tài khoản!');
+        return redirect()->route('admin.accounts', ['type' => $account->type ?? 'Unlocktool'])->with('success', 'Đã cập nhật trạng thái tài khoản!');
     }
     
     public function updateAccount(Request $request, $id)
     {
+        $account = DB::table('accounts')->where('id', $id)->first();
+        $type = $account->type ?? 'Unlocktool';
+        
         $data = [];
         
         if ($request->has('username')) $data['username'] = $request->username;
@@ -361,7 +366,7 @@ class AdminController extends Controller
             DB::table('accounts')->where('id', $id)->update($data);
         }
         
-        return back()->with('success', 'Cập nhật tài khoản thành công!');
+        return redirect()->route('admin.accounts', ['type' => $type])->with('success', 'Cập nhật tài khoản thành công!');
     }
     
     public function deleteAccount($id)
@@ -400,7 +405,7 @@ class AdminController extends Controller
             'updated_at' => now(),
         ]);
         
-        return redirect()->route('admin.accounts.edit', $id)->with('success', 'Đã đổi mật khẩu thành công!');
+        return redirect()->route('admin.accounts', ['type' => $account->type ?? 'Unlocktool'])->with('success', 'Đã đổi mật khẩu thành công!');
     }
     
     /**
@@ -421,7 +426,7 @@ class AdminController extends Controller
             'updated_at' => now(),
         ]);
         
-        return redirect()->route('admin.accounts.edit', $id)->with('success', 'Đã reset Telegram session!');
+        return redirect()->route('admin.accounts', ['type' => $account->type ?? 'Unlocktool'])->with('success', 'Đã reset Telegram session!');
     }
     
     // ==================== PRICES ====================
