@@ -114,7 +114,14 @@ class OrdCheckoutController extends Controller
         $priceVnd = $this->adyService->convertUsdToVnd($priceUsd);
         $productName = $product['name'] ?? 'Unknown';
         
-        if ($priceVnd <= 0) {
+        // Calculate total price based on quantity
+        $quantity = isset($fields['Quantity']) ? (int)$fields['Quantity'] : 1;
+        if ($quantity < 1) $quantity = 1;
+        
+        $totalPriceUsd = $priceUsd * $quantity;
+        $totalPriceVnd = $priceVnd * $quantity;
+        
+        if ($totalPriceVnd <= 0) {
             return response()->json([
                 'success' => false,
                 'error' => 'Lỗi: Giá sản phẩm không hợp lệ'
@@ -140,8 +147,8 @@ class OrdCheckoutController extends Controller
                 'tracking_code' => $trackingCode,
                 'product_uuid' => $uuid,
                 'product_name' => $productName,
-                'price_usd' => $priceUsd,
-                'price_vnd' => $priceVnd,
+                'price_usd' => $totalPriceUsd, // Store total price
+                'price_vnd' => $totalPriceVnd, // Store total price
                 'fields' => json_encode($fields),
                 'customer_email' => $email,
                 'status' => 'pending',
@@ -151,7 +158,7 @@ class OrdCheckoutController extends Controller
             
             // Generate QR URL
             $qrUrl = 'https://img.vietqr.io/image/' . self::BANK_BIN . '-' . self::BANK_ACCOUNT 
-                   . '-compact.png?amount=' . $priceVnd 
+                   . '-compact.png?amount=' . $totalPriceVnd 
                    . '&addInfo=' . urlencode($trackingCode) 
                    . '&accountName=' . urlencode(self::BANK_OWNER);
             
@@ -159,7 +166,7 @@ class OrdCheckoutController extends Controller
                 'success' => true,
                 'order_id' => $orderId,
                 'tracking_code' => $trackingCode,
-                'amount' => $priceVnd,
+                'amount' => $totalPriceVnd,
                 'qr_url' => $qrUrl,
                 'bank_info' => [
                     'name' => self::BANK_NAME,

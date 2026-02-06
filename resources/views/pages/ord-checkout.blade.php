@@ -112,6 +112,16 @@
                         <small>Kết quả dịch vụ sẽ được gửi đến email này</small>
                     </div>
                     
+                    {{-- Quantity field (Default 1) --}}
+                    <div class="form-group">
+                        <label>Số lượng (Quantity) <span class="required">*</span></label>
+                        <div class="quantity-input-group">
+                            <button type="button" class="btn-qty" onclick="updateQty(-1)">-</button>
+                            <input type="number" name="Quantity" id="Quantity" value="1" min="1" required class="form-control text-center" style="width: 80px;" oninput="calculateTotal()">
+                            <button type="button" class="btn-qty" onclick="updateQty(1)">+</button>
+                        </div>
+                    </div>
+
                     {{-- Dynamic fields from ADY product --}}
                     @if(!empty($product['fields']))
                         @foreach($product['fields'] as $index => $fieldConfig)
@@ -121,6 +131,8 @@
                                 
                                 // Skip Email field since we already have it above
                                 if (strtolower($fieldName) === 'email') continue;
+                                // Skip Quantity field if present in dynamic fields (we handle it separately)
+                                if (strtolower($fieldName) === 'quantity') continue;
                                 
                                 $isRequired = ($fieldConfig['required'] ?? false) || ($fieldConfig['validation'] ?? false);
                                 $fieldType = $fieldConfig['type'] ?? 'text';
@@ -173,10 +185,153 @@
                     </div>
                     
                     <button type="submit" class="btn-submit" id="submitBtn">
-                        💳 Tạo đơn & Thanh toán {{ number_format($product['priceVnd']) }}đ
+                        💳 Tạo đơn & Thanh toán <span id="btnTotalText">{{ number_format($product['priceVnd']) }}đ</span>
                     </button>
                 </form>
             </div>
+        </div>
+    </div>
+    
+    {{-- Payment Section --}}
+    <div class="container" id="paymentSection" style="display: none;">
+        <div class="payment-box">
+            <h2>Thanh toán đơn hàng</h2>
+            <div class="qr-container">
+                <img id="qrImage" src="" alt="QR Code" class="qr-code">
+                <p class="qr-note">Quét mã để thanh toán</p>
+            </div>
+            <div class="payment-info">
+                <div class="info-row">
+                    <span>Mã đơn hàng:</span>
+                    <strong id="displayCode" class="highlight">---</strong>
+                </div>
+                <div class="info-row">
+                    <span>Số tiền:</span>
+                    <strong id="displayAmount">0đ</strong>
+                </div>
+                <div class="info-row">
+                    <span>Nội dung CK:</span>
+                    <strong id="displayCodeCheck">---</strong>
+                </div>
+            </div>
+            <div class="payment-actions">
+                <a href="#" id="checkResultBtn" class="btn-check">Kiểm tra kết quả</a>
+                <button onclick="window.location.reload()" class="btn-secondary">Tạo đơn khác</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.quantity-input-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.btn-qty {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ddd;
+    background: #f8f9fa;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.btn-qty:hover {
+    background: #e9ecef;
+}
+</style>
+
+<script>
+let currentOrderId = null;
+let currentTrackingCode = null;
+let checkCount = 0;
+let checkInterval = null;
+const unitPrice = {{ $product['priceVnd'] }};
+
+function updateQty(change) {
+    const qtyInput = document.getElementById('Quantity');
+    let newQty = parseInt(qtyInput.value) + change;
+    if (newQty < 1) newQty = 1;
+    qtyInput.value = newQty;
+    calculateTotal();
+}
+
+function calculateTotal() {
+    const qtyInput = document.getElementById('Quantity');
+    let qty = parseInt(qtyInput.value);
+    if (!qty || qty < 1) qty = 1;
+    
+    const total = unitPrice * qty;
+    document.getElementById('btnTotalText').textContent = new Intl.NumberFormat('vi-VN').format(total) + 'đ';
+}
+
+document.getElementById('checkoutForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const btn = document.getElementById('submitBtn');
+    const errorBox = document.getElementById('errorBox');
+    
+    btn.disabled = true;
+    const originalBtnText = btn.innerHTML;
+    btn.textContent = '⏳ Đang tạo đơn...';
+    errorBox.style.display = 'none';
+    
+    try {
+        const formData = new FormData(this);
+        
+        // Build dynamic fields object from all form inputs
+        const payload = { uuid: formData.get('uuid'), fields: {} };
+        for (const [key, value] of formData.entries()) {
+            if (key !== 'uuid' && key !== '_token' && value) {
+                payload.fields[key] = value;
+            }
+        }
+        
+        const response = await fetch('{{ route("ord-checkout.submit") }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            currentOrderId = data.order_id;
+            currentTrackingCode = data.tracking_code;
+            
+            // Update payment section
+            document.getElementById('qrImage').src = data.qr_url;
+            document.getElementById('displayCode').textContent = data.tracking_code;
+            document.getElementById('displayCodeCheck').textContent = data.tracking_code;
+            document.getElementById('displayAmount').textContent = Number(data.amount).toLocaleString('vi-VN') + ' đ';
+            // document.getElementById('totalAmount').textContent = Number(data.amount).toLocaleString('vi-VN') + 'đ'; // Removed as ID not found
+            document.getElementById('checkResultBtn').href = '/don-ady?code=' + data.tracking_code;
+            
+            // Show payment section
+            document.getElementById('formSection').style.display = 'none';
+            document.getElementById('paymentSection').style.display = 'block';
+            
+            // Start checking status
+            checkInterval = setInterval(checkOrderStatus, 5000); // Check every 5s
+        } else {
+            errorBox.textContent = data.error || 'Có lỗi xảy ra, vui lòng thử lại';
+            errorBox.style.display = 'block';
+            btn.disabled = false;
+            btn.innerHTML = originalBtnText;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        errorBox.textContent = 'Lỗi kết nối server, vui lòng thử lại';
+        errorBox.style.display = 'block';
+        btn.disabled = false;
+        btn.innerHTML = originalBtnText;
+    }
+});
             
             <!-- Payment Section (shown after order created) -->
             <div id="paymentSection" style="display: none;">
