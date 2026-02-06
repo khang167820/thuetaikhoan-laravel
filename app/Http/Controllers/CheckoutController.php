@@ -326,10 +326,10 @@ class CheckoutController extends Controller
             $user->balance = $user->balance - $order->amount;
             $user->save();
             
-            // Mark order as paid (user_id for tracking who paid)
-            $order->user_id = $user->id;
+            // Mark order as paid
             $order->status = Order::STATUS_PAID;
             $order->paid_at = now();
+            $order->notes = 'Paid by user #' . $user->id . ' (balance)';
             $order->save();
             
             \DB::commit();
