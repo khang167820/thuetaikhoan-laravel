@@ -294,22 +294,29 @@
                                 $hint = $fieldConfig['hint'] ?? $fieldConfig['description'] ?? '';
                                 if ($fieldType === 'number') $fieldType = 'tel';
                                 $fl = strtolower($fieldName);
-                                if (str_contains($fl, 'imei')) { $placeholder = $placeholder ?: 'Nhập IMEI (15 số)'; $hint = $hint ?: 'Mở Settings > General > About > IMEI'; }
+                                $isIMEI = str_contains($fl, 'imei');
+                                if ($isIMEI) { 
+                                    $placeholder = $placeholder ?: 'Nhập IMEI (15 số)'; 
+                                    $hint = $hint ?: 'Mở Settings > General > About > IMEI'; 
+                                    $fieldType = 'tel';
+                                }
                                 elseif (str_contains($fl, 'serial')) { $placeholder = $placeholder ?: 'Nhập Serial Number'; $hint = $hint ?: 'Mở Settings > General > About > Serial Number'; }
                                 elseif (str_contains($fl, 'model')) { $placeholder = $placeholder ?: 'VD: iPhone 12 Pro Max'; }
                             @endphp
                             <div class="ck-fg">
                                 <label>{{ $fieldName }} @if($isRequired)<span class="req">*</span>@endif</label>
                                 <input type="{{ $fieldType }}" name="{{ $fieldName }}" id="{{ $fieldName }}" 
-                                       placeholder="{{ $placeholder }}" {{ $isRequired ? 'required' : '' }}>
-                                @if($hint)<span class="hint">{{ $hint }}</span>@endif
+                                       placeholder="{{ $placeholder }}" {{ $isRequired ? 'required' : '' }}
+                                       @if($isIMEI) pattern="[0-9]{15}" maxlength="15" minlength="15" inputmode="numeric" class="imei-field" @endif>
+                                @if($hint)<span class="hint">{{ $hint }}@if($isIMEI) <span class="imei-counter" data-for="{{ $fieldName }}"></span>@endif</span>@endif
                             </div>
                         @endforeach
                     @else
                         <div class="ck-fg">
                             <label>IMEI <span class="req">*</span></label>
-                            <input type="text" name="IMEI" id="IMEI" placeholder="Nhập IMEI (15 số)" required>
-                            <span class="hint">Mở Settings > General > About > IMEI</span>
+                            <input type="tel" name="IMEI" id="IMEI" placeholder="Nhập IMEI (15 số)" required 
+                                   pattern="[0-9]{15}" maxlength="15" minlength="15" inputmode="numeric" class="imei-field">
+                            <span class="hint">Mở Settings > General > About > IMEI <span class="imei-counter" data-for="IMEI"></span></span>
                         </div>
                     @endif
 
@@ -423,6 +430,19 @@ function calculateTotal() {
 document.getElementById('checkoutForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     const btn = document.getElementById('submitBtn'), errorBox = document.getElementById('errorBox');
+    
+    // Validate IMEI fields
+    const imeiInputs = document.querySelectorAll('.imei-field');
+    for (const input of imeiInputs) {
+        const val = input.value.trim();
+        if (val && !/^[0-9]{15}$/.test(val)) {
+            errorBox.textContent = `${input.name || 'IMEI'} phải có đúng 15 chữ số. Hiện tại: ${val.length} số.`;
+            errorBox.style.display = 'block';
+            input.focus();
+            return;
+        }
+    }
+    
     btn.disabled = true;
     const orig = btn.innerHTML;
     btn.innerHTML = '<span>⏳ Đang tạo đơn...</span>';
@@ -483,6 +503,23 @@ function startPaymentCheck() {
             }).catch(() => {});
     }, 3000);
 }
+
+// IMEI character counter
+document.querySelectorAll('.imei-field').forEach(input => {
+    const counter = document.querySelector(`.imei-counter[data-for="${input.id}"]`);
+    if (!counter) return;
+    
+    function updateCounter() {
+        const len = input.value.length;
+        counter.textContent = ` (${len}/15 số)`;
+        counter.style.color = len === 15 ? '#10b981' : '#f97316';
+        counter.style.fontWeight = '600';
+    }
+    
+    input.addEventListener('input', updateCounter);
+    updateCounter();
+});
+
 
 @if(Auth::check() && $userBalance >= $product['priceVnd'])
 async function payWithBalance() {
