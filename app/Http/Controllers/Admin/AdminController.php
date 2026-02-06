@@ -429,6 +429,24 @@ class AdminController extends Controller
         return redirect()->route('admin.accounts', ['type' => $account->type ?? 'Unlocktool'])->with('success', 'Đã reset Telegram session!');
     }
     
+    /**
+     * Lock all accounts with notes (set is_available = 0)
+     */
+    public function lockAccountsWithNotes(Request $request)
+    {
+        $type = $request->input('type', 'Unlocktool');
+        
+        $affected = DB::table('accounts')
+            ->where('type', $type)
+            ->where('is_available', 1)
+            ->whereNotNull('note')
+            ->where('note', '!=', '')
+            ->update(['is_available' => 0]);
+        
+        return redirect()->route('admin.accounts', ['type' => $type])
+            ->with('success', "Đã khóa {$affected} tài khoản có ghi chú!");
+    }
+    
     // ==================== PRICES ====================
     
     public function prices(Request $request)

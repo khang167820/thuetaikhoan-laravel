@@ -152,6 +152,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::post('/accounts/{id}/change-pass', [AdminController::class, 'changeAccountPassword'])->name('admin.accounts.change-pass');
     Route::post('/accounts/{id}/reset-tg', [AdminController::class, 'resetAccountTG'])->name('admin.accounts.reset-tg');
     Route::delete('/accounts/{id}', [AdminController::class, 'deleteAccount'])->name('admin.accounts.delete');
+    Route::post('/accounts/lock-with-notes', [AdminController::class, 'lockAccountsWithNotes'])->name('admin.accounts.lock-with-notes');
     
     // Prices (Gói thuê)
     Route::get('/prices', [AdminController::class, 'prices'])->name('admin.prices');
