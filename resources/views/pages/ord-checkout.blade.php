@@ -24,7 +24,7 @@
 .ck-hero {
     grid-column: 1 / -1;
     background: #fff;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #cbd5e1;
     border-radius: 14px;
     padding: 28px 32px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -43,9 +43,9 @@
 .ck-badge--stock { background: #eff6ff; border: 1px solid #bfdbfe; color: #2563eb; }
 
 /* ===== FORM CARD ===== */
-.ck-form-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.ck-form-card { background: #fff; border: 1px solid #cbd5e1; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
 .ck-form-header {
-    padding: 18px 24px; border-bottom: 1px solid #f1f5f9;
+    padding: 18px 24px; border-bottom: 1px solid #e2e8f0;
     display: flex; align-items: center; gap: 10px;
     font-weight: 700; color: #1e293b; font-size: 15px;
     background: #fafbfc;
@@ -60,7 +60,7 @@
 .ck-fg label .req { color: #ef4444; margin-left: 2px; }
 .ck-fg input, .ck-fg textarea, .ck-fg select {
     width: 100%; padding: 12px 16px;
-    background: #f8fafc; border: 1.5px solid #e2e8f0;
+    background: #f8fafc; border: 1.5px solid #cbd5e1;
     border-radius: 12px; color: #1e293b; font-size: 14px;
     transition: all 0.25s ease;
 }
@@ -75,7 +75,7 @@
 /* Quantity */
 .ck-qty {
     display: inline-flex; align-items: center;
-    background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px;
+    background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px;
     overflow: hidden;
 }
 .ck-qty button {
@@ -86,7 +86,7 @@
 .ck-qty button:hover { background: #e2e8f0; color: #1e293b; }
 .ck-qty input {
     width: 56px; text-align: center; border: none; border-radius: 0;
-    border-left: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0;
+    border-left: 1px solid #cbd5e1; border-right: 1px solid #cbd5e1;
     background: #fff; padding: 12px 0; font-weight: 700; font-size: 15px; color: #1e293b;
 }
 .ck-qty input:focus { box-shadow: none; outline: none; }
@@ -113,8 +113,8 @@
 }
 
 /* ===== SIDEBAR ===== */
-.ck-sidebar { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; overflow: hidden; position: sticky; top: 100px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-.ck-sidebar-header { padding: 18px 24px; border-bottom: 1px solid #f1f5f9; font-weight: 700; color: #1e293b; font-size: 15px; background: #fafbfc; }
+.ck-sidebar { background: #fff; border: 1px solid #cbd5e1; border-radius: 14px; overflow: hidden; position: sticky; top: 100px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.ck-sidebar-header { padding: 18px 24px; border-bottom: 1px solid #e2e8f0; font-weight: 700; color: #1e293b; font-size: 15px; background: #fafbfc; }
 .ck-sidebar-body { padding: 20px 24px; }
 .ck-sum-row {
     display: flex; justify-content: space-between; align-items: center;
@@ -143,9 +143,9 @@
 /* ===== PAYMENT ===== */
 .ck-payment { display: none; grid-column: 1 / -1; }
 .ck-pay-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-.ck-pay-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.ck-pay-card { background: #fff; border: 1px solid #cbd5e1; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
 .ck-pay-header {
-    padding: 16px 24px; border-bottom: 1px solid #f1f5f9;
+    padding: 16px 24px; border-bottom: 1px solid #e2e8f0;
     font-weight: 700; color: #1e293b; font-size: 14px;
     display: flex; align-items: center; gap: 8px; background: #fafbfc;
 }
