@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Đang bảo trì - Dịch vụ ADY')
+@section('title', 'Đang bảo trì')
 
 @section('content')
 <style>

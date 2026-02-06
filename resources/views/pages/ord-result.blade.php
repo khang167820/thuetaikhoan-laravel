@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Đơn hàng ADY - ' . $order->tracking_code)
+@section('title', 'Đơn hàng - ' . $order->tracking_code)
 
 @section('content')
 <div class="container" style="max-width: 600px; margin: 40px auto; padding: 0 16px;">
