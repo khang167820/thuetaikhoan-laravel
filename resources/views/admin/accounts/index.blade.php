@@ -196,6 +196,7 @@
         padding: 2px 6px;
         border-radius: 4px;
         display: inline-block;
+        font-weight: 700;
     }
     .acc-btns { display: flex; gap: 6px; margin-top: 8px; }
     .copy-btn { 
