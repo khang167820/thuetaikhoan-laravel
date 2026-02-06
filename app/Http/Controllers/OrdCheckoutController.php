@@ -28,8 +28,8 @@ class OrdCheckoutController extends Controller
      */
     public function show(Request $request)
     {
-        // MAINTENANCE MODE - Remove this block when ready
-        return view('pages.ord-maintenance');
+        // MAINTENANCE MODE - Uncomment block below to re-enable
+        // return view('pages.ord-maintenance');
         // END MAINTENANCE MODE
         
         $uuid = $request->input('uuid');
