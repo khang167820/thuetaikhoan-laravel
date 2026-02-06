@@ -32,7 +32,7 @@
                 <div class="input-group">
                     <input type="text" name="username" id="username" class="form-input readonly-input" 
                            value="{{ $account->username }}" readonly>
-                    <button type="button" class="btn-copy" onclick="copyText('username')">Copy TK</button>
+                    <button type="button" class="btn-copy" onclick="copyText('username', this)">Copy TK</button>
                 </div>
                 <div class="form-note">Không cho phép sửa tên đăng nhập</div>
             </div>
@@ -43,7 +43,7 @@
                     <input type="text" name="password" id="password" class="form-input" 
                            value="{{ $account->password }}">
                     <button type="button" class="btn-suggest" onclick="suggestPassword()">Đề xuất</button>
-                    <button type="button" class="btn-copy" onclick="copyText('password')">Copy MK</button>
+                    <button type="button" class="btn-copy" onclick="copyText('password', this)">Copy MK</button>
                 </div>
             </div>
         </div>
@@ -126,9 +126,21 @@
 </div>
 
 <script>
-function copyText(inputId) {
+function copyText(inputId, btn) {
     const input = document.getElementById(inputId);
     navigator.clipboard.writeText(input.value);
+    
+    // Visual feedback
+    const originalText = btn.innerText;
+    btn.innerText = '✅';
+    btn.style.color = '#10b981';
+    btn.style.borderColor = '#10b981';
+    
+    setTimeout(() => {
+        btn.innerText = originalText;
+        btn.style.color = '';
+        btn.style.borderColor = '';
+    }, 1500);
 }
 
 function suggestPassword() {
