@@ -93,20 +93,15 @@
                     <td style="max-width: 180px;">
                         <div style="font-weight: 500;">{{ Str::limit($order->product_name ?? 'N/A', 35) }}</div>
                     </td>
-                    <td style="max-width: 160px;">
-                        @if($mainField)
-                            <code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 11px; color: #334155;">{{ $mainField }}</code>
-                        @endif
-                        @if(count($fields) > 1)
-                            <button onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'" 
-                                    style="background: none; border: none; color: #3b82f6; cursor: pointer; font-size: 11px; margin-top: 2px;">
-                                +{{ count($fields) - 1 }} thêm
-                            </button>
-                            <div style="display: none; margin-top: 4px; font-size: 11px; color: #64748b;">
-                                @foreach($fields as $k => $v)
-                                    <div><strong>{{ $k }}:</strong> {{ Str::limit($v, 30) }}</div>
-                                @endforeach
+                    <td style="max-width: 200px; font-size: 11px;">
+                        @foreach($fields as $k => $v)
+                            <div style="margin-bottom: 2px;">
+                                <span style="color: #94a3b8;">{{ $k }}:</span>
+                                <code style="background: #f1f5f9; padding: 1px 4px; border-radius: 3px; color: #334155;">{{ Str::limit($v, 25) }}</code>
                             </div>
+                        @endforeach
+                        @if(empty($fields))
+                            <span style="color: #94a3b8;">—</span>
                         @endif
                     </td>
                     <td style="font-weight: 600; white-space: nowrap;">
