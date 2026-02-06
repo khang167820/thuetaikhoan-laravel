@@ -151,7 +151,7 @@ function processAdyOrder($order, $amount) {
  */
 function processRegularOrder($trackingCode, $amount) {
     $order = DB::table('orders')
-        ->where('order_code', $trackingCode)
+        ->where('tracking_code', $trackingCode)
         ->where('status', 'pending')
         ->first();
     
