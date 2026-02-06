@@ -114,31 +114,39 @@
                     
                     {{-- Dynamic fields from ADY product --}}
                     @if(!empty($product['fields']))
-                        @foreach($product['fields'] as $fieldName => $fieldConfig)
+                        @foreach($product['fields'] as $index => $fieldConfig)
                             @php
+                                // ADY API returns fields as indexed array, get name from config
+                                $fieldName = $fieldConfig['name'] ?? $fieldConfig['label'] ?? "Field_$index";
+                                
                                 // Skip Email field since we already have it above
                                 if (strtolower($fieldName) === 'email') continue;
                                 
                                 $isRequired = ($fieldConfig['required'] ?? false) || ($fieldConfig['validation'] ?? false);
-                                $fieldType = 'text';
+                                $fieldType = $fieldConfig['type'] ?? 'text';
                                 $placeholder = $fieldConfig['placeholder'] ?? "Nhập $fieldName";
-                                $hint = $fieldConfig['hint'] ?? '';
+                                $hint = $fieldConfig['hint'] ?? $fieldConfig['description'] ?? '';
                                 
-                                // Determine field type and hint based on field name
+                                // Map ADY field types to HTML input types
+                                if ($fieldType === 'number') {
+                                    $fieldType = 'tel'; // Use tel for better mobile experience
+                                }
+                                
+                                // Determine better placeholder and hint based on field name
                                 $fieldLower = strtolower($fieldName);
                                 if (str_contains($fieldLower, 'imei')) {
-                                    $placeholder = 'Nhập IMEI (15 số)';
-                                    $hint = 'Mở Settings > General > About > IMEI. IMEI gồm 15 chữ số.';
+                                    $placeholder = $placeholder ?: 'Nhập IMEI (15 số)';
+                                    $hint = $hint ?: 'Mở Settings > General > About > IMEI. IMEI gồm 15 chữ số.';
                                 } elseif (str_contains($fieldLower, 'serial')) {
-                                    $placeholder = 'Nhập Serial Number';
-                                    $hint = 'Mở Settings > General > About > Serial Number';
+                                    $placeholder = $placeholder ?: 'Nhập Serial Number';
+                                    $hint = $hint ?: 'Mở Settings > General > About > Serial Number';
                                 } elseif (str_contains($fieldLower, 'phone') || str_contains($fieldLower, 'số điện thoại')) {
                                     $fieldType = 'tel';
-                                    $placeholder = 'Nhập số điện thoại';
+                                    $placeholder = $placeholder ?: 'Nhập số điện thoại';
                                 } elseif (str_contains($fieldLower, 'model')) {
-                                    $placeholder = 'Nhập Model (VD: iPhone 12 Pro Max)';
+                                    $placeholder = $placeholder ?: 'Nhập Model (VD: iPhone 12 Pro Max)';
                                 } elseif (str_contains($fieldLower, 'carrier') || str_contains($fieldLower, 'network')) {
-                                    $placeholder = 'Nhập Carrier/Nhà mạng';
+                                    $placeholder = $placeholder ?: 'Nhập Carrier/Nhà mạng';
                                 }
                             @endphp
                             <div class="form-group">
