@@ -43,13 +43,18 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Modern UI Enhancement -->
-    <link rel="stylesheet" href="/css/modern-ui.css?v=6">
+    <!-- Defer font loading to reduce FCP -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
     
-    <!-- Mobile Menu Styles -->
-    <link rel="stylesheet" href="/css/mobile-menu.css?v=1">
+    <!-- Defer non-critical CSS -->
+    <link rel="preload" as="style" href="/css/modern-ui.css?v=6" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/css/modern-ui.css?v=6"></noscript>
+    
+    <!-- Mobile Menu - defer to reduce render blocking -->
+    <link rel="preload" as="style" href="/css/mobile-menu.css?v=1" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/css/mobile-menu.css?v=1"></noscript>
     
     <style>
         /* ============================================
