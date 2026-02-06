@@ -145,14 +145,14 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     
     // Accounts (Tài khoản cho thuê)
     Route::get('/accounts', [AdminController::class, 'accounts'])->name('admin.accounts');
-    Route::get('/accounts/{id}/edit', [AdminController::class, 'editAccount'])->name('admin.accounts.edit');
     Route::post('/accounts', [AdminController::class, 'addAccount'])->name('admin.accounts.add');
+    Route::post('/accounts/lock-with-notes', [AdminController::class, 'lockAccountsWithNotes'])->name('admin.accounts.lock-with-notes');
+    Route::get('/accounts/{id}/edit', [AdminController::class, 'editAccount'])->name('admin.accounts.edit');
     Route::post('/accounts/{id}/toggle', [AdminController::class, 'toggleAccount'])->name('admin.accounts.toggle');
     Route::post('/accounts/{id}', [AdminController::class, 'updateAccount'])->name('admin.accounts.update');
     Route::post('/accounts/{id}/change-pass', [AdminController::class, 'changeAccountPassword'])->name('admin.accounts.change-pass');
     Route::post('/accounts/{id}/reset-tg', [AdminController::class, 'resetAccountTG'])->name('admin.accounts.reset-tg');
     Route::delete('/accounts/{id}', [AdminController::class, 'deleteAccount'])->name('admin.accounts.delete');
-    Route::post('/accounts/lock-with-notes', [AdminController::class, 'lockAccountsWithNotes'])->name('admin.accounts.lock-with-notes');
     
     // Prices (Gói thuê)
     Route::get('/prices', [AdminController::class, 'prices'])->name('admin.prices');
