@@ -34,6 +34,7 @@
                 <th>Thời gian</th>
                 <th>Số tiền</th>
                 <th>Trạng thái</th>
+                <th>Tài khoản cấp</th>
                 <th>Ngày tạo</th>
                 <th>Hành động</th>
             </tr>
@@ -77,6 +78,18 @@
                         <span class="badge badge-cancelled">{{ $order->status }}</span>
                     @endif
                 </td>
+                <td style="font-size: 11px;">
+                    @if($order->account)
+                        <div style="color: #16a34a; font-weight: 600;">🔑 {{ $order->account->username ?? $order->account->email ?? 'TK #'.$order->account->id }}</div>
+                        @if($order->assigned_password)
+                            <div style="color: #64748b; font-family: monospace; font-size: 10px;">🔒 {{ $order->assigned_password }}</div>
+                        @endif
+                    @elseif($order->status === 'completed')
+                        <span style="color: #f59e0b;">⚠️ Chưa gán</span>
+                    @else
+                        <span style="color: #cbd5e1;">—</span>
+                    @endif
+                </td>
                 <td>{{ $order->created_at ? $order->created_at->format('d/m/Y H:i') : 'N/A' }}</td>
                 <td>
                     <form action="{{ route('admin.orders.status', $order->id) }}" method="POST" style="display: inline;">
@@ -92,7 +105,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="9" style="text-align: center; color: #64748b; padding: 40px;">
+                <td colspan="10" style="text-align: center; color: #64748b; padding: 40px;">
                     Không có đơn hàng nào
                 </td>
             </tr>

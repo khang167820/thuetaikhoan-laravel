@@ -64,7 +64,7 @@ class AdminController extends Controller
      */
     public function orders(Request $request)
     {
-        $query = Order::orderBy('created_at', 'desc');
+        $query = Order::with(['account', 'user'])->orderBy('created_at', 'desc');
         
         if ($request->filled('status')) {
             $query->where('status', $request->status);
