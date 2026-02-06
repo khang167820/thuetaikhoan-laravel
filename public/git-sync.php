@@ -17,14 +17,14 @@ try {
     $count = BlogPost::count();
     echo "<p>Total posts: <strong>{$count}</strong></p>";
     
-    $published = BlogPost::where('is_published', true)->count();
+    $published = BlogPost::where('status', 'published')->count();
     echo "<p>Published posts: <strong>{$published}</strong></p>";
     
     echo "<h2>First 10 posts:</h2>";
     echo "<table border='1' cellpadding='5'>";
-    echo "<tr><th>ID</th><th>Slug</th><th>Published At</th><th>Updated At</th></tr>";
+    echo "<tr><th>ID</th><th>Slug</th><th>Created At</th><th>Updated At</th></tr>";
     
-    $posts = BlogPost::where('is_published', true)->take(10)->get();
+    $posts = BlogPost::where('status', 'published')->take(10)->get();
     foreach ($posts as $post) {
         $pubAt = $post->published_at ?? 'NULL';
         $updAt = $post->updated_at ?? 'NULL';

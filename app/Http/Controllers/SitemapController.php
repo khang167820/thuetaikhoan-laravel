@@ -92,8 +92,8 @@ class SitemapController extends Controller
 
         // Get blog posts from database
         try {
-            $posts = BlogPost::where('is_published', true)
-                ->orderBy('published_at', 'desc')
+            $posts = BlogPost::where('status', 'published')
+                ->orderBy('created_at', 'desc')
                 ->get();
 
             foreach ($posts as $post) {
