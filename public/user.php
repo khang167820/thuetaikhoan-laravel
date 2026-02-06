@@ -1,4 +1,4 @@
 <?php
-// Redirect old user.php to new Laravel site
-header('Location: https://thuetaikhoan.net/user', true, 301);
+// Redirect old user.php to Laravel login page
+header('Location: https://thuetaikhoan.net/login', true, 301);
 exit;
