@@ -14,6 +14,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
         ]);
+        
+        // Add OptimizeImages to web routes for automatic lazy loading
+        $middleware->web(append: [
+            \App\Http\Middleware\OptimizeImages::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

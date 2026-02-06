@@ -77,7 +77,8 @@
         }
         .main-content { flex: 1; }
         a { color: inherit; text-decoration: none; }
-        img { max-width: 100%; height: auto; }
+        img { max-width: 100%; height: auto; content-visibility: auto; }
+        img[loading="lazy"] { opacity: 1; transition: opacity 0.3s; }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
         
         /* HEADER */
