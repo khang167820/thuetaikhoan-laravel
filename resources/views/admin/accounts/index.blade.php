@@ -190,12 +190,8 @@
     }
     .acc-password { 
         font-size: 13px; 
-        color: #f97316; 
+        color: #1e40af; 
         font-weight: 700;
-        background: #fff7ed;
-        padding: 2px 6px;
-        border-radius: 4px;
-        display: inline-block;
     }
     .acc-btns { display: flex; gap: 6px; margin-top: 8px; }
     .copy-btn { 
