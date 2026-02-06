@@ -625,11 +625,17 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
                 },
                 body: JSON.stringify({ code: trackingCode })
             })
-            .then(r => r.json())
+            .then(r => {
+                if (!r.ok && r.status === 419) {
+                    throw new Error('Phiên đăng nhập hết hạn. Vui lòng tải lại trang.');
+                }
+                return r.json().catch(() => { throw new Error('Lỗi server (HTTP ' + r.status + '). Vui lòng thử lại.'); });
+            })
             .then(data => {
                 if (data.success) {
                     const statusEl = document.getElementById('cp-status');
@@ -657,7 +663,7 @@
                 }
             })
             .catch(err => {
-                alert('Có lỗi xảy ra, vui lòng thử lại');
+                alert(err.message || 'Có lỗi xảy ra, vui lòng thử lại');
                 payBtn.disabled = false;
                 payBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Thanh toán bằng số dư';
             });
