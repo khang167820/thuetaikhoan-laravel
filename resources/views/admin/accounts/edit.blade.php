@@ -161,10 +161,8 @@ function suggestPassword(btn) {
 }
 
 function setStatus(status) {
-    if (confirm('Đặt tài khoản về trạng thái Chờ thuê?')) {
-        document.getElementById('toggleStatus').value = status;
-        document.getElementById('toggleForm').submit();
-    }
+    document.getElementById('toggleStatus').value = status;
+    document.getElementById('toggleForm').submit();
 }
 
 function changePassword() {
