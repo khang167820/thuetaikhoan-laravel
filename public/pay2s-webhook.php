@@ -50,8 +50,8 @@ foreach ($data['transactions'] as $tx) {
             continue;
         }
         
-        // Extract tracking code (GHxxxxxx format)
-        preg_match('/(GH\d+)/i', $content, $matches);
+        // Extract tracking code (GHxxxxxx or ADYxxxxxx format)
+        preg_match('/(GH\d+|ADY\d+)/i', $content, $matches);
         $trackingCode = strtoupper($matches[1] ?? '');
         
         if (empty($trackingCode)) {
