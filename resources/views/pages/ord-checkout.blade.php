@@ -528,7 +528,7 @@ async function payWithBalance() {
     const btn = document.getElementById('payBalanceBtn');
     btn.disabled = true; btn.textContent = '⏳ Đang xử lý...';
     try {
-        const res = await fetch('/api/pay-with-balance', {
+        const res = await fetch('/api/ady/pay-with-balance', {
             method: 'POST',
             headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Content-Type': 'application/json', 'Accept': 'application/json' },
             body: JSON.stringify({ order_id: currentOrderId })
