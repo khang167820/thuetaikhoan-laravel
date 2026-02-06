@@ -51,16 +51,8 @@
         <div class="form-row">
             <div class="form-group">
                 <label class="form-label">Loại</label>
-                <select name="type" class="form-select">
-                    <option value="Unlocktool" {{ ($account->type ?? '') == 'Unlocktool' ? 'selected' : '' }}>Unlocktool</option>
-                    <option value="VietMap" {{ ($account->type ?? '') == 'VietMap' ? 'selected' : '' }}>VietMap</option>
-                    <option value="Griffin" {{ ($account->type ?? '') == 'Griffin' ? 'selected' : '' }}>Griffin</option>
-                    <option value="AMT" {{ ($account->type ?? '') == 'AMT' ? 'selected' : '' }}>AMT</option>
-                    <option value="TSM" {{ ($account->type ?? '') == 'TSM' ? 'selected' : '' }}>TSM</option>
-                    <option value="DFT" {{ ($account->type ?? '') == 'DFT' ? 'selected' : '' }}>DFT</option>
-                    <option value="SamsungTool" {{ ($account->type ?? '') == 'SamsungTool' ? 'selected' : '' }}>SamsungTool</option>
-                    <option value="KGKiller" {{ ($account->type ?? '') == 'KGKiller' ? 'selected' : '' }}>KG Killer</option>
-                </select>
+                <input type="text" class="form-input readonly-input" value="{{ $account->type ?? 'Unlocktool' }}" readonly>
+                <input type="hidden" name="type" value="{{ $account->type ?? 'Unlocktool' }}">
             </div>
             
             <div class="form-group">
@@ -76,32 +68,7 @@
                 <input type="date" name="note_date" class="form-input" 
                        value="{{ isset($account->note_date) && $account->note_date ? \Carbon\Carbon::parse($account->note_date)->format('Y-m-d') : '' }}">
             </div>
-            
-            <div class="form-group">
-                <label class="form-label">Trạng thái hiện tại</label>
-                <div class="status-box">
-                    @php $status = $account->status ?? ($account->is_available ?? 0); @endphp
-                    @if($status == 'available' || $status == 1 || ($account->is_available ?? false))
-                        <span style="color: #10b981;">🟢 Chờ thuê (Có sẵn)</span>
-                    @else
-                        <span style="color: #f59e0b;">🟡 Đang thuê</span>
-                    @endif
-                </div>
-            </div>
-        </div>
-        
-        <div class="form-row">
-            <div class="form-group">
-                <label class="form-label">Ngày hết hạn</label>
-                <input type="datetime-local" name="expires_at" class="form-input" 
-                       value="{{ isset($account->expires_at) && $account->expires_at ? \Carbon\Carbon::parse($account->expires_at)->format('Y-m-d\TH:i') : '' }}">
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">2FA / OTP (nếu có)</label>
-                <input type="text" name="otp_secret" class="form-input" 
-                       value="{{ $account->otp_secret ?? '' }}" placeholder="Secret key">
-            </div>
+            <div class="form-group"></div>
         </div>
         
         <div class="btn-row">

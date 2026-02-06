@@ -328,6 +328,8 @@ class AdminController extends Controller
         if ($request->has('username')) $data['username'] = $request->username;
         if ($request->has('password')) $data['password'] = $request->password;
         if ($request->has('note')) $data['note'] = $request->note;
+        if ($request->has('type')) $data['type'] = $request->type;
+        if ($request->has('note_date')) $data['note_date'] = $request->note_date;
         if ($request->has('expires_at')) $data['expires_at'] = $request->expires_at;
         
         if (!empty($data)) {
