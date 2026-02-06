@@ -416,6 +416,15 @@
                 <td>
                     @if($account->is_available ?? false)
                         <span class="status-badge available">Chờ thuê</span>
+                        @if(isset($account->available_since) && $account->available_since)
+                            @php
+                                $availableSince = \Carbon\Carbon::parse($account->available_since);
+                                $waitingTime = $availableSince->diffForHumans(null, true);
+                            @endphp
+                            <div class="status-time" style="color: #64748b; font-size: 11px;">
+                                ⏱️ {{ $waitingTime }}
+                            </div>
+                        @endif
                     @else
                         <span class="status-badge renting">Đang thuê</span>
                         @if(isset($account->rental_expires_at) && $account->rental_expires_at)

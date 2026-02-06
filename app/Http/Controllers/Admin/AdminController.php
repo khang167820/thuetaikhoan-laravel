@@ -340,10 +340,18 @@ class AdminController extends Controller
     public function toggleAccount($id)
     {
         $account = DB::table('accounts')->where('id', $id)->first();
+        $newAvailable = !$account->is_available;
         
-        DB::table('accounts')->where('id', $id)->update([
-            'is_available' => DB::raw('1 - is_available')
-        ]);
+        $updateData = ['is_available' => $newAvailable ? 1 : 0];
+        
+        // Set available_since when account becomes available
+        if ($newAvailable) {
+            $updateData['available_since'] = now();
+        } else {
+            $updateData['available_since'] = null;
+        }
+        
+        DB::table('accounts')->where('id', $id)->update($updateData);
         
         return redirect()->route('admin.accounts', ['type' => $account->type ?? 'Unlocktool'])->with('success', 'Đã cập nhật trạng thái tài khoản!');
     }
