@@ -91,6 +91,10 @@ tbody tr:last-child td {
     background: #fee2e2;
     color: #991b1b;
 }
+.status-processing {
+    background: #e0e7ff;
+    color: #4338ca;
+}
 .order-link {
     color: #667eea;
     text-decoration: none;
@@ -214,7 +218,7 @@ tbody tr:last-child td {
 @section('content')
 <div class="history-container">
     <div class="page-header">
-        <h1 class="page-title">📋 Lịch sử thuê 30 ngày</h1>
+        <h1 class="page-title">📋 Lịch sử đơn hàng 30 ngày</h1>
         <p class="page-subtitle">Xem lại các đơn hàng bạn đã đặt trong 30 ngày qua</p>
     </div>
 
@@ -249,19 +253,30 @@ tbody tr:last-child td {
                 <tbody>
                     @foreach($orders as $order)
                     @php
-                        $serviceName = OrderHistoryController::getServiceName($order);
+                        $isAdyOrder = ($order->order_type ?? '') === 'ady';
+                        
+                        if ($isAdyOrder) {
+                            $serviceName = $order->service_type ?? 'Dịch vụ GSM';
+                        } else {
+                            $serviceName = OrderHistoryController::getServiceName($order);
+                        }
+                        
                         $hours = (int)($order->hours ?? 0);
-                        $hoursLabel = $hours < 24 ? $hours . ' giờ' : ($hours / 24) . ' ngày';
+                        $hoursLabel = $isAdyOrder ? 'GSM' : ($hours < 24 ? $hours . ' giờ' : ($hours / 24) . ' ngày');
                         $statusText = OrderHistoryController::getStatusText($order->status);
                         $statusClass = OrderHistoryController::getStatusBadgeClass($order->status);
+                        
+                        $orderLink = $isAdyOrder 
+                            ? '/don-ady?code=' . urlencode($order->tracking_code)
+                            : '/order-detail?code=' . urlencode($order->tracking_code);
                     @endphp
                     <tr>
                         <td data-label="Mã đơn">
-                            <a href="/order-detail?code={{ urlencode($order->tracking_code) }}" class="order-link">
+                            <a href="{{ $orderLink }}" class="order-link">
                                 {{ $order->tracking_code }}
                             </a>
                         </td>
-                        <td data-label="Dịch vụ">{{ $serviceName }}</td>
+                        <td data-label="Dịch vụ">{{ Str::limit($serviceName, 35) }}</td>
                         <td data-label="Gói">{{ $hoursLabel }}</td>
                         <td data-label="Số tiền"><strong>{{ number_format($order->amount) }}₫</strong></td>
                         <td data-label="Trạng thái">
@@ -271,7 +286,9 @@ tbody tr:last-child td {
                         </td>
                         <td data-label="Ngày tạo">{{ $order->created_at ? \Carbon\Carbon::parse($order->created_at)->format('d/m/Y H:i') : '-' }}</td>
                         <td data-label="Hết hạn">
-                            @if($order->expires_at)
+                            @if($isAdyOrder)
+                                -
+                            @elseif($order->expires_at)
                                 @php
                                     $expires = \Carbon\Carbon::parse($order->expires_at);
                                     $isExpired = $expires->isPast();
@@ -284,7 +301,7 @@ tbody tr:last-child td {
                             @endif
                         </td>
                         <td data-label="">
-                            <a href="/order-detail?code={{ urlencode($order->tracking_code) }}" class="order-link">
+                            <a href="{{ $orderLink }}" class="order-link">
                                 Xem chi tiết
                             </a>
                         </td>

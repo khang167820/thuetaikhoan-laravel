@@ -21,8 +21,8 @@ class OrderHistoryController extends Controller
         if (empty($customerIp)) {
             $error = 'Không thể xác định địa chỉ IP';
         } else {
-            // Get paid orders by IP in last 30 days (exclude pending)
-            $orders = DB::table('orders')
+            // Get paid rental orders by IP in last 30 days
+            $rentalOrders = DB::table('orders')
                 ->leftJoin('accounts', 'orders.account_id', '=', 'accounts.id')
                 ->leftJoin('prices', 'orders.price_id', '=', 'prices.id')
                 ->select(
@@ -34,10 +34,9 @@ class OrderHistoryController extends Controller
                     'orders.created_at',
                     'orders.paid_at',
                     'orders.expires_at',
-                    'orders.ady_product_uuid',
-                    'orders.ady_order_uuid',
                     'accounts.type as account_type',
-                    'prices.type as service_type'
+                    'prices.type as service_type',
+                    DB::raw("'rental' as order_type")
                 )
                 ->where('orders.ip_address', $customerIp)
                 ->where('orders.created_at', '>=', now()->subDays(30))
@@ -45,6 +44,32 @@ class OrderHistoryController extends Controller
                 ->orderBy('orders.created_at', 'desc')
                 ->limit(100)
                 ->get();
+            
+            // Get ADY orders by IP in last 30 days
+            $adyOrders = DB::table('ady_orders')
+                ->select(
+                    'id',
+                    'tracking_code',
+                    DB::raw('NULL as hours'),
+                    'price_vnd as amount',
+                    'status',
+                    'created_at',
+                    DB::raw('paid_at as paid_at'),
+                    DB::raw('NULL as expires_at'),
+                    DB::raw("NULL as account_type"),
+                    'product_name as service_type',
+                    DB::raw("'ady' as order_type")
+                )
+                ->where('ip_address', $customerIp)
+                ->where('created_at', '>=', now()->subDays(30))
+                ->orderBy('created_at', 'desc')
+                ->limit(100)
+                ->get();
+            
+            // Merge and sort
+            $orders = $rentalOrders->concat($adyOrders)
+                ->sortByDesc('created_at')
+                ->values();
         }
 
         return view('pages.order-history', compact('orders', 'error', 'customerIp'));
