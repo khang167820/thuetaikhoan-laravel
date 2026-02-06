@@ -72,6 +72,15 @@
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
+    # Legacy .php URL redirects (301) — handle at server level before Laravel
+    # Blog posts: /blog/slug.php → /blog/slug
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^blog/(.+)\.php$ /blog/$1 [L,R=301]
+    
+    # Other legacy pages: /anything.php → /anything (preserve query string)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.+)\.php$ /$1 [L,R=301,QSA]
+
     # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
