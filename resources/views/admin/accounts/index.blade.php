@@ -189,14 +189,13 @@
         margin-bottom: 2px;
     }
     .acc-password { 
-        font-size: 12px; 
+        font-size: 13px; 
         color: #f97316; 
-        font-family: 'Consolas', 'Monaco', monospace;
+        font-weight: 700;
         background: #fff7ed;
         padding: 2px 6px;
         border-radius: 4px;
         display: inline-block;
-        font-weight: 700;
     }
     .acc-btns { display: flex; gap: 6px; margin-top: 8px; }
     .copy-btn { 
