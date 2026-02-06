@@ -328,7 +328,12 @@ class AdyService
         $result = $this->callApi('POST', '/api/reseller/v1/order', $data);
         
         if (isset($result['error'])) {
-            return ['success' => false, 'error' => $result['error']];
+            return [
+                'success' => false,
+                'error' => $result['error'],
+                'response' => $result['response'] ?? null,
+                'http_code' => $result['http_code'] ?? null
+            ];
         }
         
         if (isset($result['status']) && $result['status'] === 'success' && isset($result['data'])) {
