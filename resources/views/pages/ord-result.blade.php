@@ -67,7 +67,7 @@
         @if($order->result)
         <div style="background: #0f172a; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
             <div style="color: #94a3b8; margin-bottom: 8px; font-size: 13px;">Kết quả:</div>
-            <div style="background: #1e293b; padding: 16px; border-radius: 8px; font-family: monospace; color: #10b981; white-space: pre-wrap; word-break: break-all; font-size: 13px;">{{ $order->result }}</div>
+            <div style="background: #1e293b; padding: 16px; border-radius: 8px; font-family: monospace; color: #10b981; white-space: pre-wrap; word-break: break-all; font-size: 13px;">{!! strip_tags($order->result, '<br><span><b><strong><i><em><p><div><ul><li><a>') !!}</div>
         </div>
         @endif
 
