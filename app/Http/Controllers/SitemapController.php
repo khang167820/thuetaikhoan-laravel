@@ -82,28 +82,32 @@ class SitemapController extends Controller
     {
         $urls = [];
 
-        // Get blog posts from database if model exists
+        // Add blog index page
+        $urls[] = [
+            'loc' => url('/blog'),
+            'lastmod' => now()->toW3cString(),
+            'changefreq' => 'daily',
+            'priority' => '0.8'
+        ];
+
+        // Get blog posts from database
         try {
             $posts = BlogPost::where('is_published', true)
                 ->orderBy('published_at', 'desc')
                 ->get();
 
             foreach ($posts as $post) {
+                $lastmod = $post->updated_at ?? $post->published_at ?? now();
                 $urls[] = [
                     'loc' => url("/blog/{$post->slug}"),
-                    'lastmod' => $post->updated_at->toW3cString(),
+                    'lastmod' => $lastmod->toW3cString(),
                     'changefreq' => 'weekly',
                     'priority' => '0.7'
                 ];
             }
         } catch (\Exception $e) {
-            // If BlogPost model doesn't exist, add some static blog URLs
-            $urls[] = [
-                'loc' => url('/blog'),
-                'lastmod' => now()->toW3cString(),
-                'changefreq' => 'daily',
-                'priority' => '0.8'
-            ];
+            // Log error but continue
+            \Log::error('Sitemap posts error: ' . $e->getMessage());
         }
 
         // Add testpoint pages
