@@ -419,7 +419,9 @@
                         @if(isset($account->available_since) && $account->available_since)
                             @php
                                 $availableSince = \Carbon\Carbon::parse($account->available_since);
-                                $waitingTime = $availableSince->diffForHumans(null, true);
+                                $diff = $availableSince->diff(now());
+                                $totalHours = ($diff->days * 24) + $diff->h;
+                                $waitingTime = $totalHours . 'h ' . $diff->i . 'p ' . $diff->s . 's';
                             @endphp
                             <div class="status-time" style="color: #64748b; font-size: 11px;">
                                 ⏱️ {{ $waitingTime }}
