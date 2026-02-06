@@ -9,12 +9,12 @@
 <style>
 /* ===== BASE ===== */
 .ck-page * { box-sizing: border-box; font-family: 'Inter', -apple-system, sans-serif; }
-.ck-page { min-height: 100vh; background: linear-gradient(180deg, #cbd5e1 0%, #94a3b8 100%); padding: 0 16px 60px; }
+.ck-page { min-height: 100vh; background: #f8fafc; padding: 0 16px 60px; }
 
 /* ===== BREADCRUMB ===== */
 .ck-bread { max-width: 1000px; margin: 0 auto; padding: 16px 0; display: flex; gap: 8px; font-size: 13px; color: #64748b; align-items: center; flex-wrap: wrap; }
-.ck-bread a { color: #4f46e5; text-decoration: none; font-weight: 500; }
-.ck-bread a:hover { color: #6366f1; }
+.ck-bread a { color: #f97316; text-decoration: none; font-weight: 500; }
+.ck-bread a:hover { color: #ea580c; }
 .ck-bread svg { width: 14px; height: 14px; opacity: 0.4; }
 
 /* ===== GRID ===== */
@@ -23,11 +23,11 @@
 /* ===== HERO ===== */
 .ck-hero {
     grid-column: 1 / -1;
-    background: #f8fafb;
-    border: 1px solid #cbd5e1;
-    border-radius: 20px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
     padding: 28px 32px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 .ck-hero-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; }
 .ck-hero h1 { font-size: 17px; font-weight: 700; color: #1e293b; line-height: 1.6; max-width: 580px; }
@@ -43,12 +43,12 @@
 .ck-badge--stock { background: #eff6ff; border: 1px solid #bfdbfe; color: #2563eb; }
 
 /* ===== FORM CARD ===== */
-.ck-form-card { background: #f8fafb; border: 1px solid #cbd5e1; border-radius: 20px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.ck-form-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
 .ck-form-header {
-    padding: 18px 24px; border-bottom: 1px solid #cbd5e1;
+    padding: 18px 24px; border-bottom: 1px solid #f1f5f9;
     display: flex; align-items: center; gap: 10px;
     font-weight: 700; color: #1e293b; font-size: 15px;
-    background: #e2e8f0;
+    background: #fafbfc;
 }
 .ck-form-header .icon { font-size: 18px; }
 .ck-form-body { padding: 24px; }
@@ -60,14 +60,14 @@
 .ck-fg label .req { color: #ef4444; margin-left: 2px; }
 .ck-fg input, .ck-fg textarea, .ck-fg select {
     width: 100%; padding: 12px 16px;
-    background: #e8edf2; border: 1.5px solid #cbd5e1;
+    background: #f8fafc; border: 1.5px solid #e2e8f0;
     border-radius: 12px; color: #1e293b; font-size: 14px;
     transition: all 0.25s ease;
 }
 .ck-fg input:focus, .ck-fg textarea:focus, .ck-fg select:focus {
-    outline: none; border-color: #4f46e5;
-    box-shadow: 0 0 0 3px rgba(79,70,229,0.15);
-    background: #f8fafb;
+    outline: none; border-color: #f97316;
+    box-shadow: 0 0 0 3px rgba(249,115,22,0.1);
+    background: #fff;
 }
 .ck-fg input::placeholder, .ck-fg textarea::placeholder { color: #94a3b8; }
 .ck-fg .hint { font-size: 11px; color: #94a3b8; margin-top: 6px; display: block; }
@@ -75,7 +75,7 @@
 /* Quantity */
 .ck-qty {
     display: inline-flex; align-items: center;
-    background: #e8edf2; border: 1.5px solid #cbd5e1; border-radius: 12px;
+    background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px;
     overflow: hidden;
 }
 .ck-qty button {
@@ -83,11 +83,11 @@
     background: transparent; color: #64748b; font-size: 18px; font-weight: 700;
     cursor: pointer; transition: all 0.2s;
 }
-.ck-qty button:hover { background: #cbd5e1; color: #1e293b; }
+.ck-qty button:hover { background: #e2e8f0; color: #1e293b; }
 .ck-qty input {
     width: 56px; text-align: center; border: none; border-radius: 0;
-    border-left: 1px solid #cbd5e1; border-right: 1px solid #cbd5e1;
-    background: #f8fafb; padding: 12px 0; font-weight: 700; font-size: 15px; color: #1e293b;
+    border-left: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0;
+    background: #fff; padding: 12px 0; font-weight: 700; font-size: 15px; color: #1e293b;
 }
 .ck-qty input:focus { box-shadow: none; outline: none; }
 
@@ -113,19 +113,19 @@
 }
 
 /* ===== SIDEBAR ===== */
-.ck-sidebar { background: #f8fafb; border: 1px solid #cbd5e1; border-radius: 20px; overflow: hidden; position: sticky; top: 100px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-.ck-sidebar-header { padding: 18px 24px; border-bottom: 1px solid #cbd5e1; font-weight: 700; color: #1e293b; font-size: 15px; background: #e2e8f0; }
+.ck-sidebar { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; overflow: hidden; position: sticky; top: 100px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.ck-sidebar-header { padding: 18px 24px; border-bottom: 1px solid #f1f5f9; font-weight: 700; color: #1e293b; font-size: 15px; background: #fafbfc; }
 .ck-sidebar-body { padding: 20px 24px; }
 .ck-sum-row {
     display: flex; justify-content: space-between; align-items: center;
     padding: 10px 0; font-size: 13px; color: #64748b;
-    border-bottom: 1px solid #cbd5e1;
+    border-bottom: 1px solid #f1f5f9;
 }
 .ck-sum-row:last-child { border-bottom: none; }
 .ck-sum-row .val { color: #1e293b; font-weight: 600; text-align: right; max-width: 180px; word-break: break-word; }
 .ck-sum-total {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 16px 0; margin-top: 8px; border-top: 2px solid #cbd5e1;
+    padding: 16px 0; margin-top: 8px; border-top: 2px solid #e2e8f0;
 }
 .ck-sum-total .lbl { font-size: 14px; font-weight: 600; color: #374151; }
 .ck-sum-total .amt { font-size: 24px; font-weight: 800; color: #10b981; }
@@ -134,20 +134,20 @@
 .ck-guarantees { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
 .ck-guarantee {
     display: flex; align-items: center; gap: 10px;
-    padding: 10px 14px; background: #e2e8f0;
+    padding: 10px 14px; background: #f8fafc;
     border-radius: 10px; font-size: 12px; color: #64748b;
-    border: 1px solid #cbd5e1;
+    border: 1px solid #f1f5f9;
 }
 .ck-guarantee .gi { font-size: 16px; flex-shrink: 0; }
 
 /* ===== PAYMENT ===== */
 .ck-payment { display: none; grid-column: 1 / -1; }
 .ck-pay-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-.ck-pay-card { background: #f8fafb; border: 1px solid #cbd5e1; border-radius: 20px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.ck-pay-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
 .ck-pay-header {
-    padding: 16px 24px; border-bottom: 1px solid #cbd5e1;
+    padding: 16px 24px; border-bottom: 1px solid #f1f5f9;
     font-weight: 700; color: #1e293b; font-size: 14px;
-    display: flex; align-items: center; gap: 8px; background: #e2e8f0;
+    display: flex; align-items: center; gap: 8px; background: #fafbfc;
 }
 .ck-pay-body { padding: 24px; }
 
