@@ -237,14 +237,39 @@ class AdminController extends Controller
             $currentType = 'Unlocktool';
         }
         
-        // Simple query for accounts - no complex joins
+        // Advanced query with sorting logic
         $accounts = DB::table('accounts')
+            ->select('accounts.*')
+            ->selectSub(function ($query) {
+                $query->select('expires_at')
+                    ->from('orders')
+                    ->whereColumn('account_id', 'accounts.id')
+                    ->where('status', 'completed')
+                    ->orderBy('id', 'desc')
+                    ->limit(1);
+            }, 'sorting_expires_at')
             ->where('type', $currentType)
             ->orderByRaw("
                 CASE 
-                    WHEN is_available = 0 THEN 1
-                    ELSE 2
-                END
+                    -- 1. Hết thời gian (Đang thuê nhưng đã hết hạn)
+                    WHEN is_available = 0 AND sorting_expires_at < NOW() THEN 1
+                    
+                    -- 2. Sắp hết thời gian (Đang thuê, chưa hết hạn)
+                    WHEN is_available = 0 AND sorting_expires_at >= NOW() THEN 2
+                    
+                    -- 3. Có ghi chú (Chờ thuê + Có Note)
+                    WHEN is_available = 1 AND note IS NOT NULL AND note != '' THEN 3
+                    
+                    -- 4. Chờ thuê (Còn lại)
+                    ELSE 4
+                END ASC
+            ")
+            ->orderByRaw("
+                CASE 
+                    -- Group 2: Sort by expiration time ASC (soonest first)
+                    WHEN is_available = 0 AND sorting_expires_at >= NOW() THEN sorting_expires_at
+                    ELSE NULL 
+                END ASC
             ")
             ->orderBy('id', 'desc')
             ->paginate(50)
