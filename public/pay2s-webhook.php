@@ -1,226 +1,206 @@
 <?php
 /**
- * Pay2S Webhook for Laravel
- * Handles deposit notifications from Pay2S.vn
+ * Pay2s Webhook Handler (Standalone PHP - no Laravel bootstrap needed for speed)
+ * URL: https://thuetaikhoan.net/pay2s-webhook.php
  * 
- * Endpoint: https://staging.thuetaikhoan.net/pay2s-webhook.php
- * Configure this URL in Pay2S dashboard
+ * Flow: Pay2s sends transaction → We verify → Update order → Call ADY API
  */
 
+// Quick response first (Pay2s requires fast response)
 header('Content-Type: application/json');
-date_default_timezone_set('Asia/Ho_Chi_Minh');
 
-// Log file
+// Get raw input
+$input = file_get_contents('php://input');
+$data = json_decode($input, true);
+
+// Log for debug
 $logFile = __DIR__ . '/../storage/logs/pay2s-webhook.log';
+$logEntry = date('Y-m-d H:i:s') . " | " . $input . "\n";
+file_put_contents($logFile, $logEntry, FILE_APPEND);
 
-// Log raw body
-$raw = file_get_contents('php://input');
-file_put_contents($logFile, date('Y-m-d H:i:s') . " | RAW: " . $raw . "\n", FILE_APPEND);
+// Validate token
+$token = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+$token = str_replace('Bearer ', '', $token);
+$expectedToken = '6b175e25a84efff064416aa36add80be93925e532126939af6';
 
-// Bootstrap Laravel
-require __DIR__ . '/../vendor/autoload.php';
+if ($token !== $expectedToken) {
+    file_put_contents($logFile, date('Y-m-d H:i:s') . " | ERROR: Invalid token\n", FILE_APPEND);
+    echo json_encode(['success' => false, 'error' => 'Invalid token']);
+    exit;
+}
+
+// Check transactions
+if (empty($data['transactions']) || !is_array($data['transactions'])) {
+    echo json_encode(['success' => true, 'message' => 'No transactions']);
+    exit;
+}
+
+// Database connection
+require_once __DIR__ . '/../vendor/autoload.php';
 $app = require_once __DIR__ . '/../bootstrap/app.php';
-$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
-$kernel->bootstrap();
+$app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
-// Webhook secret (configure in .env as PAY2S_SECRET)
-$webhookSecret = env('PAY2S_SECRET', '');
-
-// Verify token
-$auth = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
-if (preg_match('/^\s*Bearer\s+(.+)$/i', $auth, $m)) {
-    $tokenHeader = trim($m[1]);
-} else {
-    $tokenHeader = $_SERVER['HTTP_X_TOKEN'] ?? $_SERVER['HTTP_X_WEBHOOK_TOKEN'] ?? '';
-}
-
-if (!empty($webhookSecret) && $tokenHeader !== $webhookSecret) {
-    file_put_contents($logFile, date('Y-m-d H:i:s') . " | UNAUTHORIZED\n", FILE_APPEND);
-    http_response_code(401);
-    echo json_encode(['ok' => false, 'message' => 'Unauthorized']);
-    exit;
-}
-
-// Parse JSON
-$data = json_decode($raw, true);
-if (!$data) {
-    file_put_contents($logFile, date('Y-m-d H:i:s') . " | Invalid JSON\n", FILE_APPEND);
-    http_response_code(400);
-    echo json_encode(['ok' => false, 'message' => 'Invalid JSON']);
-    exit;
-}
-
-// Handle both formats
-$txList = [];
-if (isset($data['transactions']) && is_array($data['transactions'])) {
-    $txList = $data['transactions'];
-} else {
-    $txList[] = [
-        'transferType' => $data['transferType'] ?? 'IN',
-        'transferAmount' => $data['amount'] ?? 0,
-        'content' => $data['comment'] ?? ($data['content'] ?? ''),
-    ];
-}
-
-$updated = [];
-
-foreach ($txList as $tx) {
-    // Only process incoming transfers
-    if (strtoupper($tx['transferType'] ?? 'IN') !== 'IN') {
-        continue;
-    }
-
-    $amount = (int)($tx['transferAmount'] ?? 0);
-    $content = trim($tx['content'] ?? '');
-
-    if ($amount <= 0 || $content === '') {
-        continue;
-    }
-
-    // Extract tracking code - support both NAP (deposits) and GH (orders)
-    $tracking = '';
-    if (preg_match('/(NAP\d+)/i', $content, $m)) {
-        $tracking = strtoupper($m[1]);
-    } elseif (preg_match('/(GH\d+)/i', $content, $m)) {
-        $tracking = strtoupper($m[1]);
-    }
-
-    file_put_contents($logFile, date('Y-m-d H:i:s') . " | PARSED: tracking={$tracking}, amount={$amount}\n", FILE_APPEND);
-
-    if (empty($tracking)) {
-        continue;
-    }
-
-    // Handle deposit (NAP...)
-    if (preg_match('/^NAP/i', $tracking)) {
-        try {
-            DB::beginTransaction();
-
-            // Find pending deposit
-            $deposit = DB::table('deposits')
-                ->where('transaction_id', $tracking)
-                ->where('status', 'pending')
-                ->lockForUpdate()
-                ->first();
-
-            if (!$deposit) {
-                DB::rollBack();
-                file_put_contents($logFile, date('Y-m-d H:i:s') . " | DEPOSIT NOT FOUND: {$tracking}\n", FILE_APPEND);
-                continue;
-            }
-
-            // Check amount
-            if ($amount < $deposit->amount) {
-                DB::rollBack();
-                file_put_contents($logFile, date('Y-m-d H:i:s') . " | UNDERPAID: Expected {$deposit->amount}, Got {$amount}\n", FILE_APPEND);
-                continue;
-            }
-
-            // Update deposit status
-            DB::table('deposits')
-                ->where('id', $deposit->id)
-                ->update([
-                    'status' => 'completed',
-                    'completed_at' => now()
-                ]);
-
-            // Add balance to user
-            DB::table('users')
-                ->where('id', $deposit->user_id)
-                ->increment('balance', $amount);
-
-            // Update total_deposit if column exists
-            try {
-                DB::table('users')
-                    ->where('id', $deposit->user_id)
-                    ->increment('total_deposit', $amount);
-            } catch (\Exception $e) {
-                // Column might not exist
-            }
-
-            DB::commit();
-
-            $updated[] = [
-                'type' => 'deposit',
-                'deposit_id' => $deposit->id,
-                'user_id' => $deposit->user_id,
-                'amount' => $amount,
-                'status' => 'completed'
-            ];
-
-            file_put_contents($logFile, date('Y-m-d H:i:s') . " | DEPOSIT COMPLETED: ID={$deposit->id}, Amount={$amount}\n", FILE_APPEND);
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            file_put_contents($logFile, date('Y-m-d H:i:s') . " | ERROR: " . $e->getMessage() . "\n", FILE_APPEND);
+foreach ($data['transactions'] as $tx) {
+    try {
+        $content = $tx['content'] ?? '';
+        $amount = (int)($tx['transferAmount'] ?? 0);
+        $type = $tx['transferType'] ?? '';
+        
+        // Only process incoming transfers
+        if ($type !== 'IN') continue;
+        
+        // Extract tracking code from content
+        // For ADY orders: ADYxxxxxx
+        // For regular orders: GHxxxxxx
+        preg_match('/(ADY\d+|GH\d+)/i', $content, $matches);
+        $trackingCode = strtoupper($matches[1] ?? '');
+        
+        if (empty($trackingCode)) {
+            Log::info("Pay2s: No tracking code found in content: $content");
+            continue;
         }
+        
+        Log::info("Pay2s: Processing $trackingCode, amount: $amount");
+        
+        // Check if ADY order
+        if (str_starts_with($trackingCode, 'ADY')) {
+            processAdyOrder($trackingCode, $amount);
+        } else {
+            // Regular order (thuê tài khoản)
+            processRegularOrder($trackingCode, $amount);
+        }
+        
+    } catch (Exception $e) {
+        Log::error("Pay2s Webhook Error: " . $e->getMessage());
+    }
+}
+
+echo json_encode(['success' => true]);
+
+/**
+ * Process ADY order - call ADY API
+ */
+function processAdyOrder($trackingCode, $amount) {
+    $order = DB::table('ady_orders')
+        ->where('tracking_code', $trackingCode)
+        ->where('status', 'pending')
+        ->first();
+    
+    if (!$order) {
+        Log::info("Pay2s: ADY order not found or already processed: $trackingCode");
+        return;
     }
     
-    // Handle order payment (GH...)
-    if (preg_match('/^GH/i', $tracking)) {
-        try {
-            DB::beginTransaction();
-
-            // Find pending order
-            $order = DB::table('orders')
-                ->where('tracking_code', $tracking)
-                ->where('status', 'pending')
-                ->lockForUpdate()
-                ->first();
-
-            if (!$order) {
-                DB::rollBack();
-                file_put_contents($logFile, date('Y-m-d H:i:s') . " | ORDER NOT FOUND: {$tracking}\n", FILE_APPEND);
-                continue;
-            }
-
-            // Check amount
-            if ($amount < $order->amount) {
-                DB::rollBack();
-                file_put_contents($logFile, date('Y-m-d H:i:s') . " | ORDER UNDERPAID: Expected {$order->amount}, Got {$amount}\n", FILE_APPEND);
-                continue;
-            }
-
-            // Update order status to paid
-            DB::table('orders')
-                ->where('id', $order->id)
-                ->update([
-                    'status' => 'paid',
-                    'paid_at' => now()
-                ]);
-
-            DB::commit();
-
-            // Auto-allocate account using the service
-            $orderModel = \App\Models\Order::find($order->id);
-            if ($orderModel) {
-                $allocationResult = \App\Services\AccountAllocationService::allocateAccount($orderModel);
-                
-                if ($allocationResult['success']) {
-                    file_put_contents($logFile, date('Y-m-d H:i:s') . " | ORDER COMPLETED: {$tracking}, Account allocated\n", FILE_APPEND);
-                } else {
-                    file_put_contents($logFile, date('Y-m-d H:i:s') . " | ORDER PAID BUT ALLOCATION FAILED: {$tracking}, Error: {$allocationResult['error']}\n", FILE_APPEND);
-                }
-            }
-
-            $updated[] = [
-                'type' => 'order',
-                'order_id' => $order->id,
-                'tracking_code' => $tracking,
-                'amount' => $amount,
-                'status' => 'paid'
-            ];
-
-            file_put_contents($logFile, date('Y-m-d H:i:s') . " | ORDER PAID: {$tracking}, Amount={$amount}\n", FILE_APPEND);
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            file_put_contents($logFile, date('Y-m-d H:i:s') . " | ORDER ERROR: " . $e->getMessage() . "\n", FILE_APPEND);
-        }
+    // Verify amount (allow 1% tolerance for fees)
+    if ($amount < $order->price_vnd * 0.99) {
+        Log::warning("Pay2s: Amount mismatch for $trackingCode. Expected: {$order->price_vnd}, Got: $amount");
+        return;
+    }
+    
+    // Mark as paid
+    DB::table('ady_orders')->where('id', $order->id)->update([
+        'status' => 'paid',
+        'paid_at' => now(),
+        'paid_amount' => $amount,
+    ]);
+    
+    // Call ADY API
+    $adyService = app(\App\Services\AdyService::class);
+    $fields = json_decode($order->fields, true) ?? [];
+    $feedbackUrl = url('/ady-webhook.php');
+    
+    $result = $adyService->placeOrder(
+        $order->product_uuid,
+        $fields,
+        $order->tracking_code,
+        $feedbackUrl
+    );
+    
+    if ($result['success']) {
+        DB::table('ady_orders')->where('id', $order->id)->update([
+            'ady_order_uuid' => $result['order_uuid'],
+            'status' => 'processing',
+        ]);
+        Log::info("Pay2s: ADY order placed successfully: $trackingCode");
+    } else {
+        DB::table('ady_orders')->where('id', $order->id)->update([
+            'status' => 'failed',
+            'error' => $result['error'] ?? 'Unknown error',
+        ]);
+        Log::error("Pay2s: ADY order failed: $trackingCode - " . ($result['error'] ?? 'Unknown'));
     }
 }
 
-echo json_encode(['ok' => true, 'updated' => $updated]);
-
+/**
+ * Process regular order (thuê tài khoản UnlockTool, Vietmap, etc.)
+ */
+function processRegularOrder($trackingCode, $amount) {
+    $order = DB::table('orders')
+        ->where('order_code', $trackingCode)
+        ->where('status', 'pending')
+        ->first();
+    
+    if (!$order) {
+        Log::info("Pay2s: Order not found or already processed: $trackingCode");
+        return;
+    }
+    
+    // Verify amount
+    if ($amount < $order->total_amount * 0.99) {
+        Log::warning("Pay2s: Amount mismatch for $trackingCode. Expected: {$order->total_amount}, Got: $amount");
+        return;
+    }
+    
+    // Mark as paid and assign account
+    DB::beginTransaction();
+    try {
+        // Get available account
+        $account = DB::table('accounts')
+            ->where('service_type', $order->service_type)
+            ->where('status', 'available')
+            ->lockForUpdate()
+            ->first();
+        
+        if (!$account) {
+            Log::warning("Pay2s: No available account for order $trackingCode");
+            DB::table('orders')->where('id', $order->id)->update([
+                'status' => 'paid',
+                'paid_at' => now(),
+                'note' => 'Đã thanh toán - Chờ cấp tài khoản',
+            ]);
+            DB::commit();
+            return;
+        }
+        
+        // Assign account
+        DB::table('accounts')->where('id', $account->id)->update([
+            'status' => 'in_use',
+            'order_id' => $order->id,
+            'used_at' => now(),
+        ]);
+        
+        // Update order
+        DB::table('orders')->where('id', $order->id)->update([
+            'status' => 'completed',
+            'account_id' => $account->id,
+            'paid_at' => now(),
+            'completed_at' => now(),
+        ]);
+        
+        // Add loyalty points to user
+        if ($order->user_id) {
+            $points = floor($order->total_amount / 1000); // 1 point per 1000 VND
+            DB::table('users')->where('id', $order->user_id)->increment('loyalty_points', $points);
+        }
+        
+        DB::commit();
+        Log::info("Pay2s: Order completed: $trackingCode, assigned account: {$account->id}");
+        
+    } catch (Exception $e) {
+        DB::rollBack();
+        Log::error("Pay2s: Error processing order $trackingCode: " . $e->getMessage());
+    }
+}
