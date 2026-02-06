@@ -112,9 +112,9 @@
                     </div>
                     
                     <div class="form-group">
-                        <label>IMEI / Serial Number</label>
-                        <input type="text" name="imei" id="imei" placeholder="Nhập IMEI hoặc Serial Number">
-                        <small>Mở Settings > General > About > IMEI</small>
+                        <label>IMEI <span class="required">*</span></label>
+                        <input type="text" name="imei" id="imei" placeholder="Nhập IMEI (15 số)" required>
+                        <small>Mở Settings > General > About > IMEI. IMEI gồm 15 chữ số.</small>
                     </div>
                     
                     <div class="form-group">
