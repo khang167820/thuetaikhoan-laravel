@@ -251,8 +251,8 @@ class AdminController extends Controller
             ->where('type', $currentType)
             ->orderByRaw("
                 CASE 
-                    -- 1. Hết thời gian (Đang thuê nhưng đã hết hạn)
-                    WHEN is_available = 0 AND sorting_expires_at < NOW() THEN 1
+                    -- 1. Hết thời gian (Đang thuê nhưng đã hết hạn HOẶC không tìm thấy đơn)
+                    WHEN is_available = 0 AND (sorting_expires_at < NOW() OR sorting_expires_at IS NULL) THEN 1
                     
                     -- 2. Sắp hết thời gian (Đang thuê, chưa hết hạn)
                     WHEN is_available = 0 AND sorting_expires_at >= NOW() THEN 2
