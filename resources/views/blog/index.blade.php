@@ -456,6 +456,64 @@
     margin-top: 50px;
 }
 
+/* Fix Laravel Tailwind Pagination */
+.pagination-wrapper nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.pagination-wrapper nav > div:first-child {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.pagination-wrapper nav > div:last-child {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.pagination-wrapper nav span,
+.pagination-wrapper nav a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.pagination-wrapper nav a {
+    background: #fff;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+}
+
+.pagination-wrapper nav a:hover {
+    background: #f97316;
+    color: #fff;
+    border-color: #f97316;
+}
+
+.pagination-wrapper nav span[aria-current="page"] span {
+    background: #f97316;
+    color: #fff;
+    border-radius: 10px;
+}
+
+/* Fix SVG arrow size - CRITICAL */
+.pagination-wrapper svg {
+    width: 16px !important;
+    height: 16px !important;
+}
+
 /* ===============================================
    DARK MODE
    =============================================== */
