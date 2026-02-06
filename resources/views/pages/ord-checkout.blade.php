@@ -253,7 +253,7 @@
                 </div>
             </div>
             <div class="ck-badges">
-                <span class="ck-badge ck-badge--time">⏱️ {{ $product['deliveryTime'] }}</span>
+                <span class="ck-badge ck-badge--time">⏱️ 30s - 5 phút</span>
                 <span class="ck-badge ck-badge--stock">✅ Còn hàng</span>
             </div>
         </div>
@@ -332,7 +332,7 @@
                 <div class="ck-sum-row"><span>Dịch vụ</span><span class="val">{{ Str::limit($product['name'], 35) }}</span></div>
                 <div class="ck-sum-row"><span>Đơn giá</span><span class="val">{{ number_format($product['priceVnd']) }}đ</span></div>
                 <div class="ck-sum-row"><span>Số lượng</span><span class="val" id="summaryQty">1</span></div>
-                <div class="ck-sum-row"><span>Thời gian xử lý</span><span class="val">{{ $product['deliveryTime'] }}</span></div>
+                <div class="ck-sum-row"><span>Thời gian xử lý</span><span class="val">30s - 5 phút</span></div>
                 <div class="ck-sum-total">
                     <span class="lbl">Tổng cộng</span>
                     <span class="amt" id="summaryTotal">{{ number_format($product['priceVnd']) }}đ</span>
