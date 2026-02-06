@@ -309,7 +309,12 @@ class AdyService
     public function placeOrder(string $productUuid, array $fields = [], ?string $referenceId = null, ?string $feedbackUrl = null): array
     {
         $orderFields = $fields;
-        
+    
+        // ADY requires Quantity field
+        if (!isset($orderFields['Quantity'])) {
+            $orderFields['Quantity'] = 1;
+        }
+    
         if ($referenceId) {
             $orderFields['reference_id'] = $referenceId;
         }
