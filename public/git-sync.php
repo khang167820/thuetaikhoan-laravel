@@ -1,33 +1,41 @@
 <?php
-// git-sync.php - Force git pull on server
-// DELETE THIS FILE AFTER USE!
+// Simple debug script - shows blog post info
+// No exec() needed - works on shared hosting
 
-echo "<h1>Git Sync</h1>";
+require __DIR__ . '/../vendor/autoload.php';
+$app = require_once __DIR__ . '/../bootstrap/app.php';
+$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
+$response = $kernel->handle(
+    $request = Illuminate\Http\Request::capture()
+);
 
-$output = [];
-$returnVar = 0;
+use App\Models\BlogPost;
 
-// Change to project root
-chdir(__DIR__ . '/..');
+echo "<h1>Blog Posts Debug</h1>";
 
-echo "<h2>Running: git fetch origin</h2>";
-exec('git fetch origin 2>&1', $output, $returnVar);
-echo "<pre>" . implode("\n", $output) . "</pre>";
-
-$output = [];
-echo "<h2>Running: git reset --hard origin/main</h2>";
-exec('git reset --hard origin/main 2>&1', $output, $returnVar);
-echo "<pre>" . implode("\n", $output) . "</pre>";
-
-$output = [];
-echo "<h2>Running: git status</h2>";
-exec('git status 2>&1', $output, $returnVar);
-echo "<pre>" . implode("\n", $output) . "</pre>";
-
-echo "<h2>Clearing Laravel cache...</h2>";
-exec('php artisan config:clear 2>&1', $output);
-exec('php artisan cache:clear 2>&1', $output);
-exec('php artisan view:clear 2>&1', $output);
-
-echo "<h3 style='color: green;'>Done! Now test: <a href='/sitemap-posts.xml'>/sitemap-posts.xml</a></h3>";
-echo "<p style='color: red;'><strong>DELETE THIS FILE NOW!</strong></p>";
+try {
+    $count = BlogPost::count();
+    echo "<p>Total posts: <strong>{$count}</strong></p>";
+    
+    $published = BlogPost::where('is_published', true)->count();
+    echo "<p>Published posts: <strong>{$published}</strong></p>";
+    
+    echo "<h2>First 10 posts:</h2>";
+    echo "<table border='1' cellpadding='5'>";
+    echo "<tr><th>ID</th><th>Slug</th><th>Published At</th><th>Updated At</th></tr>";
+    
+    $posts = BlogPost::where('is_published', true)->take(10)->get();
+    foreach ($posts as $post) {
+        $pubAt = $post->published_at ?? 'NULL';
+        $updAt = $post->updated_at ?? 'NULL';
+        echo "<tr><td>{$post->id}</td><td>{$post->slug}</td><td>{$pubAt}</td><td>{$updAt}</td></tr>";
+    }
+    echo "</table>";
+    
+    echo "<h3 style='color:green'>✅ BlogPost model works!</h3>";
+    echo "<p>Try sitemap: <a href='/sitemap-posts.xml'>/sitemap-posts.xml</a></p>";
+    
+} catch (\Exception $e) {
+    echo "<h3 style='color:red'>Error: " . $e->getMessage() . "</h3>";
+    echo "<pre>" . $e->getTraceAsString() . "</pre>";
+}
