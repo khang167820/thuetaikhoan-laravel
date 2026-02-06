@@ -15,6 +15,77 @@
         </button>
     </div>
     
+    <?php if(auth()->guard()->check()): ?>
+    <!-- User Info Section (for logged in users) -->
+    <div class="mobile-user-section">
+        <div class="mobile-user-info">
+            <div class="mobile-user-avatar">
+                <?php echo e(strtoupper(substr(auth()->user()->name ?? auth()->user()->email ?? 'U', 0, 1))); ?>
+
+            </div>
+            <div class="mobile-user-details">
+                <span class="mobile-user-name"><?php echo e(auth()->user()->name ?? 'Tài khoản'); ?></span>
+                <span class="mobile-user-email"><?php echo e(auth()->user()->email); ?></span>
+            </div>
+        </div>
+        <div class="mobile-balance-row">
+            <div class="mobile-balance-info">
+                <span class="mobile-balance-label">Số dư:</span>
+                <span class="mobile-balance-amount"><?php echo e(number_format(auth()->user()->balance ?? 0, 0, ',', '.')); ?>đ</span>
+            </div>
+            <a href="/deposit" class="mobile-deposit-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+                Nạp tiền
+            </a>
+        </div>
+        <div class="mobile-user-actions">
+            <a href="/account" class="mobile-action-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                </svg>
+                Tài khoản
+            </a>
+            <a href="/order-history" class="mobile-action-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                </svg>
+                Lịch sử
+            </a>
+            <form action="/logout" method="POST" style="flex:1;">
+                <?php echo csrf_field(); ?>
+                <button type="submit" class="mobile-action-btn mobile-logout-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    Đăng xuất
+                </button>
+            </form>
+        </div>
+    </div>
+    <?php else: ?>
+    <!-- Guest Auth Buttons -->
+    <div class="mobile-auth-section">
+        <a href="/login" class="mobile-auth-btn mobile-auth-login">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/>
+                <line x1="15" y1="12" x2="3" y2="12"/>
+            </svg>
+            Đăng nhập
+        </a>
+        <a href="/register" class="mobile-auth-btn mobile-auth-register">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/>
+            </svg>
+            Đăng ký
+        </a>
+    </div>
+    <?php endif; ?>
+    
     <!-- Search Bar -->
     <div class="mobile-menu-search">
         <form action="/order-history-ip" method="GET" class="mobile-search-form">
@@ -150,43 +221,199 @@
             <span class="theme-text">Chế độ tối</span>
         </button>
     </div>
-    
-    <!-- Auth Buttons -->
-    <div class="mobile-menu-footer">
-        <?php if(auth()->guard()->check()): ?>
-        <a href="/account" class="mobile-menu-btn mobile-menu-btn-outline">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                <circle cx="12" cy="7" r="4"/>
-            </svg>
-            Tài khoản
-        </a>
-        <form action="/logout" method="POST" style="flex:1;">
-            <?php echo csrf_field(); ?>
-            <button type="submit" class="mobile-menu-btn mobile-menu-btn-primary" style="width:100%;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/>
-                    <line x1="21" y1="12" x2="9" y2="12"/>
-                </svg>
-                Đăng xuất
-            </button>
-        </form>
-        <?php else: ?>
-        <a href="/login" class="mobile-menu-btn mobile-menu-btn-outline">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/>
-                <line x1="15" y1="12" x2="3" y2="12"/>
-            </svg>
-            Đăng nhập
-        </a>
-        <a href="/register" class="mobile-menu-btn mobile-menu-btn-primary">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                <circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/>
-            </svg>
-            Đăng ký
-        </a>
-        <?php endif; ?>
-    </div>
 </nav>
+
+<style>
+/* Mobile User Section */
+.mobile-user-section {
+    padding: 16px;
+    border-bottom: 1px solid #e5e7eb;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+.mobile-user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+.mobile-user-avatar {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+    color: #fff;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+}
+.mobile-user-details {
+    display: flex;
+    flex-direction: column;
+}
+.mobile-user-name {
+    font-weight: 700;
+    font-size: 15px;
+    color: #1e293b;
+}
+.mobile-user-email {
+    font-size: 12px;
+    color: #64748b;
+}
+.mobile-balance-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    margin-bottom: 12px;
+}
+.mobile-balance-info {
+    display: flex;
+    flex-direction: column;
+}
+.mobile-balance-label {
+    font-size: 11px;
+    color: #64748b;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+.mobile-balance-amount {
+    font-size: 18px;
+    font-weight: 800;
+    color: #10b981;
+}
+.mobile-deposit-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #fff;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+.mobile-deposit-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(16,185,129,0.3);
+}
+.mobile-user-actions {
+    display: flex;
+    gap: 8px;
+}
+.mobile-action-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    color: #374151;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.mobile-action-btn:hover {
+    border-color: #1e40af;
+    color: #1e40af;
+    background: #eff6ff;
+}
+.mobile-logout-btn {
+    color: #dc2626 !important;
+    border-color: #fecaca !important;
+    background: #fff !important;
+    width: 100%;
+}
+.mobile-logout-btn:hover {
+    background: #fef2f2 !important;
+    border-color: #dc2626 !important;
+}
+
+/* Guest Auth Section */
+.mobile-auth-section {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    border-bottom: 1px solid #e5e7eb;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+.mobile-auth-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+.mobile-auth-login {
+    background: #fff;
+    color: #1e40af;
+    border: 2px solid #e5e7eb;
+}
+.mobile-auth-login:hover {
+    border-color: #1e40af;
+    background: #eff6ff;
+}
+.mobile-auth-register {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: #fff;
+    border: none;
+}
+.mobile-auth-register:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+/* Dark mode */
+[data-theme="dark"] .mobile-user-section {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border-color: #334155;
+}
+[data-theme="dark"] .mobile-user-name { color: #f1f5f9; }
+[data-theme="dark"] .mobile-user-email { color: #94a3b8; }
+[data-theme="dark"] .mobile-balance-row {
+    background: #1e293b;
+    border-color: #334155;
+}
+[data-theme="dark"] .mobile-balance-label { color: #94a3b8; }
+[data-theme="dark"] .mobile-action-btn {
+    background: #334155;
+    border-color: #475569;
+    color: #cbd5e1;
+}
+[data-theme="dark"] .mobile-action-btn:hover {
+    border-color: #60a5fa;
+    color: #60a5fa;
+    background: #1e293b;
+}
+[data-theme="dark"] .mobile-logout-btn {
+    background: #1e293b !important;
+    border-color: #7f1d1d !important;
+}
+[data-theme="dark"] .mobile-auth-section {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border-color: #334155;
+}
+[data-theme="dark"] .mobile-auth-login {
+    background: #334155;
+    border-color: #475569;
+    color: #93c5fd;
+}
+</style>
 <?php /**PATH D:\Dowload\thuetaikhoan\thuetaikhoan-laravel\resources\views/partials/mobile-menu.blade.php ENDPATH**/ ?>

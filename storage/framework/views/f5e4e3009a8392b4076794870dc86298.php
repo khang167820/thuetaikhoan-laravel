@@ -599,6 +599,32 @@
             cursor: pointer;
         }
 
+        /* ===== SOLD OUT STATE ===== */
+        .fo-card-compact.sold-out {
+            opacity: 0.6;
+            filter: grayscale(40%);
+            pointer-events: none;
+        }
+        .fo-card-compact.sold-out .fo-badge-compact {
+            background: #6b7280 !important;
+        }
+        .fo-card-compact.sold-out .fo-cta-compact {
+            background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%) !important;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .fo-card-compact.sold-out .fo-cta-compact:hover {
+            transform: none;
+        }
+        .fo-badge-compact.sold-out-badge {
+            background: #dc2626 !important;
+            animation: pulse-sold-out 2s infinite;
+        }
+        @keyframes pulse-sold-out {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
         /* ===== FAST ORDER BLOCK ===== */
         .fast-order-wrap {
             background: #fff;
@@ -794,19 +820,36 @@
             opacity: 0.75;
         }
 
-        /* ===== MEGA SERVICES BANNER ===== */
+        /* ===== MEGA SERVICES BANNER - REDESIGNED ===== */
         .mega-services-banner {
             position: relative;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-            padding: 60px 20px;
+            background: linear-gradient(145deg, #0c1222 0%, #1a1f3a 40%, #0f172a 100%);
+            padding: 70px 24px;
             overflow: hidden;
+        }
+        .mega-services-banner::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 60%;
+            height: 100%;
+            background: radial-gradient(ellipse at 100% 50%, rgba(99, 102, 241, 0.12) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .mega-services-banner::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 50%;
+            height: 100%;
+            background: radial-gradient(ellipse at 0% 100%, rgba(249, 115, 22, 0.08) 0%, transparent 50%);
+            pointer-events: none;
         }
         .mega-services-bg {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             background-image: 
-                radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 50%, rgba(168, 85, 247, 0.15) 0%, transparent 50%);
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
             pointer-events: none;
         }
         .mega-services-container {
@@ -815,124 +858,169 @@
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 50px;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 60px;
             align-items: center;
         }
         .mega-services-content { color: #fff; }
         .mega-services-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
             color: #fff;
-            padding: 6px 14px;
-            border-radius: 20px;
+            padding: 8px 16px;
+            border-radius: 24px;
             font-size: 12px;
             font-weight: 700;
-            margin-bottom: 20px;
-            animation: pulse 2s infinite;
+            margin-bottom: 24px;
+            animation: badgePulse 2s ease-in-out infinite;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.5); }
+            50% { transform: scale(1.02); box-shadow: 0 0 20px 5px rgba(249, 115, 22, 0.3); }
         }
         .mega-services-title {
-            font-size: 2.5rem;
-            font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 16px;
+            font-size: 2.8rem;
+            font-weight: 900;
+            line-height: 1.15;
+            margin-bottom: 18px;
+            letter-spacing: -0.5px;
         }
         .mega-highlight {
-            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
         .mega-services-desc {
             font-size: 1.1rem;
-            color: #94a3b8;
-            line-height: 1.6;
-            margin-bottom: 30px;
+            color: #a1a1aa;
+            line-height: 1.7;
+            margin-bottom: 32px;
         }
         .mega-stats {
             display: flex;
-            gap: 30px;
-            margin-bottom: 30px;
+            gap: 40px;
+            margin-bottom: 36px;
         }
-        .mega-stat { text-align: center; }
+        .mega-stat { 
+            text-align: center;
+            position: relative;
+        }
+        .mega-stat:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(180deg, transparent, rgba(255,255,255,0.2), transparent);
+        }
         .mega-stat-number {
             display: block;
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
         }
         .mega-stat-label {
             font-size: 13px;
             color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         .mega-services-btn {
             display: inline-flex;
             align-items: center;
             gap: 12px;
-            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            background: linear-gradient(135deg, #3b82f6 0%, #6366f1 50%, #8b5cf6 100%);
             color: #fff;
-            padding: 16px 28px;
-            border-radius: 12px;
+            padding: 16px 32px;
+            border-radius: 16px;
             font-size: 16px;
             font-weight: 700;
             text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.35);
+            border: 1px solid rgba(255,255,255,0.1);
         }
         .mega-services-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.5);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 16px 40px rgba(99, 102, 241, 0.5);
         }
         .mega-categories {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 14px;
         }
         .mega-cat {
             display: flex;
             align-items: center;
-            gap: 12px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            padding: 14px 16px;
+            gap: 14px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 16px 18px;
             text-decoration: none;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(8px);
         }
         .mega-cat:hover {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.08);
             border-color: rgba(255,255,255,0.2);
-            transform: translateX(5px);
+            transform: translateY(-3px) translateX(5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
         .mega-cat-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 22px;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+        .mega-cat:hover .mega-cat-icon {
+            transform: scale(1.1) rotate(5deg);
         }
         .mega-cat-info {
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 3px;
         }
         .mega-cat-name {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
-            color: #fff;
+            color: #f1f5f9;
         }
         .mega-cat-count {
             font-size: 12px;
-            color: #64748b;
+            color: #6b7280;
         }
+        /* Mobile responsiveness */
+        @media (max-width: 900px) {
+            .mega-services-container { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+            .mega-services-title { font-size: 2rem; }
+            .mega-stats { justify-content: center; }
+            .mega-services-badge { margin: 0 auto 24px; }
+            .mega-services-btn { margin: 0 auto; }
+        }
+        @media (max-width: 600px) {
+            .mega-services-banner { padding: 50px 16px; }
+            .mega-services-title { font-size: 1.6rem; }
+            .mega-categories { grid-template-columns: 1fr; gap: 10px; }
+            .mega-stats { gap: 24px; flex-wrap: wrap; }
+            .mega-stat:not(:last-child)::after { display: none; }
+        }
+
 
         /* ===== MUA SƠ ĐỒ & BYPASS A12+ ===== */
         .ady-extra-section {
@@ -1263,7 +1351,40 @@
 </head>
 <body>
 
+<?php
+// Calculate minimum prices after all discounts for card display
+// Formula: min_price - 3000 (points) - 2000 (coupon) = display_price
+$pointsDiscount = 3000;
+$couponDiscount = 2000;
+$totalDiscount = $pointsDiscount + $couponDiscount;
 
+$cardPrices = [];
+$typeMapping = [
+    'Unlocktool' => 'unlocktool',
+    'Vietmap' => 'vietmap', 
+    'Griffin' => 'griffin',
+    'AMT' => 'amt',
+    'TSMTool' => 'tsm',
+    'KGKiller' => 'kg-killer',
+    'SamsungTool' => 'samsung-tool',
+    'DFTPro' => 'dft'
+];
+
+foreach($allPrices ?? [] as $type => $prices) {
+    $jsKey = $typeMapping[$type] ?? strtolower($type);
+    $minPrice = $prices->min('price');
+    $minOldPrice = $prices->where('price', $minPrice)->first()->original_price ?? $minPrice;
+    
+    // Apply max discounts
+    $displayPrice = max(1000, $minPrice - $totalDiscount);
+    
+    $cardPrices[$jsKey] = [
+        'original' => $minPrice,
+        'display' => $displayPrice,
+        'oldPrice' => $minOldPrice
+    ];
+}
+?>
 <!-- SHARED HEADER -->
 <?php echo $__env->make('partials.header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
@@ -1278,7 +1399,7 @@
         <p class="hero-subtitle">
             Hệ thống cho thuê tài khoản UnlockTool, Vietmap, Griffin, Samsung Tool và hơn 20+ công cụ GSM khác. Nhận tài khoản ngay sau khi thanh toán!
         </p>
-        <form class="search-modern" action="/search" method="GET">
+        <form class="search-modern" action="/ord-services" method="GET">
             <input type="text" name="q" placeholder="Tìm kiếm: Mua sơ đồ, Unlocktool, Tool FRP, Credits, Bypass A12+...">
             <button type="submit">Tìm kiếm</button>
         </form>
@@ -1304,8 +1425,12 @@
     <div class="fast-order">
         <div class="fast-order-grid">
             <!-- CARD: UnlockTool -->
-            <article class="fo-card-compact">
+            <article class="fo-card-compact <?php echo e(!($availableServices['Unlocktool'] ?? false) ? 'sold-out' : ''); ?>">
+                <?php if(!($availableServices['Unlocktool'] ?? false)): ?>
+                <span class="fo-badge-compact sold-out-badge">Hết tài khoản</span>
+                <?php else: ?>
                 <span class="fo-badge-compact">Flash Sale</span>
+                <?php endif; ?>
                 <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
                 <div class="fo-logo-compact">
                     <img src="/images/services/unlocktool.png" alt="UnlockTool">
@@ -1323,15 +1448,25 @@
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
+                <?php if($availableServices['Unlocktool'] ?? false): ?>
                 <button type="button" onclick="openPriceModal('unlocktool')" class="fo-cta-compact">
-                    <span class="fo-price-compact">10.000 VND</span>
-                    <span class="fo-price-old-compact">25.000₫</span>
+                    <span class="fo-price-compact"><?php echo e(number_format($cardPrices['unlocktool']['display'] ?? 10000, 0, ',', '.')); ?> VND</span>
+                    <span class="fo-price-old-compact"><?php echo e(number_format($cardPrices['unlocktool']['oldPrice'] ?? 25000, 0, ',', '.')); ?>₫</span>
                 </button>
+                <?php else: ?>
+                <button type="button" class="fo-cta-compact" disabled>
+                    <span class="fo-price-compact">HẾT TÀI KHOẢN</span>
+                </button>
+                <?php endif; ?>
             </article>
 
             <!-- CARD: Vietmap Live PRO -->
-            <article class="fo-card-compact">
+            <article class="fo-card-compact <?php echo e(!($availableServices['Vietmap'] ?? false) ? 'sold-out' : ''); ?>">
+                <?php if(!($availableServices['Vietmap'] ?? false)): ?>
+                <span class="fo-badge-compact sold-out-badge">Hết tài khoản</span>
+                <?php else: ?>
                 <span class="fo-badge-compact green">Hot</span>
+                <?php endif; ?>
                 <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
                 <div class="fo-logo-compact">
                     <img src="/images/services/vietmap.png" alt="Vietmap Live">
@@ -1349,15 +1484,25 @@
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
+                <?php if($availableServices['Vietmap'] ?? false): ?>
                 <button type="button" onclick="openPriceModal('vietmap')" class="fo-cta-compact green">
-                    <span class="fo-price-compact">8.000 VND</span>
-                    <span class="fo-price-old-compact">19.000₫</span>
+                    <span class="fo-price-compact"><?php echo e(number_format($cardPrices['vietmap']['display'] ?? 8000, 0, ',', '.')); ?> VND</span>
+                    <span class="fo-price-old-compact"><?php echo e(number_format($cardPrices['vietmap']['oldPrice'] ?? 19000, 0, ',', '.')); ?>₫</span>
                 </button>
+                <?php else: ?>
+                <button type="button" class="fo-cta-compact" disabled>
+                    <span class="fo-price-compact">HẾT TÀI KHOẢN</span>
+                </button>
+                <?php endif; ?>
             </article>
 
             <!-- CARD: Griffin Premium -->
-            <article class="fo-card-compact">
+            <article class="fo-card-compact <?php echo e(!($availableServices['Griffin'] ?? false) ? 'sold-out' : ''); ?>">
+                <?php if(!($availableServices['Griffin'] ?? false)): ?>
+                <span class="fo-badge-compact sold-out-badge">Hết tài khoản</span>
+                <?php else: ?>
                 <span class="fo-badge-compact purple">Premium</span>
+                <?php endif; ?>
                 <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
                 <div class="fo-logo-compact">
                     <img src="/images/services/griffin.png" alt="Griffin-Unlocker">
@@ -1377,15 +1522,25 @@
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
+                <?php if($availableServices['Griffin'] ?? false): ?>
                 <button type="button" onclick="openPriceModal('griffin')" class="fo-cta-compact blue">
-                    <span class="fo-price-compact">42.000 VND</span>
-                    <span class="fo-price-old-compact">100.000₫</span>
+                    <span class="fo-price-compact"><?php echo e(number_format($cardPrices['griffin']['display'] ?? 42000, 0, ',', '.')); ?> VND</span>
+                    <span class="fo-price-old-compact"><?php echo e(number_format($cardPrices['griffin']['oldPrice'] ?? 100000, 0, ',', '.')); ?>₫</span>
                 </button>
+                <?php else: ?>
+                <button type="button" class="fo-cta-compact" disabled>
+                    <span class="fo-price-compact">HẾT TÀI KHOẢN</span>
+                </button>
+                <?php endif; ?>
             </article>
 
             <!-- CARD: Android Multitool -->
-            <article class="fo-card-compact">
+            <article class="fo-card-compact <?php echo e(!($availableServices['AMT'] ?? false) ? 'sold-out' : ''); ?>">
+                <?php if(!($availableServices['AMT'] ?? false)): ?>
+                <span class="fo-badge-compact sold-out-badge">Hết tài khoản</span>
+                <?php else: ?>
                 <span class="fo-badge-compact orange">Flash Sale</span>
+                <?php endif; ?>
                 <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
                 <div class="fo-logo-compact">
                     <img src="/images/services/amt.svg" alt="Android Multitool">
@@ -1404,15 +1559,25 @@
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
+                <?php if($availableServices['AMT'] ?? false): ?>
                 <button type="button" onclick="openPriceModal('amt')" class="fo-cta-compact orange">
-                    <span class="fo-price-compact">9.000 VND</span>
-                    <span class="fo-price-old-compact">30.000₫</span>
+                    <span class="fo-price-compact"><?php echo e(number_format($cardPrices['amt']['display'] ?? 9000, 0, ',', '.')); ?> VND</span>
+                    <span class="fo-price-old-compact"><?php echo e(number_format($cardPrices['amt']['oldPrice'] ?? 30000, 0, ',', '.')); ?>₫</span>
                 </button>
+                <?php else: ?>
+                <button type="button" class="fo-cta-compact" disabled>
+                    <span class="fo-price-compact">HẾT TÀI KHOẢN</span>
+                </button>
+                <?php endif; ?>
             </article>
 
             <!-- CARD: KG Killer Tool -->
-            <article class="fo-card-compact">
+            <article class="fo-card-compact <?php echo e(!($availableServices['KGKiller'] ?? false) ? 'sold-out' : ''); ?>">
+                <?php if(!($availableServices['KGKiller'] ?? false)): ?>
+                <span class="fo-badge-compact sold-out-badge">Hết tài khoản</span>
+                <?php else: ?>
                 <span class="fo-badge-compact">Flash Sale</span>
+                <?php endif; ?>
                 <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
                 <div class="fo-logo-compact">
                     <img src="/images/services/kg-killer.png" alt="KG Killer Tool">
@@ -1431,15 +1596,25 @@
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
+                <?php if($availableServices['KGKiller'] ?? false): ?>
                 <button type="button" onclick="openPriceModal('kg-killer')" class="fo-cta-compact">
-                    <span class="fo-price-compact">8.000 VND</span>
-                    <span class="fo-price-old-compact">35.000₫</span>
+                    <span class="fo-price-compact"><?php echo e(number_format($cardPrices['kg-killer']['display'] ?? 8000, 0, ',', '.')); ?> VND</span>
+                    <span class="fo-price-old-compact"><?php echo e(number_format($cardPrices['kg-killer']['oldPrice'] ?? 35000, 0, ',', '.')); ?>₫</span>
                 </button>
+                <?php else: ?>
+                <button type="button" class="fo-cta-compact" disabled>
+                    <span class="fo-price-compact">HẾT TÀI KHOẢN</span>
+                </button>
+                <?php endif; ?>
             </article>
 
             <!-- CARD: Samsung Tool -->
-            <article class="fo-card-compact">
+            <article class="fo-card-compact <?php echo e(!($availableServices['SamsungTool'] ?? false) ? 'sold-out' : ''); ?>">
+                <?php if(!($availableServices['SamsungTool'] ?? false)): ?>
+                <span class="fo-badge-compact sold-out-badge">Hết tài khoản</span>
+                <?php else: ?>
                 <span class="fo-badge-compact orange">Hot</span>
+                <?php endif; ?>
                 <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
                 <div class="fo-logo-compact">
                     <img src="/images/services/samsung-tool.png" alt="Samsung Tool">
@@ -1457,15 +1632,25 @@
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
+                <?php if($availableServices['SamsungTool'] ?? false): ?>
                 <button type="button" onclick="openPriceModal('samsung-tool')" class="fo-cta-compact orange">
-                    <span class="fo-price-compact">162.000 VND</span>
-                    <span class="fo-price-old-compact">250.000₫</span>
+                    <span class="fo-price-compact"><?php echo e(number_format($cardPrices['samsung-tool']['display'] ?? 162000, 0, ',', '.')); ?> VND</span>
+                    <span class="fo-price-old-compact"><?php echo e(number_format($cardPrices['samsung-tool']['oldPrice'] ?? 250000, 0, ',', '.')); ?>₫</span>
                 </button>
+                <?php else: ?>
+                <button type="button" class="fo-cta-compact" disabled>
+                    <span class="fo-price-compact">HẾT TÀI KHOẢN</span>
+                </button>
+                <?php endif; ?>
             </article>
 
             <!-- CARD: DFT Pro Tool -->
-            <article class="fo-card-compact">
+            <article class="fo-card-compact <?php echo e(!($availableServices['DFTPro'] ?? false) ? 'sold-out' : ''); ?>">
+                <?php if(!($availableServices['DFTPro'] ?? false)): ?>
+                <span class="fo-badge-compact sold-out-badge">Hết tài khoản</span>
+                <?php else: ?>
                 <span class="fo-badge-compact blue">New</span>
+                <?php endif; ?>
                 <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
                 <div class="fo-logo-compact">
                     <img src="/images/services/dft-pro.png" alt="DFT Pro Tool">
@@ -1483,15 +1668,25 @@
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
+                <?php if($availableServices['DFTPro'] ?? false): ?>
                 <button type="button" onclick="openPriceModal('dft')" class="fo-cta-compact blue">
-                    <span class="fo-price-compact">105.000 VND</span>
-                    <span class="fo-price-old-compact">130.000₫</span>
+                    <span class="fo-price-compact"><?php echo e(number_format($cardPrices['dft']['display'] ?? 65000, 0, ',', '.')); ?> VND</span>
+                    <span class="fo-price-old-compact"><?php echo e(number_format($cardPrices['dft']['oldPrice'] ?? 130000, 0, ',', '.')); ?>₫</span>
                 </button>
+                <?php else: ?>
+                <button type="button" class="fo-cta-compact" disabled>
+                    <span class="fo-price-compact">HẾT TÀI KHOẢN</span>
+                </button>
+                <?php endif; ?>
             </article>
 
             <!-- CARD: TSM Tool -->
-            <article class="fo-card-compact">
+            <article class="fo-card-compact <?php echo e(!($availableServices['TSMTool'] ?? false) ? 'sold-out' : ''); ?>">
+                <?php if(!($availableServices['TSMTool'] ?? false)): ?>
+                <span class="fo-badge-compact sold-out-badge">Hết tài khoản</span>
+                <?php else: ?>
                 <span class="fo-badge-compact">Flash Sale</span>
+                <?php endif; ?>
                 <a class="fo-coupon-compact" href="/ma-giam-gia">Mã giảm giá</a>
                 <div class="fo-logo-compact">
                     <img src="/images/services/tsm.png" alt="TSM Tool">
@@ -1512,10 +1707,16 @@
                     <span class="collapse-text" style="display:none">Thu gọn</span>
                     <span class="expand-text">Xem thêm</span>
                 </button>
+                <?php if($availableServices['TSMTool'] ?? false): ?>
                 <button type="button" onclick="openPriceModal('tsm')" class="fo-cta-compact">
-                    <span class="fo-price-compact">6.000 VND</span>
-                    <span class="fo-price-old-compact">25.000₫</span>
+                    <span class="fo-price-compact"><?php echo e(number_format($cardPrices['tsm']['display'] ?? 2000, 0, ',', '.')); ?> VND</span>
+                    <span class="fo-price-old-compact"><?php echo e(number_format($cardPrices['tsm']['oldPrice'] ?? 25000, 0, ',', '.')); ?>₫</span>
                 </button>
+                <?php else: ?>
+                <button type="button" class="fo-cta-compact" disabled>
+                    <span class="fo-price-compact">HẾT TÀI KHOẢN</span>
+                </button>
+                <?php endif; ?>
             </article>
         </div>
     </div>
@@ -1651,6 +1852,17 @@
                 <h3 class="ady-extra-card-title">Order Bypass A12+</h3>
                 <p class="ady-extra-card-desc">Bypass Hello Screen, FRP A12+, kích hoạt iPhone/iPad qua server</p>
                 <span class="ady-extra-card-link">Xem dịch vụ Bypass A12+ →</span>
+            </a>
+            <a href="/ord-services?cat=Phan%20mem%20mo%20khoa" class="ady-extra-card">
+                <div class="ady-extra-card-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 9.9-1"/>
+                    </svg>
+                </div>
+                <h3 class="ady-extra-card-title">Phần mềm mở khóa</h3>
+                <p class="ady-extra-card-desc">UnlockTool, Griffin, DFT, TSM, Samsung Tool và các phần mềm unlock điện thoại</p>
+                <span class="ady-extra-card-link">Xem phần mềm mở khóa →</span>
             </a>
         </div>
     </div>
@@ -1865,6 +2077,9 @@
         const icon = document.getElementById('theme-icon');
         const html = document.documentElement;
         
+        // Exit early if elements don't exist
+        if (!toggle || !icon) return;
+        
         const savedTheme = localStorage.getItem('theme');
         const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         
@@ -1904,6 +2119,13 @@
     flex-direction: column;
     align-items: flex-end;
     gap: 12px;
+    pointer-events: none; /* Don't block clicks when closed */
+}
+.contact-float.open {
+    pointer-events: auto;
+}
+.contact-float-toggle {
+    pointer-events: auto !important; /* Toggle button always clickable */
 }
 .contact-float-items {
     display: flex;
@@ -2066,15 +2288,17 @@
 </div>
 <script>
 function toggleContactFloat() {
-    document.getElementById('contact-float').classList.toggle('open');
+    const el = document.getElementById('contact-float');
+    if (el) el.classList.toggle('open');
 }
 
 function toggleFeatures(cardId) {
     const features = document.getElementById('features-' + cardId);
+    if (!features) return;
     const card = features.closest('.fo-card-compact');
     const button = features.nextElementSibling;
     features.classList.toggle('collapsed');
-    card.classList.toggle('expanded');
+    if (card) card.classList.toggle('expanded');
     
     // Update button text visibility
     const expandText = button.querySelector('.expand-text');
@@ -2113,15 +2337,14 @@ function toggleFeatures(cardId) {
             <span class="pm-points-vnd">(≈ <span id="pm-points-vnd">0</span> VND)</span>
         </div>
         
-        <!-- Price Options List -->
+        <!-- Price Options List (includes discount section at bottom) -->
         <div class="pm-options-scroll">
             <div class="pm-options" id="pm-options">
                 <!-- Dynamic options will be inserted here -->
             </div>
-        </div>
-        
-        <!-- Discount Section -->
-        <div class="pm-discount-section">
+            
+            <!-- Discount Section (moved inside scroll area) -->
+            <div class="pm-discount-section" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
             <!-- Use Points Checkbox -->
             <label class="pm-checkbox" id="pm-use-points-wrapper">
                 <input type="checkbox" id="pm-use-points">
@@ -2162,28 +2385,27 @@ function toggleFeatures(cardId) {
                 <!-- Hidden input to store coupon code -->
                 <input type="hidden" id="pm-coupon-code" value="">
                 
-                <!-- Coupon Result Display -->
-                <div id="pm-coupon-result" style="display: none; margin-top: 12px; padding: 12px; background: #f0fdf4; border: 1px solid #86efac; border-radius: 10px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                        <span style="font-size: 12px; color: #15803d; font-weight: 600;">✓ Mã <span id="pm-coupon-code-display"></span></span>
-                        <button type="button" onclick="removeCouponWelcome()" style="background: none; border: none; color: #dc2626; font-size: 11px; cursor: pointer;">Xóa</button>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 13px;">
-                        <span style="color: #64748b;">Giá gốc:</span>
-                        <span id="pm-original-price" style="color: #64748b; text-decoration: line-through;"></span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 13px;">
-                        <span style="color: #16a34a;">Giảm:</span>
-                        <span id="pm-discount-amount" style="color: #16a34a; font-weight: 600;"></span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 15px; margin-top: 6px; padding-top: 6px; border-top: 1px dashed #86efac;">
-                        <span style="color: #1e293b; font-weight: 700;">Thành tiền:</span>
-                        <span id="pm-final-price" style="color: #dc2626; font-weight: 800;"></span>
-                    </div>
-                </div>
+                <!-- Old coupon result removed - now using only the consolidated price summary below -->
                 
                 <!-- Error Message -->
                 <div id="pm-coupon-error" style="display: none; margin-top: 8px; padding: 8px 12px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; color: #dc2626; font-size: 12px;"></div>
+            </div>
+            
+            <!-- Real-time Price Summary -->
+            <div id="pm-price-summary" class="pm-price-summary" style="margin-top: 16px; padding: 16px; background: linear-gradient(135deg, #f0fdf4, #dcfce7); border: 2px solid #22c55e; border-radius: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-size: 13px; color: #374151; font-weight: 600;">Giá gốc:</span>
+                    <span id="pm-summary-original" style="font-size: 13px; color: #6b7280; text-decoration: line-through;">0 VND</span>
+                </div>
+                <div id="pm-summary-discount-row" style="display: none; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-size: 13px; color: #16a34a; font-weight: 600;">Giảm giá:</span>
+                    <span id="pm-summary-discount" style="font-size: 13px; color: #16a34a; font-weight: 700;">-0 VND</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 2px dashed #86efac;">
+                    <span style="font-size: 15px; color: #0f172a; font-weight: 800;">💰 Thành tiền:</span>
+                    <span id="pm-summary-total" style="font-size: 18px; color: #dc2626; font-weight: 900;">0 VND</span>
+                </div>
+            </div>
             </div>
         </div>
         
@@ -2317,26 +2539,25 @@ function toggleFeatures(cardId) {
 
 /* Options Scroll */
 .pm-options-scroll {
-    flex: 1;
     overflow-y: auto;
-    max-height: 450px;
-    padding: 8px 20px;
+    height: 500px;
+    padding: 6px 16px;
 }
 .pm-options {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 3px;
 }
 
 /* Single Price Option */
 .pm-option {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 12px;
+    gap: 8px;
+    padding: 6px 10px;
     background: #fff;
     border: 2px solid #e5e7eb;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -2391,27 +2612,28 @@ function toggleFeatures(cardId) {
 
 .pm-option-info { flex: 1; min-width: 0; }
 .pm-option-name {
-    font-size: 12px;
-    font-weight: 600;
-    color: #1f2937;
+    font-size: 13px;
+    font-weight: 700;
+    color: #0f172a;
     margin-bottom: 1px;
 }
 .pm-option-duration {
-    font-size: 11px;
-    color: #6b7280;
+    font-size: 12px;
+    font-weight: 500;
+    color: #475569;
 }
 .pm-option-price {
     text-align: right;
     flex-shrink: 0;
 }
 .pm-option-current {
-    font-size: 14px;
-    font-weight: 700;
-    color: #1f2937;
+    font-size: 15px;
+    font-weight: 800;
+    color: #0f172a;
 }
 .pm-option-old {
-    font-size: 11px;
-    color: #9ca3af;
+    font-size: 12px;
+    color: #64748b;
     text-decoration: line-through;
 }
 .pm-option-discount {
@@ -2654,7 +2876,7 @@ function toggleFeatures(cardId) {
         margin-top: auto;
     }
     .pm-options-scroll {
-        max-height: 280px;
+        max-height: 450px;
     }
     .pm-option {
         padding: 10px 12px;
@@ -2670,83 +2892,53 @@ function toggleFeatures(cardId) {
 
 <script>
 // ========== ENHANCED PRICE DATA ==========
+// Dynamic prices from database
 const servicePricesV2 = {
-    'unlocktool': {
-        name: 'UNLOCKTOOL',
-        packages: [
-            { hours: 6, name: 'Unlocktool 6 giờ', price: 15000, oldPrice: 25000, tags: ['special', 'promo'], specialTag: 'Tưng bừng khai trương' },
-            { hours: 12, name: 'Unlocktool 12 giờ', price: 19000, oldPrice: 29000, tags: ['flash-sale', 'promo'], discount: 34 },
-            { hours: 24, name: 'Unlocktool 1 ngày', price: 33000, oldPrice: 50000, tags: ['flash-sale', 'hot'] },
-            { hours: 48, name: 'Unlocktool 2 ngày', price: 43000, oldPrice: 80000, tags: ['flash-sale', 'promo'] },
-            { hours: 120, name: 'Unlocktool 5 ngày', price: 67000, oldPrice: 120000, tags: ['flash-sale', 'promo'] },
-            { hours: 168, name: 'Unlocktool 7 ngày', price: 96000, oldPrice: 160000, tags: [] },
-            { hours: 336, name: 'Unlocktool 14 ngày', price: 147000, oldPrice: 280000, tags: ['flash-sale', 'promo'] },
-            { hours: 720, name: 'Unlocktool 30 ngày', price: 249000, oldPrice: 268000, tags: ['flash-sale', 'promo'], discount: 7 }
-        ]
-    },
-    'vietmap': {
-        name: 'VIETMAP LIVE PRO',
-        packages: [
-            { hours: 6, name: 'Vietmap 6 giờ', price: 8000, oldPrice: 15000, tags: ['hot'] },
-            { hours: 24, name: 'Vietmap 1 ngày', price: 15000, oldPrice: 25000, tags: ['promo'] },
-            { hours: 168, name: 'Vietmap 7 ngày', price: 45000, oldPrice: 80000, tags: ['flash-sale'] },
-            { hours: 720, name: 'Vietmap 30 ngày', price: 90000, oldPrice: 150000, tags: ['flash-sale', 'promo'], discount: 40 }
-        ]
-    },
-    'griffin': {
-        name: 'GRIFFIN-UNLOCKER',
-        packages: [
-            { hours: 6, name: 'Griffin 6 giờ', price: 42000, oldPrice: 80000, tags: ['hot'] },
-            { hours: 24, name: 'Griffin 1 ngày', price: 75000, oldPrice: 150000, tags: ['promo'] },
-            { hours: 168, name: 'Griffin 7 ngày', price: 200000, oldPrice: 400000, tags: ['flash-sale', 'promo'] },
-            { hours: 720, name: 'Griffin 30 ngày', price: 450000, oldPrice: 800000, tags: ['flash-sale'], discount: 44 }
-        ]
-    },
-    'amt': {
-        name: 'ANDROID MULTITOOL',
-        packages: [
-            { hours: 6, name: 'AMT 6 giờ', price: 9000, oldPrice: 20000, tags: ['flash-sale'] },
-            { hours: 24, name: 'AMT 1 ngày', price: 20000, oldPrice: 40000, tags: ['promo'] },
-            { hours: 168, name: 'AMT 7 ngày', price: 60000, oldPrice: 120000, tags: ['flash-sale', 'promo'] },
-            { hours: 720, name: 'AMT 30 ngày', price: 150000, oldPrice: 300000, tags: ['hot'], discount: 50 }
-        ]
-    },
-    'kg-killer': {
-        name: 'KG KILLER TOOL',
-        packages: [
-            { hours: 6, name: 'KG Killer 6 giờ', price: 8000, oldPrice: 25000, tags: ['hot'] },
-            { hours: 24, name: 'KG Killer 1 ngày', price: 18000, oldPrice: 45000, tags: ['promo'] },
-            { hours: 168, name: 'KG Killer 7 ngày', price: 55000, oldPrice: 130000, tags: ['flash-sale'] },
-            { hours: 720, name: 'KG Killer 30 ngày', price: 120000, oldPrice: 280000, tags: ['flash-sale', 'promo'], discount: 57 }
-        ]
-    },
-    'samsung-tool': {
-        name: 'SAMSUNG TOOL',
-        packages: [
-            { hours: 6, name: 'Samsung Tool 6 giờ', price: 162000, oldPrice: 200000, tags: ['hot'] },
-            { hours: 24, name: 'Samsung Tool 1 ngày', price: 280000, oldPrice: 380000, tags: ['promo'] },
-            { hours: 168, name: 'Samsung Tool 7 ngày', price: 650000, oldPrice: 900000, tags: ['flash-sale'] },
-            { hours: 720, name: 'Samsung Tool 30 ngày', price: 1200000, oldPrice: 1800000, tags: ['flash-sale', 'promo'], discount: 33 }
-        ]
-    },
-    'dft': {
-        name: 'DFT PRO TOOL',
-        packages: [
-            { hours: 6, name: 'DFT Pro 6 giờ', price: 105000, oldPrice: 130000, tags: ['hot'] },
-            { hours: 24, name: 'DFT Pro 1 ngày', price: 180000, oldPrice: 250000, tags: ['promo'] },
-            { hours: 168, name: 'DFT Pro 7 ngày', price: 450000, oldPrice: 650000, tags: ['flash-sale'] },
-            { hours: 720, name: 'DFT Pro 30 ngày', price: 900000, oldPrice: 1400000, tags: ['flash-sale', 'promo'], discount: 36 }
-        ]
-    },
-    'tsm': {
-        name: 'TSM TOOL',
-        packages: [
-            { hours: 6, name: 'TSM 6 giờ', price: 6000, oldPrice: 15000, tags: ['flash-sale'] },
-            { hours: 24, name: 'TSM 1 ngày', price: 15000, oldPrice: 30000, tags: ['promo'] },
-            { hours: 168, name: 'TSM 7 ngày', price: 45000, oldPrice: 90000, tags: ['flash-sale', 'hot'] },
-            { hours: 720, name: 'TSM 30 ngày', price: 100000, oldPrice: 200000, tags: ['flash-sale', 'promo'], discount: 50 }
-        ]
-    }
+    <?php
+    $typeMapping = [
+        'Unlocktool' => 'unlocktool',
+        'Vietmap' => 'vietmap',
+        'Griffin' => 'griffin',
+        'AMT' => 'amt',
+        'TSMTool' => 'tsm',
+        'KGKiller' => 'kg-killer',
+        'SamsungTool' => 'samsung-tool',
+        'DFTPro' => 'dft'
+    ];
+    $displayNames = [
+        'Unlocktool' => 'UNLOCKTOOL',
+        'Vietmap' => 'VIETMAP LIVE PRO',
+        'Griffin' => 'GRIFFIN-UNLOCKER',
+        'AMT' => 'ANDROID MULTITOOL',
+        'TSMTool' => 'TSM TOOL',
+        'KGKiller' => 'KG KILLER TOOL',
+        'SamsungTool' => 'SAMSUNG TOOL',
+        'DFTPro' => 'DFT PRO TOOL'
+    ];
+    ?>
+    <?php $__currentLoopData = $allPrices ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type => $prices): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <?php $jsKey = $typeMapping[$type] ?? strtolower($type); ?>
+        '<?php echo e($jsKey); ?>': {
+            name: '<?php echo e($displayNames[$type] ?? strtoupper($type)); ?>',
+            packages: [
+                <?php $__currentLoopData = $prices; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $price): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                {
+                    id: <?php echo e($price->id); ?>,
+                    hours: <?php echo e($price->hours); ?>,
+                    name: '<?php echo e($displayNames[$type] ?? $type); ?> <?php echo e($price->hours >= 24 ? floor($price->hours / 24) . ' ngày' : $price->hours . ' giờ'); ?>',
+                    price: <?php echo e($price->price); ?>,
+                    oldPrice: <?php echo e($price->original_price ?? $price->price); ?>,
+                    tags: [
+                        <?php if($price->promo_badge): ?> '<?php echo e(strtolower(str_replace(' ', '-', $price->promo_badge))); ?>', <?php endif; ?>
+                        <?php if($price->promo_label): ?> 'promo', <?php endif; ?>
+                    ],
+                    <?php if($price->promo_label): ?> specialTag: '<?php echo e($price->promo_label); ?>', <?php endif; ?>
+                    <?php if($price->discount_percent): ?> discount: <?php echo e($price->discount_percent); ?>, <?php endif; ?>
+                },
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            ]
+        },
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 };
 
 let currentServiceId = null;
@@ -2762,20 +2954,26 @@ function openPriceModal(serviceId) {
     selectedCoupon = null;
     
     // Set service name
-    document.getElementById('pm-service-name').textContent = service.name;
+    const serviceNameEl = document.getElementById('pm-service-name');
+    if (serviceNameEl) serviceNameEl.textContent = service.name;
     
     // Check if user is logged in and has points
     const userPoints = <?php echo e(Auth::check() ? (Auth::user()->balance ?? 0) : 0); ?>;
+    const pointsSection = document.getElementById('pm-points-section');
+    const userPointsEl = document.getElementById('pm-user-points');
+    const pointsVndEl = document.getElementById('pm-points-vnd');
+    const usePointsWrapper = document.getElementById('pm-use-points-wrapper');
+    
     if (userPoints > 0) {
-        document.getElementById('pm-points-section').style.display = 'flex';
-        document.getElementById('pm-user-points').textContent = userPoints.toLocaleString('vi-VN') + ' điểm';
-        document.getElementById('pm-points-vnd').textContent = userPoints.toLocaleString('vi-VN');
-        document.getElementById('pm-use-points-wrapper').style.display = 'flex';
-        document.getElementById('pm-points-deduct').textContent = userPoints.toLocaleString('vi-VN');
+        if (pointsSection) pointsSection.style.display = 'flex';
+        if (userPointsEl) userPointsEl.textContent = userPoints.toLocaleString('vi-VN') + ' điểm';
+        if (pointsVndEl) pointsVndEl.textContent = userPoints.toLocaleString('vi-VN');
     } else {
-        document.getElementById('pm-points-section').style.display = 'none';
-        document.getElementById('pm-use-points-wrapper').style.display = 'none';
+        if (pointsSection) pointsSection.style.display = 'none';
     }
+    
+    // Always show points deduction checkbox with fixed 3000 VND
+    if (usePointsWrapper) usePointsWrapper.style.display = 'flex';
     
     // Build package options
     const optionsContainer = document.getElementById('pm-options');
@@ -2817,14 +3015,21 @@ function openPriceModal(serviceId) {
     }).join('');
     
     // Reset coupon section
-    document.getElementById('pm-use-coupon').checked = false;
-    document.getElementById('pm-coupon-section').style.display = 'none';
-    document.getElementById('pm-coupon-code').value = '';
+    const useCouponCheckbox = document.getElementById('pm-use-coupon');
+    const couponSection = document.getElementById('pm-coupon-section');
+    const couponCodeInput = document.getElementById('pm-coupon-code');
+    
+    if (useCouponCheckbox) useCouponCheckbox.checked = false;
+    if (couponSection) couponSection.style.display = 'none';
+    if (couponCodeInput) couponCodeInput.value = '';
     document.querySelectorAll('.pm-coupon-item').forEach(item => item.classList.remove('selected'));
     
     // Show modal
     document.getElementById('price-modal').classList.add('open');
     document.body.style.overflow = 'hidden';
+    
+    // Initialize price summary
+    setTimeout(() => updatePriceDisplay(), 50);
 }
 
 function selectPackage(index) {
@@ -2832,11 +3037,16 @@ function selectPackage(index) {
     document.querySelectorAll('.pm-option').forEach((opt, i) => {
         opt.classList.toggle('selected', i === index);
     });
+    // Update price summary when package changes
+    updatePriceDisplay();
 }
 
 function toggleCouponSection() {
-    const isChecked = document.getElementById('pm-use-coupon').checked;
-    document.getElementById('pm-coupon-section').style.display = isChecked ? 'block' : 'none';
+    const checkbox = document.getElementById('pm-use-coupon');
+    const section = document.getElementById('pm-coupon-section');
+    if (checkbox && section) {
+        section.style.display = checkbox.checked ? 'block' : 'none';
+    }
 }
 
 function selectCoupon(code, value, type) {
@@ -2844,14 +3054,16 @@ function selectCoupon(code, value, type) {
     document.querySelectorAll('.pm-coupon-item').forEach(item => {
         item.classList.toggle('selected', item.dataset.code === code);
     });
-    document.getElementById('pm-coupon-code').value = code;
+    const couponCodeInput = document.getElementById('pm-coupon-code');
+    if (couponCodeInput) couponCodeInput.value = code;
     
     // Automatically apply and calculate
     calculateCouponDiscount(code);
 }
 
 function applyCouponCode() {
-    const code = document.getElementById('pm-coupon-code').value.trim();
+    const codeInput = document.getElementById('pm-coupon-code');
+    const code = codeInput ? codeInput.value.trim() : '';
     if (!code) {
         showCouponError('Vui lòng nhập mã giảm giá.');
         return;
@@ -2861,12 +3073,10 @@ function applyCouponCode() {
 
 function calculateCouponDiscount(code) {
     const btn = document.getElementById('pm-apply-coupon-btn');
-    const resultBox = document.getElementById('pm-coupon-result');
     const errorBox = document.getElementById('pm-coupon-error');
     
-    // Hide previous results
-    resultBox.style.display = 'none';
-    errorBox.style.display = 'none';
+    // Hide previous error
+    if (errorBox) errorBox.style.display = 'none';
     
     // Get current package price
     const service = servicePricesV2[currentServiceId];
@@ -2895,13 +3105,11 @@ function calculateCouponDiscount(code) {
             if (data.success) {
                 selectedCoupon = { code: data.coupon.code, value: data.discount_amount, type: data.coupon.discount_type };
                 
-                // Show result
-                document.getElementById('pm-coupon-code-display').textContent = data.coupon.code;
-                document.getElementById('pm-original-price').textContent = formatVNDWelcome(price);
-                document.getElementById('pm-discount-amount').textContent = '-' + formatVNDWelcome(data.discount_amount);
-                document.getElementById('pm-final-price').textContent = formatVNDWelcome(data.final_price);
-                resultBox.style.display = 'block';
+                // Update price summary with coupon
+                updatePriceDisplay();
             } else {
+                selectedCoupon = null;
+                updatePriceDisplay();
                 showCouponError(data.message || 'Mã giảm giá không hợp lệ.');
             }
         })
@@ -2916,29 +3124,86 @@ function calculateCouponDiscount(code) {
 
 function showCouponError(message) {
     const errorBox = document.getElementById('pm-coupon-error');
-    errorBox.textContent = message;
-    errorBox.style.display = 'block';
+    if (errorBox) {
+        errorBox.textContent = message;
+        errorBox.style.display = 'block';
+    }
 }
 
 function removeCouponWelcome() {
-    document.getElementById('pm-coupon-code').value = '';
-    document.getElementById('pm-coupon-result').style.display = 'none';
-    document.getElementById('pm-coupon-error').style.display = 'none';
+    const couponCode = document.getElementById('pm-coupon-code');
+    const couponError = document.getElementById('pm-coupon-error');
+    
+    if (couponCode) couponCode.value = '';
+    if (couponError) couponError.style.display = 'none';
     document.querySelectorAll('.pm-coupon-item').forEach(item => item.classList.remove('selected'));
     selectedCoupon = null;
+    updatePriceDisplay();
 }
 
 function formatVNDWelcome(amount) {
     return new Intl.NumberFormat('vi-VN').format(amount) + ' VND';
 }
 
+// Fixed loyalty points value
+const LOYALTY_POINTS_VALUE = 3000;
+
+// Update price display when points checkbox changes
+function updatePriceDisplay() {
+    const usePoints = document.getElementById('pm-use-points')?.checked || false;
+    
+    // Get current package price
+    const service = servicePricesV2[currentServiceId];
+    if (!service) return;
+    const pkg = service.packages[selectedPackageIndex];
+    const originalPrice = pkg.price;
+    
+    let totalDiscount = 0;
+    let discountDetails = [];
+    
+    // Add loyalty points discount
+    if (usePoints) {
+        totalDiscount += LOYALTY_POINTS_VALUE;
+        discountDetails.push('Điểm: -' + formatVNDWelcome(LOYALTY_POINTS_VALUE));
+    }
+    
+    // Add coupon discount
+    if (selectedCoupon && selectedCoupon.value > 0) {
+        totalDiscount += selectedCoupon.value;
+        discountDetails.push('Mã ' + selectedCoupon.code + ': -' + formatVNDWelcome(selectedCoupon.value));
+    }
+    
+    const finalPrice = Math.max(0, originalPrice - totalDiscount);
+    
+    // Update ALWAYS VISIBLE price summary section
+    const summaryOriginal = document.getElementById('pm-summary-original');
+    const summaryDiscountRow = document.getElementById('pm-summary-discount-row');
+    const summaryDiscount = document.getElementById('pm-summary-discount');
+    const summaryTotal = document.getElementById('pm-summary-total');
+    
+    if (summaryOriginal) summaryOriginal.textContent = formatVNDWelcome(originalPrice);
+    if (summaryTotal) summaryTotal.textContent = formatVNDWelcome(finalPrice);
+    
+    if (totalDiscount > 0) {
+        if (summaryDiscountRow) summaryDiscountRow.style.display = 'flex';
+        if (summaryDiscount) summaryDiscount.textContent = '-' + formatVNDWelcome(totalDiscount);
+    } else {
+        if (summaryDiscountRow) summaryDiscountRow.style.display = 'none';
+    }
+}
+
+// Add event listener for points checkbox
+document.getElementById('pm-use-points')?.addEventListener('change', updatePriceDisplay);
+
 function confirmRental() {
     const service = servicePricesV2[currentServiceId];
     if (!service) return;
     
     const pkg = service.packages[selectedPackageIndex];
+    
     const usePoints = document.getElementById('pm-use-points')?.checked || false;
-    const useCoupon = document.getElementById('pm-use-coupon').checked;
+    const useCouponEl = document.getElementById('pm-use-coupon');
+    const useCoupon = useCouponEl ? useCouponEl.checked : false;
     
     let url = `/thanh-toan?service=${currentServiceId}&hours=${pkg.hours}`;
     if (usePoints) url += '&use_points=1';
@@ -3017,6 +3282,78 @@ function updateThemeIcons(isDark) {
         }
     }
 })();
+
+// Mobile Menu Toggle
+(function() {
+    function initMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const menuBtn = document.getElementById('mobileMenuBtn');
+        const menuClose = document.getElementById('mobileMenuClose');
+        const overlay = document.getElementById('mobileMenuOverlay');
+        
+        if (!menu || !menuBtn) return;
+        
+        function openMenu() {
+            menu.classList.add('active');
+            if (overlay) overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeMenu() {
+            menu.classList.remove('active');
+            if (overlay) overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        menuBtn.addEventListener('click', openMenu);
+        if (menuClose) menuClose.addEventListener('click', closeMenu);
+        if (overlay) overlay.addEventListener('click', closeMenu);
+        
+        // Close on ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeMenu();
+        });
+        
+        // Close menu when clicking links
+        document.querySelectorAll('.mobile-menu-link').forEach(function(link) {
+            link.addEventListener('click', closeMenu);
+        });
+    }
+    
+    // Run when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMobileMenu);
+    } else {
+        initMobileMenu();
+    }
+})();
+
+// Toggle Services Menu in mobile menu
+function toggleServicesMenu() {
+    const btn = document.querySelector('.mobile-menu-section-toggle');
+    const list = document.getElementById('mobileServicesList');
+    
+    if (btn && list) {
+        btn.classList.toggle('collapsed');
+        list.classList.toggle('collapsed');
+    }
+}
+
+// Mobile Theme Toggle
+function toggleMobileTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    
+    if (isDark) {
+        html.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+        updateThemeIcons(false);
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+        updateThemeIcons(true);
+    }
+}
 </script>
 
 
