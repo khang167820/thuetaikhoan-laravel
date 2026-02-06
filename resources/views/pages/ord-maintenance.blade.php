@@ -58,7 +58,7 @@
         <div class="maintenance-icon">🔧</div>
         <h1 class="maintenance-title">Đang bảo trì</h1>
         <p class="maintenance-desc">
-            Dịch vụ đặt hàng ADY đang được nâng cấp.<br>
+            Dịch vụ đặt hàng đang được nâng cấp.<br>
             Vui lòng quay lại sau ít phút.<br><br>
             Xin lỗi vì sự bất tiện này!
         </p>
