@@ -161,50 +161,30 @@ function processRegularOrder($trackingCode, $amount) {
     }
     
     // Verify amount
-    if ($amount < $order->total_amount * 0.99) {
-        Log::warning("Pay2s: Amount mismatch for $trackingCode");
+    if ($amount < $order->amount * 0.99) {
+        Log::warning("Pay2s: Amount mismatch for $trackingCode. Expected: {$order->amount}, Got: $amount");
         return;
     }
     
-    DB::beginTransaction();
+    // First mark as paid
+    DB::table('orders')->where('id', $order->id)->update([
+        'status' => 'paid',
+        'paid_at' => now(),
+    ]);
+    Log::info("Pay2s: Order $trackingCode marked as paid");
+    
+    // Try to allocate account using the proper service
     try {
-        // Get available account
-        $account = DB::table('accounts')
-            ->where('service_type', $order->service_type)
-            ->where('status', 'available')
-            ->lockForUpdate()
-            ->first();
-        
-        if (!$account) {
-            DB::table('orders')->where('id', $order->id)->update([
-                'status' => 'paid',
-                'paid_at' => now(),
-                'note' => 'Đã TT - Chờ cấp account',
-            ]);
-            DB::commit();
-            Log::warning("Pay2s: No account available for $trackingCode");
-            return;
+        $orderModel = \App\Models\Order::find($order->id);
+        if ($orderModel) {
+            $result = \App\Services\AccountAllocationService::allocateAccount($orderModel);
+            if ($result['success']) {
+                Log::info("Pay2s: Order $trackingCode completed with account #{$result['account']->id}");
+            } else {
+                Log::warning("Pay2s: No account available for $trackingCode: " . ($result['error'] ?? 'Unknown'));
+            }
         }
-        
-        // Assign
-        DB::table('accounts')->where('id', $account->id)->update([
-            'status' => 'in_use',
-            'order_id' => $order->id,
-            'used_at' => now(),
-        ]);
-        
-        DB::table('orders')->where('id', $order->id)->update([
-            'status' => 'completed',
-            'account_id' => $account->id,
-            'paid_at' => now(),
-            'completed_at' => now(),
-        ]);
-        
-        DB::commit();
-        Log::info("Pay2s: Order $trackingCode completed");
-        
     } catch (Exception $e) {
-        DB::rollBack();
-        Log::error("Pay2s: Error: " . $e->getMessage());
+        Log::error("Pay2s: Allocation error for $trackingCode: " . $e->getMessage());
     }
 }
