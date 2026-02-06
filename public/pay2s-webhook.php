@@ -106,12 +106,19 @@ function processAdyOrder($order, $amount) {
         $fields = json_decode($order->fields, true) ?? [];
         $feedbackUrl = url('/ady-webhook.php');
         
+        Log::info("Pay2s: Calling ADY for {$order->tracking_code}", [
+            'product_uuid' => $order->product_uuid,
+            'fields' => $fields
+        ]);
+        
         $result = $adyService->placeOrder(
             $order->product_uuid,
             $fields,
             $order->tracking_code,
             $feedbackUrl
         );
+        
+        Log::info("Pay2s: ADY Response for {$order->tracking_code}", ['result' => $result]);
         
         if ($result['success']) {
             DB::table('ady_orders')->where('id', $order->id)->update([
@@ -120,11 +127,15 @@ function processAdyOrder($order, $amount) {
             ]);
             Log::info("Pay2s: ADY order placed: {$order->tracking_code}");
         } else {
+            $errorMsg = $result['error'] ?? 'Unknown';
+            if (isset($result['response'])) {
+                $errorMsg .= ' - ' . $result['response'];
+            }
             DB::table('ady_orders')->where('id', $order->id)->update([
                 'status' => 'failed',
-                'error' => $result['error'] ?? 'Unknown',
+                'error' => substr($errorMsg, 0, 500),
             ]);
-            Log::error("Pay2s: ADY failed: " . ($result['error'] ?? 'Unknown'));
+            Log::error("Pay2s: ADY failed: $errorMsg");
         }
     } catch (Exception $e) {
         Log::error("Pay2s: ADY API error: " . $e->getMessage());
