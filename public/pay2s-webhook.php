@@ -52,10 +52,8 @@ foreach ($data['transactions'] as $tx) {
         // Only process incoming transfers
         if ($type !== 'IN') continue;
         
-        // Extract tracking code from content
-        // For ADY orders: ADYxxxxxx
-        // For regular orders: GHxxxxxx
-        preg_match('/(ADY\d+|GH\d+)/i', $content, $matches);
+        // Extract tracking code from content (GHxxxxxx format)
+        preg_match('/(GH\d+)/i', $content, $matches);
         $trackingCode = strtoupper($matches[1] ?? '');
         
         if (empty($trackingCode)) {
@@ -65,11 +63,16 @@ foreach ($data['transactions'] as $tx) {
         
         Log::info("Pay2s: Processing $trackingCode, amount: $amount");
         
-        // Check if ADY order
-        if (str_starts_with($trackingCode, 'ADY')) {
+        // Check ADY orders first
+        $adyOrder = DB::table('ady_orders')
+            ->where('tracking_code', $trackingCode)
+            ->where('status', 'pending')
+            ->first();
+            
+        if ($adyOrder) {
             processAdyOrder($trackingCode, $amount);
         } else {
-            // Regular order (thuê tài khoản)
+            // Check regular orders
             processRegularOrder($trackingCode, $amount);
         }
         

@@ -130,13 +130,13 @@ class OrdCheckoutController extends Controller
         ];
         $fields = array_filter($fields, fn($v) => $v !== '' && $v !== null);
         
-        // Generate tracking code
-        $trackingCode = 'ADY' . date('dmy') . rand(1000, 9999);
+        // Generate tracking code: GH + dd + mm + 6 random digits
+        $trackingCode = 'GH' . date('dm') . str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
         
         // Make sure tracking code is unique
         $attempts = 0;
         while (DB::table('ady_orders')->where('tracking_code', $trackingCode)->exists() && $attempts < 10) {
-            $trackingCode = 'ADY' . date('dmy') . rand(1000, 9999);
+            $trackingCode = 'GH' . date('dm') . str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
             $attempts++;
         }
         
