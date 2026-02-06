@@ -215,3 +215,23 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     // Global Search
     Route::get('/search', [AdminController::class, 'globalSearch'])->name('admin.search');
 });
+
+// ============================================================
+// Legacy PHP URL redirects (301) — SEO-safe migration from old site
+// ============================================================
+Route::get('/login.php', fn() => redirect('/login', 301));
+Route::get('/register.php', fn() => redirect('/register', 301));
+Route::get('/blog.php', fn() => redirect('/blog', 301));
+Route::get('/tai-unlocktool.php', fn() => redirect('/thue-unlocktool', 301));
+Route::get('/tai-vietmap.php', fn() => redirect('/thue-vietmap', 301));
+Route::get('/tai-griffin.php', fn() => redirect('/thue-griffin', 301));
+Route::get('/order-history.php', fn() => redirect('/order-history-ip', 301));
+Route::get('/thanh-toan.php', fn() => redirect('/thanh-toan', 301));
+Route::get('/nap-tien.php', fn() => redirect('/deposit', 301));
+Route::get('/ma-giam-gia.php', fn() => redirect('/ma-giam-gia', 301));
+Route::get('/dieu-khoan.php', fn() => redirect('/dieu-khoan', 301));
+Route::get('/index.php', fn() => redirect('/', 301));
+
+// Catch-all: /blog/any-slug.php → /blog/any-slug
+Route::get('/blog/{slug}.php', fn($slug) => redirect("/blog/{$slug}", 301))
+    ->where('slug', '.*');
