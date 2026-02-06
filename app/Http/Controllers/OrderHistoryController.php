@@ -132,9 +132,13 @@ class OrderHistoryController extends Controller
             )
             ->where('orders.ip_address', $ip)
             ->when($filter !== 'all', function ($q) use ($filter) {
-                $q->where('orders.status', $filter);
-                if ($filter === 'pending') {
-                    $q->where('orders.created_at', '>=', now()->subHours(24));
+                if ($filter === 'completed') {
+                    $q->whereIn('orders.status', ['paid', 'completed', 'confirmed']);
+                } elseif ($filter === 'pending') {
+                    $q->where('orders.status', 'pending')
+                      ->where('orders.created_at', '>=', now()->subHours(24));
+                } else {
+                    $q->where('orders.status', $filter);
                 }
             })
             ->orderBy('orders.created_at', 'desc')
@@ -165,9 +169,13 @@ class OrderHistoryController extends Controller
                 $q->orWhere('ip_address', $ip);
             })
             ->when($filter !== 'all', function ($q) use ($filter) {
-                $q->where('status', $filter);
-                if ($filter === 'pending') {
-                    $q->where('created_at', '>=', now()->subHours(24));
+                if ($filter === 'completed') {
+                    $q->whereIn('status', ['completed', 'paid']);
+                } elseif ($filter === 'pending') {
+                    $q->where('status', 'pending')
+                      ->where('created_at', '>=', now()->subHours(24));
+                } else {
+                    $q->where('status', $filter);
                 }
             })
             ->orderBy('created_at', 'desc')
@@ -280,6 +288,8 @@ class OrderHistoryController extends Controller
             'cancelled' => 'Đã hủy',
             'expired' => 'Hết hạn',
             'completed' => 'Hoàn thành',
+            'processing' => 'Đang xử lý',
+            'failed' => 'Thất bại',
         ];
         return $map[$status] ?? $status;
     }
@@ -296,6 +306,8 @@ class OrderHistoryController extends Controller
             'cancelled' => 'status-failed',
             'expired' => 'status-failed',
             'completed' => 'status-completed',
+            'processing' => 'status-processing',
+            'failed' => 'status-failed',
         ];
         return $map[$status] ?? '';
     }

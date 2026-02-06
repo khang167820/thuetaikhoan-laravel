@@ -23,16 +23,16 @@
                 Tất cả <span>{{ $orders->total() }}</span>
             </a>
             <a href="{{ route('order.history', ['status' => 'pending']) }}" class="oh-tab {{ $filter === 'pending' ? 'active' : '' }}">
-                Chờ thanh toán <span>{{ $statusCounts['pending'] ?? 0 }}</span>
+                Chờ TT <span>{{ $statusCounts['pending'] ?? 0 }}</span>
             </a>
-            <a href="{{ route('order.history', ['status' => 'paid']) }}" class="oh-tab {{ $filter === 'paid' ? 'active' : '' }}">
-                Đã thanh toán <span>{{ $statusCounts['paid'] ?? 0 }}</span>
+            <a href="{{ route('order.history', ['status' => 'processing']) }}" class="oh-tab {{ $filter === 'processing' ? 'active' : '' }}">
+                Đang xử lý <span>{{ $statusCounts['processing'] ?? 0 }}</span>
             </a>
             <a href="{{ route('order.history', ['status' => 'completed']) }}" class="oh-tab {{ $filter === 'completed' ? 'active' : '' }}">
-                Hoàn thành <span>{{ $statusCounts['completed'] ?? 0 }}</span>
+                Hoàn thành <span>{{ ($statusCounts['completed'] ?? 0) + ($statusCounts['paid'] ?? 0) }}</span>
             </a>
-            <a href="{{ route('order.history', ['status' => 'cancelled']) }}" class="oh-tab {{ $filter === 'cancelled' ? 'active' : '' }}">
-                Đã hủy <span>{{ $statusCounts['cancelled'] ?? 0 }}</span>
+            <a href="{{ route('order.history', ['status' => 'failed']) }}" class="oh-tab {{ $filter === 'failed' ? 'active' : '' }}">
+                Thất bại <span>{{ $statusCounts['failed'] ?? 0 }}</span>
             </a>
         </div>
         
@@ -269,6 +269,7 @@
 .oh-item-status.status-paid { background: #dbeafe; color: #2563eb; }
 .oh-item-status.status-completed { background: #dcfce7; color: #16a34a; }
 .oh-item-status.status-failed { background: #fee2e2; color: #dc2626; }
+.oh-item-status.status-processing { background: #e0e7ff; color: #4f46e5; }
 
 /* Credentials Row */
 .oh-item-cred {
