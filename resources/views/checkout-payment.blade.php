@@ -163,16 +163,24 @@
                     </ol>
                 </div>
 
-                {{-- Balance Payment Option - MAINTENANCE MODE --}}
+                {{-- Balance Payment Option --}}
                 @if($isLoggedIn)
-                <div class="cp-balance-section" style="background: #fef2f2; border-color: #fecaca;">
+                <div class="cp-balance-section">
                     <div class="cp-balance-header">
                         <span>💰 Số dư tài khoản</span>
                         <span class="cp-balance-amount">{{ number_format($userBalance, 0, ',', '.') }}đ</span>
                     </div>
-                    <div style="font-size: 12px; color: #dc2626; text-align: center; padding: 8px;">
-                        🔧 Đang bảo trì đến 17:00 - Vui lòng quét QR hoặc liên hệ admin
-                    </div>
+                    @if($userBalance >= $order->amount)
+                        <button type="button" id="pay-with-balance-btn" class="cp-btn-balance">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                            Thanh toán bằng số dư
+                        </button>
+                    @else
+                        <div class="cp-balance-warn">Số dư không đủ. Còn thiếu {{ number_format($order->amount - $userBalance, 0, ',', '.') }}đ</div>
+                        <a href="/deposit" class="cp-btn-deposit">💳 Nạp thêm tiền</a>
+                    @endif
                 </div>
                 @else
                 <div class="cp-login-section">
