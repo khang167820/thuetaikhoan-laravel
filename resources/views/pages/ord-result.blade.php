@@ -73,8 +73,24 @@
 
         <!-- Error -->
         @if($order->error)
+        @php
+            // Translate common ADY errors to Vietnamese
+            $errorMsg = $order->error;
+            if (str_contains($errorMsg, 'valid IMEI')) {
+                $errorMsg = '❌ IMEI không hợp lệ. IMEI phải là 15 chữ số. Serial Number (chữ + số) không được hỗ trợ cho dịch vụ này.';
+            } elseif (str_contains($errorMsg, 'HTTP 400')) {
+                $errorMsg = '❌ Lỗi đặt hàng. Vui lòng kiểm tra lại thông tin và thử lại.';
+            } elseif (str_contains($errorMsg, 'Insufficient')) {
+                $errorMsg = '❌ Hệ thống tạm hết dung lượng. Vui lòng thử lại sau.';
+            }
+        @endphp
         <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 16px; margin-bottom: 20px;">
-            <div style="color: #ef4444; font-size: 13px;">⚠️ {{ $order->error }}</div>
+            <div style="color: #ef4444; font-size: 14px; font-weight: 500;">{{ $errorMsg }}</div>
+            @if(str_contains($order->error, 'valid IMEI') || str_contains($order->error, 'HTTP 400'))
+            <div style="color: #f87171; font-size: 13px; margin-top: 8px;">
+                💡 Bạn có thể <a href="/ord-services" style="color: #3b82f6; text-decoration: underline;">đặt lại đơn mới</a> với thông tin đúng.
+            </div>
+            @endif
         </div>
         @endif
 
