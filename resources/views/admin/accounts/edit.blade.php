@@ -42,7 +42,7 @@
                 <div class="input-group">
                     <input type="text" name="password" id="password" class="form-input" 
                            value="{{ $account->password }}">
-                    <button type="button" class="btn-suggest" onclick="suggestPassword()">Đề xuất</button>
+                    <button type="button" class="btn-suggest" onclick="suggestPassword(this)">Đề xuất</button>
                     <button type="button" class="btn-copy" onclick="copyText('password', this)">Copy MK</button>
                 </div>
             </div>
@@ -143,11 +143,21 @@ function copyText(inputId, btn) {
     }, 1500);
 }
 
-function suggestPassword() {
+function suggestPassword(btn) {
     // Generate random 3 digits from 100 to 999
     const randomNum = Math.floor(Math.random() * 900) + 100;
     const password = 'Unlock' + randomNum;
     document.getElementById('password').value = password;
+    
+    // Visual feedback
+    const originalText = btn.innerText;
+    btn.innerText = '✅';
+    btn.style.background = '#10b981';
+    
+    setTimeout(() => {
+        btn.innerText = originalText;
+        btn.style.background = '';
+    }, 1500);
 }
 
 function setStatus(status) {
