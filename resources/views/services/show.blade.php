@@ -27,9 +27,9 @@
 @endsection
 
 @section('styles')
-<link rel="stylesheet" href="/css/service-page.css">
-<link rel="stylesheet" href="/css/price-modal.css">
-<link rel="stylesheet" href="/css/modern-ui.css">
+<link rel="stylesheet" href="/css/service-page.min.css?v=2">
+<link rel="stylesheet" href="/css/price-modal.min.css?v=2">
+<link rel="stylesheet" href="/css/modern-ui.min.css?v=7">
 <style>
 /* Dark Mode for Service Page */
 [data-theme="dark"] h1, [data-theme="dark"] .service-section-title { color: var(--ink) !important; }

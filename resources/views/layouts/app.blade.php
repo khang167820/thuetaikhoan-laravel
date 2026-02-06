@@ -31,8 +31,8 @@
     
     @yield('schema')
     
-    <!-- Shared CSS -->
-    <link rel="stylesheet" href="/css/mobile-menu.css?v=1">
+    <!-- Shared CSS - Minified -->
+    <link rel="stylesheet" href="/css/mobile-menu.min.css?v=2">
     
     <style>
         :root {

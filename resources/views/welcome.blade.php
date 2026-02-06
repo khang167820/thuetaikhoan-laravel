@@ -47,9 +47,9 @@
     <!-- Font with display swap for better FCP -->
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- CSS loads normally to prevent CLS -->
-    <link rel="stylesheet" href="/css/modern-ui.css?v=6">
-    <link rel="stylesheet" href="/css/mobile-menu.css?v=1">
+    <!-- Minified CSS for better performance -->
+    <link rel="stylesheet" href="/css/modern-ui.min.css?v=7">
+    <link rel="stylesheet" href="/css/mobile-menu.min.css?v=2">
     
     <style>
         /* ============================================
