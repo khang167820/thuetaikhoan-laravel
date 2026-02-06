@@ -3,6 +3,8 @@
 @section('title', 'Đơn ADY')
 @section('page-title', 'Đơn hàng ADY Unlocker')
 
+@php use Illuminate\Support\Facades\DB; use Illuminate\Support\Str; @endphp
+
 @section('content')
 <!-- Filter -->
 <div class="filter-bar">
@@ -36,7 +38,12 @@
                 @forelse($orders as $order)
                 @php
                     // Extract fields from JSON
-                    $fields = json_decode($order->fields ?? '{}', true) ?: [];
+                    $fields = [];
+                    try {
+                        $fields = json_decode($order->fields ?? '{}', true) ?: [];
+                    } catch (\Exception $e) {
+                        $fields = [];
+                    }
                     
                     // Try to find IMEI or main identifier from fields
                     $mainField = '';
@@ -47,7 +54,6 @@
                         }
                     }
                     if (!$mainField && count($fields) > 0) {
-                        // Get first non-quantity field
                         foreach ($fields as $key => $val) {
                             if (stripos($key, 'quantity') === false && stripos($key, 'Quantity') === false) {
                                 $mainField = $val;
@@ -64,13 +70,17 @@
                         'completed' => ['Hoàn thành', 'badge-completed'],
                         'failed' => ['Thất bại', 'badge-cancelled'],
                     ];
-                    $statusInfo = $statusMap[$order->status] ?? ['N/A', 'badge-pending'];
+                    $statusInfo = $statusMap[$order->status ?? 'pending'] ?? ['N/A', 'badge-pending'];
                     
                     // User info
                     $userName = '';
-                    if ($order->user_id) {
-                        $user = \DB::table('users')->where('id', $order->user_id)->first();
-                        $userName = $user ? $user->name : "User #{$order->user_id}";
+                    try {
+                        if (!empty($order->user_id)) {
+                            $orderUser = DB::table('users')->where('id', $order->user_id)->first();
+                            $userName = $orderUser ? ($orderUser->name ?? "User #{$order->user_id}") : "User #{$order->user_id}";
+                        }
+                    } catch (\Exception $e) {
+                        $userName = '';
                     }
                 @endphp
                 <tr>
@@ -101,7 +111,7 @@
                     </td>
                     <td style="font-weight: 600; white-space: nowrap;">
                         <span style="color: #10b981;">{{ number_format($order->price_vnd ?? 0) }}đ</span>
-                        @if($order->price_usd)
+                        @if(!empty($order->price_usd))
                             <div style="font-size: 10px; color: #94a3b8;">${{ $order->price_usd }}</div>
                         @endif
                     </td>
@@ -109,14 +119,14 @@
                         <span class="badge {{ $statusInfo[1] }}">{{ $statusInfo[0] }}</span>
                     </td>
                     <td style="max-width: 250px;">
-                        @if($order->result)
+                        @if(!empty($order->result))
                             <div style="font-size: 11px; max-height: 60px; overflow: hidden; position: relative; cursor: pointer;" 
                                  onclick="this.style.maxHeight = this.style.maxHeight === 'none' ? '60px' : 'none'">
                                 <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 6px 8px; font-family: monospace; word-break: break-all;">
                                     {!! strip_tags($order->result, '<br><span><b><strong>') !!}
                                 </div>
                             </div>
-                        @elseif($order->error)
+                        @elseif(!empty($order->error))
                             <div style="font-size: 11px; color: #ef4444; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 6px 8px;">
                                 {{ Str::limit($order->error, 80) }}
                             </div>
@@ -128,17 +138,17 @@
                         @if($userName)
                             <div style="font-weight: 500;">{{ $userName }}</div>
                         @endif
-                        @if($order->customer_email)
+                        @if(!empty($order->customer_email))
                             <div style="color: #6366f1;">{{ $order->customer_email }}</div>
                         @endif
                         <div style="color: #94a3b8; font-family: monospace; font-size: 10px;">{{ $order->ip_address ?? '' }}</div>
                     </td>
                     <td style="font-size: 11px; white-space: nowrap;">
                         <div>{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y H:i') }}</div>
-                        @if($order->paid_at)
+                        @if(!empty($order->paid_at))
                             <div style="color: #10b981; font-size: 10px;">TT: {{ \Carbon\Carbon::parse($order->paid_at)->format('H:i') }}</div>
                         @endif
-                        @if($order->completed_at)
+                        @if(!empty($order->completed_at))
                             <div style="color: #3b82f6; font-size: 10px;">HT: {{ \Carbon\Carbon::parse($order->completed_at)->format('H:i') }}</div>
                         @endif
                     </td>
