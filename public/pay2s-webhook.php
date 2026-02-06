@@ -37,6 +37,7 @@ try {
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 
 foreach ($data['transactions'] as $tx) {
     try {
@@ -50,8 +51,8 @@ foreach ($data['transactions'] as $tx) {
             continue;
         }
         
-        // Extract tracking code (GHxxxxxx or ADYxxxxxx format)
-        preg_match('/(GH\d+|ADY\d+)/i', $content, $matches);
+        // Extract tracking code (GH/DH/ADY/NAP format)
+        preg_match('/(GH\d+|DH\d+|ADY\d+|NAP\d+)/i', $content, $matches);
         $trackingCode = strtoupper($matches[1] ?? '');
         
         if (empty($trackingCode)) {
@@ -60,6 +61,12 @@ foreach ($data['transactions'] as $tx) {
         }
         
         Log::info("Pay2s: Processing $trackingCode, amount: $amount");
+        
+        // Handle deposit (NAP prefix)
+        if (str_starts_with($trackingCode, 'NAP')) {
+            processDeposit($trackingCode, $amount);
+            continue;
+        }
         
         // Check ADY orders first
         $adyOrder = DB::table('ady_orders')
@@ -186,5 +193,62 @@ function processRegularOrder($trackingCode, $amount) {
         }
     } catch (Exception $e) {
         Log::error("Pay2s: Allocation error for $trackingCode: " . $e->getMessage());
+    }
+}
+
+/**
+ * Process deposit (NAP prefix)
+ * Code format: NAP{user_id}{ddmmyy} or NAP{timestamp}{user_id}
+ */
+function processDeposit($trackingCode, $amount) {
+    if ($amount <= 0) {
+        Log::info("Pay2s: Skipping deposit $trackingCode - zero amount");
+        return;
+    }
+    
+    // Check if this deposit was already processed (prevent double credit)
+    if (Schema::hasTable('deposits')) {
+        $existing = DB::table('deposits')
+            ->where('transaction_id', $trackingCode)
+            ->where('status', 'completed')
+            ->exists();
+        
+        if ($existing) {
+            Log::info("Pay2s: Deposit $trackingCode already processed");
+            return;
+        }
+    }
+    
+    // Try to find pending deposit by transaction_id
+    $deposit = null;
+    if (Schema::hasTable('deposits')) {
+        $deposit = DB::table('deposits')
+            ->where('transaction_id', $trackingCode)
+            ->where('status', 'pending')
+            ->first();
+    }
+    
+    if ($deposit) {
+        // Credit user balance
+        DB::table('users')->where('id', $deposit->user_id)->increment('balance', $amount);
+        
+        // Mark deposit as completed
+        DB::table('deposits')->where('id', $deposit->id)->update([
+            'status' => 'completed',
+            'amount' => $amount,
+            'updated_at' => now(),
+        ]);
+        
+        Log::info("Pay2s: Deposit $trackingCode completed for user #{$deposit->user_id}, amount: $amount");
+    } else {
+        // No pending deposit found - try to extract user_id from code
+        // Format: NAP{user_id}{ddmmyy} e.g. NAP1070226
+        // Extract user_id: strip NAP prefix and last 6 digits (date)
+        $codeBody = substr($trackingCode, 3); // Remove NAP
+        
+        // Try format: NAP + timestamp + user_id (e.g. NAP17386547231)
+        // Or format: NAP + user_id + ddmmyy (e.g. NAP1070226)
+        // We'll try to find user by searching recent pending deposits
+        Log::warning("Pay2s: No pending deposit found for $trackingCode, amount: $amount. Manual review needed.");
     }
 }
