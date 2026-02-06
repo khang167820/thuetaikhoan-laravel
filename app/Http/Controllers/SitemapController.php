@@ -109,24 +109,8 @@ class SitemapController extends Controller
             // Log error but continue
             \Log::error('Sitemap posts error: ' . $e->getMessage());
         }
-
-        // Add testpoint pages
-        $testpoints = [
-            'testpoint-edl9008-xiaomi',
-            'testpoint-edl9008-samsung',
-            'testpoint-edl9008-oppo',
-            'testpoint-edl9008-vivo',
-            'testpoint-edl9008-realme',
-        ];
-
-        foreach ($testpoints as $testpoint) {
-            $urls[] = [
-                'loc' => url("/blog/{$testpoint}"),
-                'lastmod' => now()->toW3cString(),
-                'changefreq' => 'monthly',
-                'priority' => '0.6'
-            ];
-        }
+        // Note: testpoint pages are already in the database as blog posts
+        // No need to hardcode them here - they're included in the loop above
 
         $content = view('sitemaps.urls', ['urls' => $urls])->render();
         
