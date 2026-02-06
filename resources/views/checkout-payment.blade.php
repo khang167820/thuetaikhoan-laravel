@@ -150,6 +150,8 @@
                     </div>
                 </div>
 
+                {{-- MAINTENANCE MODE - Uncomment after 17:00 --}}
+                {{--
                 {{-- Balance Payment Option --}}
                 @if($isLoggedIn)
                 <div class="cp-balance-section">
@@ -158,16 +160,6 @@
                         <span class="cp-balance-amount">{{ number_format($userBalance, 0, ',', '.') }}đ</span>
                     </div>
                     @if($userBalance >= $order->amount)
-                    {{-- MAINTENANCE MODE - Remove this block after 17:00 --}}
-                    <div class="cp-maintenance-notice">
-                        <div style="font-size: 13px; color: #dc2626; margin-bottom: 8px;">
-                            🔧 <strong>Đang bảo trì đến 17:00</strong>
-                        </div>
-                        <div style="font-size: 12px; color: #64748b;">
-                            Vui lòng đợi xử lý hoặc liên hệ admin
-                        </div>
-                    </div>
-                    {{-- END MAINTENANCE - Uncomment below after 17:00
                     <button type="button" id="pay-with-balance-btn" class="cp-btn-balance">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
@@ -175,7 +167,6 @@
                         </svg>
                         Thanh toán bằng số dư
                     </button>
-                    --}}
                     @else
                     <div class="cp-balance-warn">
                         ⚠️ Thiếu {{ number_format($order->amount - $userBalance, 0, ',', '.') }}đ để thanh toán
@@ -191,6 +182,7 @@
                     </div>
                 </div>
                 @endif
+                --}}
 
                 {{-- Help --}}
                 <div class="cp-help">
