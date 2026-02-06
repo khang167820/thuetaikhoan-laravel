@@ -429,7 +429,7 @@
                 </td>
                 <td>
                     @if($account->note ?? null)
-                        <span style="color: #f59e0b; font-size: 12px;">{{ $account->note }}</span>
+                        <span style="color: #1e293b; font-size: 12px; font-weight: 500;">{{ $account->note }}</span>
                     @else
                         <span style="color: #cbd5e1;">-</span>
                     @endif
