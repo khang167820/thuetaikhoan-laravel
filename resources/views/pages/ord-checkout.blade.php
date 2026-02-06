@@ -4,463 +4,554 @@
 @section('meta_description', 'Đặt hàng dịch vụ ' . $product['name'] . ' - Thuetaikhoan.net')
 
 @section('content')
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
-.ord-checkout-section {
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-    min-height: 80vh;
-    padding: 20px 0 60px;
+/* ===== RESET & BASE ===== */
+.ck-page * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, sans-serif; }
+.ck-page { min-height: 100vh; background: #0f172a; padding: 0 16px 60px; }
+
+/* ===== BREADCRUMB ===== */
+.ck-bread { max-width: 1000px; margin: 0 auto; padding: 16px 0; display: flex; gap: 8px; font-size: 13px; color: #64748b; align-items: center; flex-wrap: wrap; }
+.ck-bread a { color: #38bdf8; text-decoration: none; transition: color 0.2s; }
+.ck-bread a:hover { color: #7dd3fc; }
+.ck-bread svg { width: 14px; height: 14px; opacity: 0.4; }
+
+/* ===== LAYOUT GRID ===== */
+.ck-grid { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 1fr 380px; gap: 24px; align-items: start; }
+
+/* ===== PRODUCT HERO ===== */
+.ck-hero {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e1b4b 100%);
+    border: 1px solid rgba(99,102,241,0.2);
+    border-radius: 20px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
 }
-.checkout-container { max-width: 900px; margin: 0 auto; padding: 0 16px; }
-.checkout-breadcrumb { display: flex; gap: 8px; font-size: 13px; color: #64748b; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
-.checkout-breadcrumb a { color: #f97316; text-decoration: none; }
+.ck-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -20%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%);
+    pointer-events: none;
+}
+.ck-hero-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; position: relative; z-index: 1; }
+.ck-hero h1 { font-size: 18px; font-weight: 700; color: #f1f5f9; line-height: 1.6; max-width: 600px; }
+.ck-price-block { text-align: right; flex-shrink: 0; }
+.ck-price-label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+.ck-price-main { font-size: 36px; font-weight: 800; background: linear-gradient(135deg, #34d399, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.ck-price-main small { font-size: 18px; }
+.ck-price-total { font-size: 13px; color: #94a3b8; margin-top: 2px; }
+.ck-price-total strong { color: #34d399; font-size: 15px; }
+.ck-badges { display: flex; gap: 8px; margin-top: 16px; position: relative; z-index: 1; flex-wrap: wrap; }
+.ck-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
+}
+.ck-badge--time { background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.25); color: #34d399; }
+.ck-badge--stock { background: rgba(56,189,248,0.12); border: 1px solid rgba(56,189,248,0.25); color: #38bdf8; }
 
-.checkout-card { background: white; border-radius: 20px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid #e2e8f0; }
-.product-summary { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); padding: 28px; color: white; }
-.product-summary h1 { font-size: 17px; font-weight: 600; margin-bottom: 20px; line-height: 1.5; }
-.price-row { display: flex; justify-content: space-between; align-items: center; }
-.price-label { opacity: 0.7; font-size: 12px; text-transform: uppercase; }
-.price-value { font-size: 32px; font-weight: 700; color: #10b981; }
-.price-value small { font-size: 16px; opacity: 0.8; color: white; }
-.delivery-badge { display: inline-flex; gap: 6px; margin-top: 14px; padding: 8px 14px; background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); border-radius: 20px; font-size: 13px; color: #34d399; }
+/* ===== FORM CARD ===== */
+.ck-form-card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 20px;
+    overflow: hidden;
+}
+.ck-form-header {
+    padding: 20px 24px;
+    background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(139,92,246,0.05));
+    border-bottom: 1px solid #334155;
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 700; color: #e2e8f0; font-size: 15px;
+}
+.ck-form-header .icon { font-size: 20px; }
+.ck-form-body { padding: 24px; }
 
-/* Form */
-.checkout-form { padding: 28px; }
-.form-group { margin-bottom: 20px; }
-.form-group label { display: block; font-weight: 600; color: #1e293b; margin-bottom: 8px; font-size: 14px; }
-.form-group label .required { color: #ef4444; }
-.form-group input, .form-group textarea { width: 100%; padding: 14px 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 15px; transition: all 0.2s; background: #f8fafc; }
-.form-group input:focus, .form-group textarea:focus { outline: none; border-color: #6366f1; background: white; box-shadow: 0 0 0 4px rgba(99,102,241,0.1); }
-.form-group small { display: block; margin-top: 6px; color: #94a3b8; font-size: 12px; }
+/* Form Groups */
+.ck-fg { margin-bottom: 20px; }
+.ck-fg:last-child { margin-bottom: 0; }
+.ck-fg label {
+    display: block; font-size: 13px; font-weight: 600;
+    color: #cbd5e1; margin-bottom: 8px;
+}
+.ck-fg label .req { color: #f87171; margin-left: 2px; }
+.ck-fg input, .ck-fg textarea, .ck-fg select {
+    width: 100%; padding: 12px 16px;
+    background: #0f172a; border: 1.5px solid #334155;
+    border-radius: 12px; color: #f1f5f9; font-size: 14px;
+    transition: all 0.25s ease;
+}
+.ck-fg input:focus, .ck-fg textarea:focus, .ck-fg select:focus {
+    outline: none; border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+    background: #1e293b;
+}
+.ck-fg input::placeholder, .ck-fg textarea::placeholder { color: #475569; }
+.ck-fg .hint { font-size: 11px; color: #64748b; margin-top: 6px; display: block; }
 
-.btn-submit { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 16px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 14px rgba(16,185,129,0.3); }
-.btn-submit:hover:not(:disabled) { transform: translateY(-2px); }
-.btn-submit:disabled { background: #94a3b8; cursor: not-allowed; }
+/* Quantity */
+.ck-qty {
+    display: inline-flex; align-items: center; gap: 0;
+    background: #0f172a; border: 1.5px solid #334155; border-radius: 12px;
+    overflow: hidden;
+}
+.ck-qty button {
+    width: 40px; height: 42px; border: none;
+    background: transparent; color: #94a3b8; font-size: 18px; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+}
+.ck-qty button:hover { background: #334155; color: #e2e8f0; }
+.ck-qty input {
+    width: 60px; text-align: center; border: none; border-radius: 0;
+    border-left: 1px solid #334155; border-right: 1px solid #334155;
+    background: transparent; padding: 12px 0; font-weight: 700; font-size: 15px;
+}
+.ck-qty input:focus { box-shadow: none; }
 
-.error-box { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 14px; border-radius: 12px; margin-bottom: 20px; font-size: 14px; }
+/* Submit Button */
+.ck-submit {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; padding: 16px 24px; margin-top: 24px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff; font-size: 15px; font-weight: 700;
+    border: none; border-radius: 14px; cursor: pointer;
+    box-shadow: 0 4px 20px rgba(16,185,129,0.3);
+    transition: all 0.3s ease;
+}
+.ck-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(16,185,129,0.4); }
+.ck-submit:disabled { background: #475569; box-shadow: none; cursor: not-allowed; }
+.ck-submit .price-tag { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 8px; font-size: 14px; }
 
-/* Payment Section - 2 columns */
-.payment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding: 24px; }
-.payment-left, .payment-right { display: flex; flex-direction: column; }
-.qr-section { background: #f8fafc; border-radius: 14px; padding: 20px; border: 1px solid #e2e8f0; text-align: center; }
-.qr-label { font-weight: 600; color: #374151; margin-bottom: 12px; font-size: 14px; }
-.qr-img { max-width: 200px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-.bank-info { font-size: 13px; margin-top: 16px; text-align: left; }
-.bank-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e5e7eb; }
-.bank-row:last-child { border-bottom: none; }
-.bank-row span:first-child { color: #6b7280; }
-.bank-row strong { color: #1f2937; }
-.payment-warning { margin-top: 12px; padding: 10px; background: #fef3c7; border-radius: 8px; font-size: 12px; color: #92400e; text-align: center; }
+/* Error Box */
+.ck-error {
+    background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3);
+    color: #fca5a5; padding: 14px 16px; border-radius: 12px;
+    margin-bottom: 20px; font-size: 13px; display: none;
+}
 
-.order-summary-box { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px; }
-.summary-header { font-weight: 700; color: #1e293b; margin-bottom: 14px; font-size: 15px; }
-.summary-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
-.summary-total { display: flex; justify-content: space-between; padding: 14px 0; margin-top: 8px; border-top: 2px solid #e2e8f0; }
-.total-amount { font-size: 22px; font-weight: 700; color: #10b981; }
-.badge-pending { background: #fef3c7; color: #d97706; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+/* ===== ORDER SUMMARY SIDEBAR ===== */
+.ck-sidebar {
+    background: #1e293b; border: 1px solid #334155; border-radius: 20px;
+    overflow: hidden; position: sticky; top: 100px;
+}
+.ck-sidebar-header {
+    padding: 20px 24px; border-bottom: 1px solid #334155;
+    font-weight: 700; color: #e2e8f0; font-size: 15px;
+}
+.ck-sidebar-body { padding: 20px 24px; }
+.ck-sum-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0; font-size: 13px; color: #94a3b8;
+    border-bottom: 1px solid rgba(51,65,85,0.5);
+}
+.ck-sum-row:last-child { border-bottom: none; }
+.ck-sum-row .val { color: #e2e8f0; font-weight: 600; text-align: right; max-width: 180px; word-break: break-word; }
+.ck-sum-total {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 0; margin-top: 8px; border-top: 2px solid #334155;
+}
+.ck-sum-total .lbl { font-size: 14px; font-weight: 600; color: #cbd5e1; }
+.ck-sum-total .amt { font-size: 24px; font-weight: 800; color: #34d399; }
 
-.balance-section { background: #f0fdf4; border: 1px solid #86efac; border-radius: 10px; padding: 14px; margin-bottom: 12px; }
-.balance-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px; }
-.balance-amt { font-weight: 700; color: #16a34a; }
-.btn-balance { width: 100%; padding: 12px; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
-.balance-warning { font-size: 12px; color: #dc2626; margin-bottom: 8px; }
-.btn-deposit { display: block; width: 100%; padding: 12px; background: #2563eb; color: #fff; border-radius: 8px; text-align: center; text-decoration: none; font-size: 14px; font-weight: 600; }
+/* Guarantee badges */
+.ck-guarantees { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+.ck-guarantee {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px; background: rgba(15,23,42,0.5);
+    border-radius: 10px; font-size: 12px; color: #94a3b8;
+}
+.ck-guarantee .gi { font-size: 16px; flex-shrink: 0; }
 
-.direct-pay { background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 10px; padding: 14px; margin-bottom: 12px; text-align: center; }
-.direct-main { font-weight: 700; color: #059669; font-size: 14px; }
-.direct-sub { font-size: 12px; color: #065f46; margin-top: 4px; }
+/* ===== PAYMENT SECTION ===== */
+.ck-payment { display: none; grid-column: 1 / -1; }
+.ck-pay-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.ck-pay-card {
+    background: #1e293b; border: 1px solid #334155; border-radius: 20px;
+    overflow: hidden;
+}
+.ck-pay-header {
+    padding: 16px 24px; border-bottom: 1px solid #334155;
+    font-weight: 700; color: #e2e8f0; font-size: 14px;
+    display: flex; align-items: center; gap: 8px;
+}
+.ck-pay-body { padding: 24px; }
 
-.login-hint { font-size: 12px; color: #64748b; text-align: center; margin-bottom: 12px; }
-.login-hint a { color: #2563eb; font-weight: 600; text-decoration: none; }
+/* QR Section */
+.ck-qr-wrap { text-align: center; }
+.ck-qr-img {
+    width: 220px; height: 220px; border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    border: 3px solid #334155; margin: 0 auto 16px;
+}
+.ck-qr-note { font-size: 12px; color: #64748b; }
 
-.btn-check { display: block; width: 100%; padding: 14px; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: #fff; border-radius: 10px; text-align: center; text-decoration: none; font-size: 14px; font-weight: 600; margin-bottom: 12px; }
+.ck-bank-rows { margin-top: 20px; }
+.ck-bank-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0; border-bottom: 1px solid rgba(51,65,85,0.5);
+    font-size: 13px;
+}
+.ck-bank-row:last-child { border-bottom: none; }
+.ck-bank-row .k { color: #64748b; }
+.ck-bank-row .v { color: #e2e8f0; font-weight: 600; }
+.ck-bank-row .v.mono { font-family: 'JetBrains Mono', monospace; color: #818cf8; letter-spacing: 0.5px; }
+.ck-bank-row .v.green { color: #34d399; }
 
-.status-box { background: #dbeafe; border-radius: 8px; padding: 12px; font-size: 13px; text-align: center; }
-.status-box.success { background: #d1fae5; color: #065f46; }
+.ck-pay-warn {
+    margin-top: 16px; padding: 12px; border-radius: 10px;
+    background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.2);
+    font-size: 12px; color: #fbbf24; text-align: center;
+}
 
-@media (max-width: 768px) { .payment-grid { grid-template-columns: 1fr; } }
+/* Right side: order info + actions */
+.ck-pay-status {
+    padding: 16px; border-radius: 12px; text-align: center;
+    font-size: 14px; font-weight: 600;
+    background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.2); color: #38bdf8;
+    margin-bottom: 16px;
+    transition: all 0.3s;
+}
+.ck-pay-status.success { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3); color: #34d399; }
+
+.ck-balance-box {
+    background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2);
+    border-radius: 12px; padding: 16px; margin-bottom: 12px;
+}
+.ck-balance-row { display: flex; justify-content: space-between; font-size: 13px; color: #94a3b8; margin-bottom: 10px; }
+.ck-balance-val { color: #34d399; font-weight: 700; }
+.ck-btn-balance {
+    width: 100%; padding: 12px;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    color: #fff; border: none; border-radius: 10px;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.ck-btn-balance:hover { opacity: 0.9; }
+.ck-balance-warn { font-size: 12px; color: #f87171; margin-bottom: 8px; }
+.ck-btn-deposit {
+    display: block; width: 100%; padding: 12px;
+    background: #2563eb; color: #fff; border-radius: 10px;
+    text-align: center; text-decoration: none; font-size: 14px; font-weight: 600;
+}
+
+.ck-btn-check {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; padding: 14px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #fff; border-radius: 12px; text-decoration: none;
+    font-size: 14px; font-weight: 600; margin-bottom: 12px;
+    transition: all 0.2s;
+}
+.ck-btn-check:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(99,102,241,0.3); }
+
+.ck-btn-new {
+    display: block; width: 100%; padding: 12px;
+    background: transparent; border: 1.5px solid #334155;
+    color: #94a3b8; border-radius: 10px; font-size: 13px; font-weight: 600;
+    cursor: pointer; text-align: center;
+}
+.ck-btn-new:hover { border-color: #64748b; color: #e2e8f0; }
+
+.ck-login-hint { font-size: 12px; color: #64748b; text-align: center; margin: 12px 0; }
+.ck-login-hint a { color: #818cf8; text-decoration: none; font-weight: 600; }
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+    .ck-grid { grid-template-columns: 1fr; }
+    .ck-pay-grid { grid-template-columns: 1fr; }
+    .ck-hero h1 { font-size: 15px; }
+    .ck-price-main { font-size: 28px; }
+    .ck-sidebar { position: static; }
+}
 </style>
 
-<section class="ord-checkout-section">
-    <div class="checkout-container">
-        <div class="checkout-breadcrumb">
-            <a href="/">Trang chủ</a> › <a href="/ord-services">Dịch vụ GSM</a> › <span>Đặt hàng</span>
+<div class="ck-page">
+    {{-- Breadcrumb --}}
+    <div class="ck-bread">
+        <a href="/">Trang chủ</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <a href="/ord-services">Dịch vụ GSM</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        <span style="color:#94a3b8;">Đặt hàng</span>
+    </div>
+
+    <div class="ck-grid">
+        {{-- HERO --}}
+        <div class="ck-hero">
+            <div class="ck-hero-top">
+                <h1>{{ $product['name'] }}</h1>
+                <div class="ck-price-block">
+                    <div class="ck-price-label">Đơn giá</div>
+                    <div class="ck-price-main" data-unit="{{ $product['priceVnd'] }}">{{ number_format($product['priceVnd']) }}<small>đ</small></div>
+                    <div class="ck-price-total" id="totalDisplay">Tổng: <strong>{{ number_format($product['priceVnd']) }}đ</strong></div>
+                </div>
+            </div>
+            <div class="ck-badges">
+                <span class="ck-badge ck-badge--time">⏱️ {{ $product['deliveryTime'] }}</span>
+                <span class="ck-badge ck-badge--stock">✅ Còn hàng</span>
+            </div>
         </div>
 
-        <div class="checkout-card">
-            <div class="product-summary">
-                <h1>{{ $product['name'] }}</h1>
-                <div class="price-row">
-                    <div><div class="price-label">Giá dịch vụ</div></div>
-                    <div class="price-value" id="unit-price" data-price="{{ $product['priceVnd'] }}">{{ number_format($product['priceVnd']) }}<small>đ</small></div>
-                </div>
-                <div class="delivery-badge">⏱️ Thời gian: {{ $product['deliveryTime'] }}</div>
+        {{-- FORM --}}
+        <div class="ck-form-card" id="formSection">
+            <div class="ck-form-header">
+                <span class="icon">📝</span> Thông tin đặt hàng
             </div>
-            
-            <!-- Form Section (hidden after order created) -->
-            <div id="formSection">
-                <form id="checkoutForm" class="checkout-form">
+            <div class="ck-form-body">
+                <form id="checkoutForm">
                     @csrf
                     <input type="hidden" name="uuid" value="{{ $product['uuid'] }}">
                     
-                    <div id="errorBox" class="error-box" style="display: none;"></div>
+                    <div class="ck-error" id="errorBox"></div>
                     
-                    {{-- Email field is always required for result delivery --}}
-                    <div class="form-group">
-                        <label>Email nhận kết quả <span class="required">*</span></label>
+                    {{-- Email --}}
+                    <div class="ck-fg">
+                        <label>Email nhận kết quả <span class="req">*</span></label>
                         <input type="email" name="Email" id="Email" placeholder="email@example.com" required 
                                value="{{ Auth::check() ? Auth::user()->email : '' }}">
-                        <small>Kết quả dịch vụ sẽ được gửi đến email này</small>
+                        <span class="hint">Kết quả dịch vụ sẽ được gửi đến email này</span>
                     </div>
                     
-                    {{-- Quantity field (Default 1) --}}
-                    <div class="form-group">
-                        <label>Số lượng (Quantity) <span class="required">*</span></label>
-                        <div class="quantity-input-group">
-                            <button type="button" class="btn-qty" onclick="updateQty(-1)">-</button>
-                            <input type="number" name="Quantity" id="Quantity" value="1" min="1" required class="form-control text-center" style="width: 80px;" oninput="calculateTotal()">
-                            <button type="button" class="btn-qty" onclick="updateQty(1)">+</button>
+                    {{-- Quantity --}}
+                    <div class="ck-fg">
+                        <label>Số lượng <span class="req">*</span></label>
+                        <div class="ck-qty">
+                            <button type="button" onclick="updateQty(-1)">−</button>
+                            <input type="number" name="Quantity" id="Quantity" value="1" min="1" oninput="calculateTotal()">
+                            <button type="button" onclick="updateQty(1)">+</button>
                         </div>
                     </div>
-
-                    {{-- Dynamic fields from ADY product --}}
+                    
+                    {{-- Dynamic Fields --}}
                     @if(!empty($product['fields']))
                         @foreach($product['fields'] as $index => $fieldConfig)
                             @php
-                                // ADY API returns fields as indexed array, get name from config
                                 $fieldName = $fieldConfig['name'] ?? $fieldConfig['label'] ?? "Field_$index";
-                                
-                                // Skip Email field since we already have it above
-                                if (strtolower($fieldName) === 'email') continue;
-                                // Skip Quantity field if present in dynamic fields (we handle it separately)
-                                if (strtolower($fieldName) === 'quantity') continue;
+                                if (strtolower($fieldName) === 'email' || strtolower($fieldName) === 'quantity') continue;
                                 
                                 $isRequired = ($fieldConfig['required'] ?? false) || ($fieldConfig['validation'] ?? false);
                                 $fieldType = $fieldConfig['type'] ?? 'text';
                                 $placeholder = $fieldConfig['placeholder'] ?? "Nhập $fieldName";
                                 $hint = $fieldConfig['hint'] ?? $fieldConfig['description'] ?? '';
                                 
-                                // Map ADY field types to HTML input types
-                                if ($fieldType === 'number') {
-                                    $fieldType = 'tel'; // Use tel for better mobile experience
-                                }
+                                if ($fieldType === 'number') $fieldType = 'tel';
                                 
-                                // Determine better placeholder and hint based on field name
                                 $fieldLower = strtolower($fieldName);
                                 if (str_contains($fieldLower, 'imei')) {
                                     $placeholder = $placeholder ?: 'Nhập IMEI (15 số)';
-                                    $hint = $hint ?: 'Mở Settings > General > About > IMEI. IMEI gồm 15 chữ số.';
+                                    $hint = $hint ?: 'Mở Settings > General > About > IMEI';
                                 } elseif (str_contains($fieldLower, 'serial')) {
                                     $placeholder = $placeholder ?: 'Nhập Serial Number';
                                     $hint = $hint ?: 'Mở Settings > General > About > Serial Number';
-                                } elseif (str_contains($fieldLower, 'phone') || str_contains($fieldLower, 'số điện thoại')) {
-                                    $fieldType = 'tel';
-                                    $placeholder = $placeholder ?: 'Nhập số điện thoại';
                                 } elseif (str_contains($fieldLower, 'model')) {
-                                    $placeholder = $placeholder ?: 'Nhập Model (VD: iPhone 12 Pro Max)';
-                                } elseif (str_contains($fieldLower, 'carrier') || str_contains($fieldLower, 'network')) {
-                                    $placeholder = $placeholder ?: 'Nhập Carrier/Nhà mạng';
+                                    $placeholder = $placeholder ?: 'VD: iPhone 12 Pro Max';
                                 }
                             @endphp
-                            <div class="form-group">
-                                <label>{{ $fieldName }} @if($isRequired)<span class="required">*</span>@endif</label>
+                            <div class="ck-fg">
+                                <label>{{ $fieldName }} @if($isRequired)<span class="req">*</span>@endif</label>
                                 <input type="{{ $fieldType }}" name="{{ $fieldName }}" id="{{ $fieldName }}" 
                                        placeholder="{{ $placeholder }}" {{ $isRequired ? 'required' : '' }}>
-                                @if($hint)
-                                <small>{{ $hint }}</small>
-                                @endif
+                                @if($hint)<span class="hint">{{ $hint }}</span>@endif
                             </div>
                         @endforeach
                     @else
-                        {{-- Fallback: Show IMEI field if no fields specified --}}
-                        <div class="form-group">
-                            <label>IMEI <span class="required">*</span></label>
+                        <div class="ck-fg">
+                            <label>IMEI <span class="req">*</span></label>
                             <input type="text" name="IMEI" id="IMEI" placeholder="Nhập IMEI (15 số)" required>
-                            <small>Mở Settings > General > About > IMEI. IMEI gồm 15 chữ số.</small>
+                            <span class="hint">Mở Settings > General > About > IMEI</span>
                         </div>
                     @endif
                     
-                    <div class="form-group">
+                    {{-- Notes --}}
+                    <div class="ck-fg">
                         <label>Ghi chú</label>
                         <textarea name="Notes" id="Notes" rows="2" placeholder="Ghi chú thêm (nếu có)"></textarea>
                     </div>
                     
-                    <button type="submit" class="btn-submit" id="submitBtn">
-                        💳 Tạo đơn & Thanh toán <span id="btnTotalText">{{ number_format($product['priceVnd']) }}đ</span>
+                    <button type="submit" class="ck-submit" id="submitBtn">
+                        💳 Tạo đơn & Thanh toán <span class="price-tag" id="btnTotalText">{{ number_format($product['priceVnd']) }}đ</span>
                     </button>
                 </form>
             </div>
         </div>
-    </div>
-    
-    {{-- Payment Section --}}
-    <div class="container" id="paymentSection" style="display: none;">
-        <div class="payment-box">
-            <h2>Thanh toán đơn hàng</h2>
-            <div class="qr-container">
-                <img id="qrImage" src="" alt="QR Code" class="qr-code">
-                <p class="qr-note">Quét mã để thanh toán</p>
+
+        {{-- SIDEBAR --}}
+        <div class="ck-sidebar" id="sidebarSection">
+            <div class="ck-sidebar-header">📋 Tóm tắt đơn hàng</div>
+            <div class="ck-sidebar-body">
+                <div class="ck-sum-row">
+                    <span>Dịch vụ</span>
+                    <span class="val">{{ Str::limit($product['name'], 35) }}</span>
+                </div>
+                <div class="ck-sum-row">
+                    <span>Đơn giá</span>
+                    <span class="val">{{ number_format($product['priceVnd']) }}đ</span>
+                </div>
+                <div class="ck-sum-row">
+                    <span>Số lượng</span>
+                    <span class="val" id="summaryQty">1</span>
+                </div>
+                <div class="ck-sum-row">
+                    <span>Thời gian xử lý</span>
+                    <span class="val">{{ $product['deliveryTime'] }}</span>
+                </div>
+                <div class="ck-sum-total">
+                    <span class="lbl">Tổng cộng</span>
+                    <span class="amt" id="summaryTotal">{{ number_format($product['priceVnd']) }}đ</span>
+                </div>
+                
+                <div class="ck-guarantees">
+                    <div class="ck-guarantee"><span class="gi">🔒</span> Thanh toán bảo mật 100%</div>
+                    <div class="ck-guarantee"><span class="gi">⚡</span> Xử lý tự động sau thanh toán</div>
+                    <div class="ck-guarantee"><span class="gi">📧</span> Kết quả gửi qua Email</div>
+                    <div class="ck-guarantee"><span class="gi">💬</span> Hỗ trợ 24/7 qua Zalo</div>
+                </div>
             </div>
-            <div class="payment-info">
-                <div class="info-row">
-                    <span>Mã đơn hàng:</span>
-                    <strong id="displayCode" class="highlight">---</strong>
+        </div>
+
+        {{-- PAYMENT SECTION --}}
+        <div class="ck-payment" id="paymentSection">
+            <div class="ck-pay-grid">
+                {{-- Left: QR --}}
+                <div class="ck-pay-card">
+                    <div class="ck-pay-header">🏦 Thanh toán chuyển khoản</div>
+                    <div class="ck-pay-body">
+                        <div class="ck-qr-wrap">
+                            <img id="qrImage" src="" alt="QR" class="ck-qr-img">
+                            <p class="ck-qr-note">Mở app ngân hàng → Quét QR</p>
+                        </div>
+                        <div class="ck-bank-rows">
+                            <div class="ck-bank-row"><span class="k">Ngân hàng</span><span class="v">{{ $bankInfo['name'] }}</span></div>
+                            <div class="ck-bank-row"><span class="k">Số tài khoản</span><span class="v mono">{{ $bankInfo['account'] }}</span></div>
+                            <div class="ck-bank-row"><span class="k">Chủ TK</span><span class="v">{{ $bankInfo['owner'] }}</span></div>
+                            <div class="ck-bank-row"><span class="k">Nội dung CK</span><span class="v mono" id="displayCode">---</span></div>
+                            <div class="ck-bank-row"><span class="k">Số tiền</span><span class="v green" id="displayAmount">0đ</span></div>
+                        </div>
+                        <div class="ck-pay-warn">⚠️ Nội dung CK phải <b>chính xác 100%</b> mã đơn hàng</div>
+                    </div>
                 </div>
-                <div class="info-row">
-                    <span>Số tiền:</span>
-                    <strong id="displayAmount">0đ</strong>
+
+                {{-- Right: Summary + Actions --}}
+                <div class="ck-pay-card">
+                    <div class="ck-pay-header">📋 Trạng thái đơn hàng</div>
+                    <div class="ck-pay-body">
+                        <div class="ck-pay-status" id="statusBox">
+                            <span id="statusIcon">🔄</span> <span id="statusText">Đang chờ thanh toán...</span>
+                        </div>
+
+                        <div class="ck-sum-row"><span>Mã đơn</span><span class="val mono" id="displayCode2">---</span></div>
+                        <div class="ck-sum-row"><span>Dịch vụ</span><span class="val">{{ Str::limit($product['name'], 30) }}</span></div>
+                        <div class="ck-sum-total">
+                            <span class="lbl">Tổng</span>
+                            <span class="amt" id="totalAmount">0đ</span>
+                        </div>
+
+                        @if(Auth::check())
+                        <div class="ck-balance-box">
+                            <div class="ck-balance-row">
+                                <span>💰 Số dư</span>
+                                <span class="ck-balance-val">{{ number_format($userBalance) }}đ</span>
+                            </div>
+                            @if($userBalance >= $product['priceVnd'])
+                            <button id="payBalanceBtn" class="ck-btn-balance" onclick="payWithBalance()">⚡ Thanh toán bằng số dư</button>
+                            @else
+                            <div class="ck-balance-warn">⚠️ Thiếu {{ number_format($product['priceVnd'] - $userBalance) }}đ</div>
+                            <a href="/nap-tien" class="ck-btn-deposit">Nạp tiền vào tài khoản</a>
+                            @endif
+                        </div>
+                        @else
+                        <div class="ck-login-hint">
+                            <a href="/login?redirect={{ urlencode(request()->fullUrl()) }}">Đăng nhập</a> để thanh toán bằng số dư
+                        </div>
+                        @endif
+                        
+                        <a href="#" id="checkResultBtn" class="ck-btn-check">🔍 Kiểm tra kết quả</a>
+                        <button onclick="window.location.reload()" class="ck-btn-new">Tạo đơn hàng mới</button>
+                    </div>
                 </div>
-                <div class="info-row">
-                    <span>Nội dung CK:</span>
-                    <strong id="displayCodeCheck">---</strong>
-                </div>
-            </div>
-            <div class="payment-actions">
-                <a href="#" id="checkResultBtn" class="btn-check">Kiểm tra kết quả</a>
-                <button onclick="window.location.reload()" class="btn-secondary">Tạo đơn khác</button>
             </div>
         </div>
     </div>
-</section>
-
-<style>
-.quantity-input-group {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-.btn-qty {
-    width: 30px;
-    height: 30px;
-    border: 1px solid #ddd;
-    background: #f8f9fa;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-}
-.btn-qty:hover {
-    background: #e9ecef;
-}
-</style>
+</div>
 
 <script>
+const unitPrice = {{ $product['priceVnd'] }};
 let currentOrderId = null;
 let currentTrackingCode = null;
 let checkCount = 0;
 let checkInterval = null;
-const unitPrice = {{ $product['priceVnd'] }};
 
-function updateQty(change) {
-    const qtyInput = document.getElementById('Quantity');
-    let newQty = parseInt(qtyInput.value) + change;
-    if (newQty < 1) newQty = 1;
-    qtyInput.value = newQty;
+function updateQty(d) {
+    const el = document.getElementById('Quantity');
+    let v = Math.max(1, parseInt(el.value || 1) + d);
+    el.value = v;
     calculateTotal();
 }
-
 function calculateTotal() {
-    const qtyInput = document.getElementById('Quantity');
-    let qty = parseInt(qtyInput.value);
-    if (!qty || qty < 1) qty = 1;
-    
-    const total = unitPrice * qty;
-    document.getElementById('btnTotalText').textContent = new Intl.NumberFormat('vi-VN').format(total) + 'đ';
+    const q = Math.max(1, parseInt(document.getElementById('Quantity').value) || 1);
+    const total = unitPrice * q;
+    const fmt = new Intl.NumberFormat('vi-VN').format(total);
+    document.getElementById('btnTotalText').textContent = fmt + 'đ';
+    document.getElementById('summaryQty').textContent = q;
+    document.getElementById('summaryTotal').textContent = fmt + 'đ';
+    document.getElementById('totalDisplay').innerHTML = 'Tổng: <strong>' + fmt + 'đ</strong>';
 }
 
 document.getElementById('checkoutForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-    
     const btn = document.getElementById('submitBtn');
     const errorBox = document.getElementById('errorBox');
-    
     btn.disabled = true;
-    const originalBtnText = btn.innerHTML;
-    btn.textContent = '⏳ Đang tạo đơn...';
+    const origHTML = btn.innerHTML;
+    btn.innerHTML = '<span>⏳ Đang tạo đơn...</span>';
     errorBox.style.display = 'none';
-    
+
     try {
-        const formData = new FormData(this);
-        
-        // Build dynamic fields object from all form inputs
-        const payload = { uuid: formData.get('uuid'), fields: {} };
-        for (const [key, value] of formData.entries()) {
-            if (key !== 'uuid' && key !== '_token' && value) {
-                payload.fields[key] = value;
-            }
+        const fd = new FormData(this);
+        const payload = { uuid: fd.get('uuid'), fields: {} };
+        for (const [k, v] of fd.entries()) {
+            if (k !== 'uuid' && k !== '_token' && v) payload.fields[k] = v;
         }
-        
-        const response = await fetch('{{ route("ord-checkout.submit") }}', {
+
+        const res = await fetch('{{ route("ord-checkout.submit") }}', {
             method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
+            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json', 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
-        
-        const data = await response.json();
-        
+        const data = await res.json();
+
         if (data.success) {
             currentOrderId = data.order_id;
             currentTrackingCode = data.tracking_code;
-            
-            // Update payment section
+            const amtFmt = Number(data.amount).toLocaleString('vi-VN');
+
             document.getElementById('qrImage').src = data.qr_url;
             document.getElementById('displayCode').textContent = data.tracking_code;
-            document.getElementById('displayCodeCheck').textContent = data.tracking_code;
-            document.getElementById('displayAmount').textContent = Number(data.amount).toLocaleString('vi-VN') + ' đ';
-            // document.getElementById('totalAmount').textContent = Number(data.amount).toLocaleString('vi-VN') + 'đ'; // Removed as ID not found
+            document.getElementById('displayCode2').textContent = data.tracking_code;
+            document.getElementById('displayAmount').textContent = amtFmt + 'đ';
+            document.getElementById('totalAmount').textContent = amtFmt + 'đ';
             document.getElementById('checkResultBtn').href = '/don-ady?code=' + data.tracking_code;
-            
-            // Show payment section
-            document.getElementById('formSection').style.display = 'none';
-            document.getElementById('paymentSection').style.display = 'block';
-            
-            // Start checking status
-            checkInterval = setInterval(checkOrderStatus, 5000); // Check every 5s
-        } else {
-            errorBox.textContent = data.error || 'Có lỗi xảy ra, vui lòng thử lại';
-            errorBox.style.display = 'block';
-            btn.disabled = false;
-            btn.innerHTML = originalBtnText;
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        errorBox.textContent = 'Lỗi kết nối server, vui lòng thử lại';
-        errorBox.style.display = 'block';
-        btn.disabled = false;
-        btn.innerHTML = originalBtnText;
-    }
-});
-            
-            <!-- Payment Section (shown after order created) -->
-            <div id="paymentSection" style="display: none;">
-                <div class="payment-grid">
-                    <!-- Left: QR Code -->
-                    <div class="payment-left">
-                        <div class="qr-section">
-                            <p class="qr-label">Quét QR để thanh toán:</p>
-                            <img id="qrImage" src="" alt="QR Payment" class="qr-img">
-                            <div class="bank-info">
-                                <div class="bank-row"><span>Ngân hàng:</span><strong>{{ $bankInfo['name'] }}</strong></div>
-                                <div class="bank-row"><span>Số tài khoản:</span><strong>{{ $bankInfo['account'] }}</strong></div>
-                                <div class="bank-row"><span>Chủ TK:</span><strong>{{ $bankInfo['owner'] }}</strong></div>
-                                <div class="bank-row"><span>Nội dung:</span><strong style="color:#6366f1;" id="displayCode"></strong></div>
-                                <div class="bank-row"><span>Số tiền:</span><strong style="color:#10b981;" id="displayAmount"></strong></div>
-                            </div>
-                            <div class="payment-warning">⚠️ Nội dung CK phải giống 100% mã đơn hàng</div>
-                        </div>
-                    </div>
-                    
-                    <!-- Right: Order Summary -->
-                    <div class="payment-right">
-                        <div class="order-summary-box">
-                            <div class="summary-header">📋 Tóm tắt đơn hàng</div>
-                            <div class="summary-row"><span>Dịch vụ</span><span style="max-width: 200px; text-align: right;">{{ $product['name'] }}</span></div>
-                            <div class="summary-total"><span>Tổng thanh toán</span><span class="total-amount" id="totalAmount"></span></div>
-                            <div style="font-size: 13px; color: #64748b; margin-bottom: 14px;">Trạng thái: <span class="badge-pending">PENDING</span></div>
-                            
-                            @if(Auth::check())
-                            <div class="balance-section">
-                                <div class="balance-row"><span>💰 Số dư</span><span class="balance-amt">{{ number_format($userBalance) }} VND</span></div>
-                                @if($userBalance >= $product['priceVnd'])
-                                <button id="payBalanceBtn" class="btn-balance" onclick="payWithBalance()">Thanh toán bằng số dư</button>
-                                @else
-                                <div class="balance-warning">⚠️ Thiếu {{ number_format($product['priceVnd'] - $userBalance) }} VND</div>
-                                <a href="/nap-tien" class="btn-deposit">Nạp tiền</a>
-                                @endif
-                            </div>
-                            @else
-                            <div class="direct-pay">
-                                <div class="direct-main">✅ Thanh toán qua QR</div>
-                                <div class="direct-sub">Quét mã → Chuyển khoản → Tự động xác nhận</div>
-                            </div>
-                            <div class="login-hint">
-                                Hoặc <a href="/login?redirect={{ urlencode(request()->fullUrl()) }}">Đăng nhập</a> để dùng số dư
-                            </div>
-                            @endif
-                            
-                            <a href="#" id="checkResultBtn" class="btn-check">🔍 Kiểm tra kết quả</a>
-                            
-                            <div id="statusBox" class="status-box">
-                                <span id="statusIcon">🔄</span> <span id="statusText">Đang chờ thanh toán...</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
-<script>
-let currentOrderId = null;
-let currentTrackingCode = null;
-let checkCount = 0;
-let checkInterval = null;
-
-document.getElementById('checkoutForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    const btn = document.getElementById('submitBtn');
-    const errorBox = document.getElementById('errorBox');
-    
-    btn.disabled = true;
-    btn.textContent = '⏳ Đang tạo đơn...';
-    errorBox.style.display = 'none';
-    
-    try {
-        const formData = new FormData(this);
-        
-        // Build dynamic fields object from all form inputs
-        const payload = { uuid: formData.get('uuid'), fields: {} };
-        for (const [key, value] of formData.entries()) {
-            if (key !== 'uuid' && key !== '_token' && value) {
-                payload.fields[key] = value;
-            }
-        }
-        
-        const response = await fetch('{{ route("ord-checkout.submit") }}', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            currentOrderId = data.order_id;
-            currentTrackingCode = data.tracking_code;
-            
-            // Update payment section
-            document.getElementById('qrImage').src = data.qr_url;
-            document.getElementById('displayCode').textContent = data.tracking_code;
-            document.getElementById('displayAmount').textContent = Number(data.amount).toLocaleString('vi-VN') + ' đ';
-            document.getElementById('totalAmount').textContent = Number(data.amount).toLocaleString('vi-VN') + 'đ';
-            document.getElementById('checkResultBtn').href = '/don-ady?code=' + data.tracking_code;
-            
-            // Show payment section
             document.getElementById('formSection').style.display = 'none';
+            document.getElementById('sidebarSection').style.display = 'none';
             document.getElementById('paymentSection').style.display = 'block';
-            
-            // Start polling
+
             startPaymentCheck();
         } else {
-            errorBox.textContent = data.error;
+            errorBox.textContent = data.error || 'Có lỗi xảy ra';
             errorBox.style.display = 'block';
             btn.disabled = false;
-            btn.innerHTML = '💳 Tạo đơn & Thanh toán {{ number_format($product["priceVnd"]) }}đ';
+            btn.innerHTML = origHTML;
         }
-    } catch (error) {
-        console.error('Error:', error);
-        errorBox.textContent = 'Lỗi kết nối. Vui lòng thử lại.';
+    } catch (err) {
+        console.error(err);
+        errorBox.textContent = 'Lỗi kết nối server';
         errorBox.style.display = 'block';
         btn.disabled = false;
-        btn.innerHTML = '💳 Tạo đơn & Thanh toán {{ number_format($product["priceVnd"]) }}đ';
+        btn.innerHTML = origHTML;
     }
 });
 
@@ -470,71 +561,47 @@ function startPaymentCheck() {
         if (checkCount > 200) {
             clearInterval(checkInterval);
             document.getElementById('statusIcon').textContent = '⏰';
-            document.getElementById('statusText').textContent = 'Hết thời gian tự động. Nhấn "Kiểm tra kết quả" sau khi thanh toán.';
+            document.getElementById('statusText').textContent = 'Hết thời gian tự động. Nhấn "Kiểm tra kết quả".';
             return;
         }
-        
         fetch('/api/check-payment?code=' + encodeURIComponent(currentTrackingCode))
             .then(r => r.json())
             .then(data => {
                 if (data.paid) {
                     clearInterval(checkInterval);
                     document.getElementById('statusIcon').textContent = '✅';
-                    document.getElementById('statusText').textContent = 'Thanh toán thành công! Đang chuyển trang...';
+                    document.getElementById('statusText').textContent = 'Thanh toán thành công! Đang xử lý...';
                     document.getElementById('statusBox').classList.add('success');
-                    setTimeout(() => {
-                        window.location.href = '/don-ady?code=' + currentTrackingCode;
-                    }, 1500);
+                    setTimeout(() => { window.location.href = '/don-ady?code=' + currentTrackingCode; }, 1500);
                 }
-            })
-            .catch(() => {});
+            }).catch(() => {});
     }, 3000);
 }
 
 @if(Auth::check() && $userBalance >= $product['priceVnd'])
 async function payWithBalance() {
-    if (!currentOrderId) {
-        alert('Vui lòng tạo đơn hàng trước');
-        return;
-    }
-    
-    if (!confirm('Bạn có chắc muốn thanh toán đơn này bằng số dư tài khoản?')) return;
-    
+    if (!currentOrderId) { alert('Vui lòng tạo đơn trước'); return; }
+    if (!confirm('Thanh toán đơn này bằng số dư?')) return;
     const btn = document.getElementById('payBalanceBtn');
-    btn.disabled = true;
-    btn.textContent = '⏳ Đang xử lý...';
-    
+    btn.disabled = true; btn.textContent = '⏳ Đang xử lý...';
     try {
-        const response = await fetch('/api/pay-with-balance', {
+        const res = await fetch('/api/pay-with-balance', {
             method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
+            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Content-Type': 'application/json', 'Accept': 'application/json' },
             body: JSON.stringify({ order_id: currentOrderId })
         });
-        
-        const data = await response.json();
-        
+        const data = await res.json();
         if (data.success) {
             clearInterval(checkInterval);
             document.getElementById('statusIcon').textContent = '✅';
             document.getElementById('statusText').textContent = data.message;
             document.getElementById('statusBox').classList.add('success');
-            setTimeout(() => {
-                window.location.href = data.redirect;
-            }, 1500);
+            setTimeout(() => { window.location.href = data.redirect; }, 1500);
         } else {
-            alert(data.error);
-            btn.disabled = false;
-            btn.textContent = 'Thanh toán bằng số dư';
+            alert(data.error); btn.disabled = false; btn.textContent = '⚡ Thanh toán bằng số dư';
         }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Lỗi kết nối. Vui lòng thử lại.');
-        btn.disabled = false;
-        btn.textContent = 'Thanh toán bằng số dư';
+    } catch (err) {
+        alert('Lỗi kết nối'); btn.disabled = false; btn.textContent = '⚡ Thanh toán bằng số dư';
     }
 }
 @endif
