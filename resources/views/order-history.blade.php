@@ -41,14 +41,21 @@
         <div class="oh-list">
             @foreach($orders as $order)
             @php
-                $serviceName = \App\Http\Controllers\OrderHistoryController::getServiceName($order);
+                // Detect if ADY order
+                $isAdyOrder = ($order->order_type ?? '') === 'ady';
+                
+                $serviceName = $isAdyOrder 
+                    ? ($order->account_username ?? 'Dịch vụ GSM') // product_name is stored here
+                    : \App\Http\Controllers\OrderHistoryController::getServiceName($order);
                 $statusText = \App\Http\Controllers\OrderHistoryController::getStatusText($order->status);
                 $statusClass = \App\Http\Controllers\OrderHistoryController::getStatusBadgeClass($order->status);
                 
                 // Get logo path based on service name
                 $logoPath = '/images/services/';
                 $serviceNameLower = strtolower($serviceName);
-                if (stripos($serviceNameLower, 'unlocktool') !== false || stripos($serviceNameLower, 'unlock') !== false) {
+                if ($isAdyOrder) {
+                    $logoPath .= 'ady.png'; // ADY logo
+                } elseif (stripos($serviceNameLower, 'unlocktool') !== false || stripos($serviceNameLower, 'unlock') !== false) {
                     $logoPath .= 'unlocktool.png';
                 } elseif (stripos($serviceNameLower, 'vietmap') !== false) {
                     $logoPath .= 'vietmap.png';
@@ -67,14 +74,26 @@
                 } else {
                     $logoPath .= 'unlocktool.png'; // default
                 }
+                
+                // Order detail link
+                $orderLink = $isAdyOrder 
+                    ? '/don-ady?code=' . $order->tracking_code
+                    : '/order-detail?code=' . $order->tracking_code;
             @endphp
+            <a href="{{ $orderLink }}" class="oh-item-link" style="text-decoration: none; color: inherit;">
             <div class="oh-item">
                 <div class="oh-item-logo">
-                    <img src="{{ $logoPath }}" alt="{{ $serviceName }}" loading="lazy">
+                    <img src="{{ $logoPath }}" alt="{{ $serviceName }}" loading="lazy" onerror="this.src='/images/services/unlocktool.png'">
                 </div>
                 <div class="oh-item-info">
-                    <div class="oh-item-name">{{ $serviceName }}</div>
-                    <div class="oh-item-meta">{{ $order->hours }} giờ • {{ $order->tracking_code }}</div>
+                    <div class="oh-item-name">{{ Str::limit($serviceName, 40) }}</div>
+                    <div class="oh-item-meta">
+                        @if($isAdyOrder)
+                            GSM • {{ $order->tracking_code }}
+                        @else
+                            {{ $order->hours }} giờ • {{ $order->tracking_code }}
+                        @endif
+                    </div>
                 </div>
                 <div class="oh-item-price">
                     <div class="oh-price-value">{{ number_format($order->amount, 0, ',', '.') }}đ</div>
@@ -82,7 +101,13 @@
                 </div>
                 <div class="oh-item-status {{ $statusClass }}">{{ $statusText }}</div>
                 
-                @if(($order->status === 'paid' || $order->status === 'completed') && $order->account_username && $order->account_password)
+                @if($isAdyOrder && $order->account_password)
+                    {{-- ADY order with result --}}
+                    <div class="oh-item-cred">
+                        <span class="oh-cred-label">📄 Kết quả:</span>
+                        <span class="oh-cred-value" onclick="event.stopPropagation(); copyToClipboard('{{ addslashes($order->account_password) }}')">{{ Str::limit($order->account_password, 50) }}</span>
+                    </div>
+                @elseif(!$isAdyOrder && ($order->status === 'paid' || $order->status === 'completed') && $order->account_username && $order->account_password)
                     @php
                         $isExpired = $order->expires_at && \Carbon\Carbon::parse($order->expires_at)->isPast();
                     @endphp
@@ -94,13 +119,14 @@
                     @else
                     <div class="oh-item-cred">
                         <span class="oh-cred-label">Tài khoản:</span>
-                        <span class="oh-cred-value" onclick="copyToClipboard('{{ $order->account_username }}')">{{ $order->account_username }}</span>
+                        <span class="oh-cred-value" onclick="event.stopPropagation(); copyToClipboard('{{ $order->account_username }}')">{{ $order->account_username }}</span>
                         <span class="oh-cred-sep">/</span>
-                        <span class="oh-cred-value" onclick="copyToClipboard('{{ $order->account_password }}')">{{ $order->account_password }}</span>
+                        <span class="oh-cred-value" onclick="event.stopPropagation(); copyToClipboard('{{ $order->account_password }}')">{{ $order->account_password }}</span>
                     </div>
                     @endif
                 @endif
             </div>
+            </a>
             @endforeach
         </div>
         
