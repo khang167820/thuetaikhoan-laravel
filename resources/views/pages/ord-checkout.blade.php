@@ -104,22 +104,64 @@
                     
                     <div id="errorBox" class="error-box" style="display: none;"></div>
                     
+                    {{-- Email field is always required for result delivery --}}
                     <div class="form-group">
                         <label>Email nhận kết quả <span class="required">*</span></label>
-                        <input type="email" name="email" id="email" placeholder="email@example.com" required 
+                        <input type="email" name="Email" id="Email" placeholder="email@example.com" required 
                                value="{{ Auth::check() ? Auth::user()->email : '' }}">
                         <small>Kết quả dịch vụ sẽ được gửi đến email này</small>
                     </div>
                     
-                    <div class="form-group">
-                        <label>IMEI <span class="required">*</span></label>
-                        <input type="text" name="imei" id="imei" placeholder="Nhập IMEI (15 số)" required>
-                        <small>Mở Settings > General > About > IMEI. IMEI gồm 15 chữ số.</small>
-                    </div>
+                    {{-- Dynamic fields from ADY product --}}
+                    @if(!empty($product['fields']))
+                        @foreach($product['fields'] as $fieldName => $fieldConfig)
+                            @php
+                                // Skip Email field since we already have it above
+                                if (strtolower($fieldName) === 'email') continue;
+                                
+                                $isRequired = ($fieldConfig['required'] ?? false) || ($fieldConfig['validation'] ?? false);
+                                $fieldType = 'text';
+                                $placeholder = $fieldConfig['placeholder'] ?? "Nhập $fieldName";
+                                $hint = $fieldConfig['hint'] ?? '';
+                                
+                                // Determine field type and hint based on field name
+                                $fieldLower = strtolower($fieldName);
+                                if (str_contains($fieldLower, 'imei')) {
+                                    $placeholder = 'Nhập IMEI (15 số)';
+                                    $hint = 'Mở Settings > General > About > IMEI. IMEI gồm 15 chữ số.';
+                                } elseif (str_contains($fieldLower, 'serial')) {
+                                    $placeholder = 'Nhập Serial Number';
+                                    $hint = 'Mở Settings > General > About > Serial Number';
+                                } elseif (str_contains($fieldLower, 'phone') || str_contains($fieldLower, 'số điện thoại')) {
+                                    $fieldType = 'tel';
+                                    $placeholder = 'Nhập số điện thoại';
+                                } elseif (str_contains($fieldLower, 'model')) {
+                                    $placeholder = 'Nhập Model (VD: iPhone 12 Pro Max)';
+                                } elseif (str_contains($fieldLower, 'carrier') || str_contains($fieldLower, 'network')) {
+                                    $placeholder = 'Nhập Carrier/Nhà mạng';
+                                }
+                            @endphp
+                            <div class="form-group">
+                                <label>{{ $fieldName }} @if($isRequired)<span class="required">*</span>@endif</label>
+                                <input type="{{ $fieldType }}" name="{{ $fieldName }}" id="{{ $fieldName }}" 
+                                       placeholder="{{ $placeholder }}" {{ $isRequired ? 'required' : '' }}>
+                                @if($hint)
+                                <small>{{ $hint }}</small>
+                                @endif
+                            </div>
+                        @endforeach
+                    @else
+                        {{-- Fallback: Show IMEI field if no fields specified --}}
+                        <div class="form-group">
+                            <label>IMEI <span class="required">*</span></label>
+                            <input type="text" name="IMEI" id="IMEI" placeholder="Nhập IMEI (15 số)" required>
+                            <small>Mở Settings > General > About > IMEI. IMEI gồm 15 chữ số.</small>
+                        </div>
+                    @endif
                     
                     <div class="form-group">
                         <label>Ghi chú</label>
-                        <textarea name="notes" id="notes" rows="2" placeholder="Ghi chú thêm (nếu có)"></textarea>
+                        <textarea name="Notes" id="Notes" rows="2" placeholder="Ghi chú thêm (nếu có)"></textarea>
                     </div>
                     
                     <button type="submit" class="btn-submit" id="submitBtn">
@@ -206,6 +248,15 @@ document.getElementById('checkoutForm').addEventListener('submit', async functio
     
     try {
         const formData = new FormData(this);
+        
+        // Build dynamic fields object from all form inputs
+        const payload = { uuid: formData.get('uuid'), fields: {} };
+        for (const [key, value] of formData.entries()) {
+            if (key !== 'uuid' && key !== '_token' && value) {
+                payload.fields[key] = value;
+            }
+        }
+        
         const response = await fetch('{{ route("ord-checkout.submit") }}', {
             method: 'POST',
             headers: {
@@ -213,12 +264,7 @@ document.getElementById('checkoutForm').addEventListener('submit', async functio
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                uuid: formData.get('uuid'),
-                imei: formData.get('imei'),
-                email: formData.get('email'),
-                notes: formData.get('notes')
-            })
+            body: JSON.stringify(payload)
         });
         
         const data = await response.json();

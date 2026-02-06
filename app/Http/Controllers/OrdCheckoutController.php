@@ -83,12 +83,12 @@ class OrdCheckoutController extends Controller
     public function submit(Request $request)
     {
         try {
-            // Manual validation for better JSON error response
+            // Get request data
             $uuid = $request->input('uuid');
-            $email = $request->input('email');
-            $imei = $request->input('imei', '');
-            $serial = $request->input('serial', '');
-            $notes = $request->input('notes', '');
+            $fields = $request->input('fields', []);
+            
+            // Email is required (either in fields or root)
+            $email = $fields['Email'] ?? $request->input('email', '');
             
             if (empty($uuid)) {
                 return response()->json(['success' => false, 'error' => 'Thiếu mã sản phẩm']);
@@ -121,13 +121,7 @@ class OrdCheckoutController extends Controller
             ]);
         }
         
-        // Build fields
-        $fields = [
-            'IMEI' => $imei,
-            'Serial' => $serial,
-            'Email' => $email,
-            'Notes' => $notes,
-        ];
+        // Filter empty fields
         $fields = array_filter($fields, fn($v) => $v !== '' && $v !== null);
         
         // Generate tracking code: GH + dd + mm + 6 random digits
