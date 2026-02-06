@@ -232,6 +232,33 @@ Route::get('/ma-giam-gia.php', fn() => redirect('/ma-giam-gia', 301));
 Route::get('/dieu-khoan.php', fn() => redirect('/dieu-khoan', 301));
 Route::get('/index.php', fn() => redirect('/', 301));
 
+// Additional legacy pages
+Route::get('/ord-services.php', function (\Illuminate\Http\Request $request) {
+    $query = $request->getQueryString();
+    return redirect('/ord-services' . ($query ? '?' . $query : ''), 301);
+});
+Route::get('/ord-checkout.php', function (\Illuminate\Http\Request $request) {
+    $query = $request->getQueryString();
+    return redirect('/ord-checkout' . ($query ? '?' . $query : ''), 301);
+});
+Route::get('/account.php', fn() => redirect('/account', 301));
+Route::get('/don-ady.php', function (\Illuminate\Http\Request $request) {
+    $query = $request->getQueryString();
+    return redirect('/don-ady' . ($query ? '?' . $query : ''), 301);
+});
+Route::get('/tai-amt.php', fn() => redirect('/thue-amt', 301));
+Route::get('/tai-tsm.php', fn() => redirect('/thue-tsm', 301));
+Route::get('/tai-dft.php', fn() => redirect('/thue-dft', 301));
+Route::get('/tai-samsung-tool.php', fn() => redirect('/thue-samsung-tool', 301));
+Route::get('/tai-kg-killer.php', fn() => redirect('/thue-kg-killer', 301));
+
 // Catch-all: /blog/any-slug.php → /blog/any-slug
 Route::get('/blog/{slug}.php', fn($slug) => redirect("/blog/{$slug}", 301))
     ->where('slug', '.*');
+
+// Universal catch-all: any remaining .php URL → strip .php extension
+Route::get('/{path}.php', function (\Illuminate\Http\Request $request, $path) {
+    $query = $request->getQueryString();
+    return redirect('/' . $path . ($query ? '?' . $query : ''), 301);
+})->where('path', '[^/]+');
+
