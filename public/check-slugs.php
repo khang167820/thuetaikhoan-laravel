@@ -3,7 +3,6 @@ require __DIR__.'/../vendor/autoload.php';
 $app = require_once __DIR__.'/../bootstrap/app.php';
 $app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
 
-// All indexed blog slugs from Google Search Console (without .php)
 $indexedSlugs = [
     'testpoint-edl9008-samsung-galaxy-s205',
     'testpoint-edl9008-samsung-galaxy-m22-sm-m225f',
@@ -46,28 +45,24 @@ $indexedSlugs = [
     'top-5-tool-xoa-frp-samsung-tot-nhat-2026',
 ];
 
-// Get all DB slugs
 $dbSlugs = DB::table('blog_posts')->pluck('slug')->toArray();
 
-echo "=== DB Blog Posts: " . count($dbSlugs) . " ===\n\n";
-
-$found = 0;
-$missing = 0;
-
-echo "❌ MISSING (404) Slugs:\n";
+$missing = [];
+$found = [];
 foreach ($indexedSlugs as $slug) {
-    if (!in_array($slug, $dbSlugs)) {
-        $missing++;
-        echo "  - {$slug}\n";
+    if (in_array($slug, $dbSlugs)) {
+        $found[] = $slug;
     } else {
-        $found++;
+        $missing[] = $slug;
     }
 }
 
-echo "\n✅ Found: {$found}\n";
-echo "❌ Missing: {$missing}\n";
+echo "FOUND: " . count($found) . "\n";
+echo "MISSING: " . count($missing) . "\n\n";
 
-echo "\n=== All DB Slugs ===\n";
-foreach ($dbSlugs as $s) {
-    echo "  {$s}\n";
+if (!empty($missing)) {
+    echo "MISSING SLUGS (404):\n";
+    foreach ($missing as $s) {
+        echo "  /blog/{$s}\n";
+    }
 }
