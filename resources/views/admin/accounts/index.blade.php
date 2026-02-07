@@ -436,7 +436,7 @@
                             </div>
                         @endif
                     @else
-                        <span class="status-badge renting">Đang thuê</span>
+                        <span class="status-badge renting" data-id="{{ $account->id }}" onclick="toggleSelect(this)" style="cursor:pointer;">Đang thuê</span>
                         @if(isset($account->rental_expires_at) && $account->rental_expires_at)
                             @php
                                 $expiresAt = \Carbon\Carbon::parse($account->rental_expires_at);
@@ -460,13 +460,12 @@
                 <td>
                     <div class="action-btns">
                         <div style="display: flex; gap: 4px;">
-                            @if(!$account->is_available)
-                            <button type="button" class="toggle-btn green" data-id="{{ $account->id }}" onclick="toggleSelect(this)">
-                                Đang thuê
-                            </button>
-                            @else
-                            <span class="toggle-btn blue" style="cursor:default;">Chờ thuê</span>
-                            @endif
+                            <form action="{{ route('admin.accounts.toggle', $account->id) }}" method="POST" style="margin:0;">
+                                @csrf
+                                <button type="submit" class="toggle-btn {{ $account->is_available ? 'blue' : 'green' }}">
+                                    Chuyển TT
+                                </button>
+                            </form>
                             <span title="{{ $account->password_changed ? 'Đã đổi pass' : 'Chưa đổi pass' }}" style="display:inline-block; width:20px; height:20px; border-radius:50%; background: {{ $account->password_changed ? '#4ade80' : '#f87171' }}; vertical-align:middle; cursor:default;"></span>
                         </div>
                         <div class="action-note">Ngày kích hoạt: -</div>
@@ -571,18 +570,20 @@ setInterval(updateIdleTimers, 1000);
 // === Batch Toggle Logic ===
 const selectedIds = new Set();
 
-function toggleSelect(btn) {
-    const id = btn.getAttribute('data-id');
+function toggleSelect(badge) {
+    const id = badge.getAttribute('data-id');
     if (selectedIds.has(id)) {
         selectedIds.delete(id);
-        btn.classList.remove('blue');
-        btn.classList.add('green');
-        btn.textContent = 'Đang thuê';
+        badge.classList.add('renting');
+        badge.classList.remove('selected');
+        badge.textContent = 'Đang thuê';
+        badge.style.background = '';
     } else {
         selectedIds.add(id);
-        btn.classList.remove('green');
-        btn.classList.add('blue');
-        btn.textContent = '✓ Chờ thuê';
+        badge.classList.remove('renting');
+        badge.classList.add('selected');
+        badge.textContent = '✓ Chờ thuê';
+        badge.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
     }
     // Update save button counter
     const saveBtn = document.getElementById('saveBtn');
