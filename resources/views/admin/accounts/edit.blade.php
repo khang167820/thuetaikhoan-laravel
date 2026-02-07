@@ -194,10 +194,8 @@ function changePassword() {
         alert('Vui lòng nhập mật khẩu mới!');
         return;
     }
-    if (confirm('Đổi mật khẩu thành: ' + newPass + '?')) {
-        document.getElementById('newPassword').value = newPass;
-        document.getElementById('changePassForm').submit();
-    }
+    document.getElementById('newPassword').value = newPass;
+    document.getElementById('changePassForm').submit();
 }
 
 function resetTime() {
