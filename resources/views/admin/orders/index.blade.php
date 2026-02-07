@@ -44,7 +44,34 @@
             <tr>
                 <td>#{{ $order->id }}</td>
                 <td><strong>{{ $order->tracking_code }}</strong></td>
-                <td>{{ $order->service_type ?? 'N/A' }}</td>
+                <td>
+                    @php
+                        $sType = $order->service_type ?? 'N/A';
+                        $sColors = [
+                            'Vietmap' => ['#059669', '#ecfdf5'],
+                            'Unlocktool' => ['#2563eb', '#eff6ff'],
+                            'TSMTool' => ['#7c3aed', '#f5f3ff'],
+                            'TSM Tool' => ['#7c3aed', '#f5f3ff'],
+                            'DFTPro' => ['#475569', '#f1f5f9'],
+                            'Griffin' => ['#ea580c', '#fff7ed'],
+                            'AMT' => ['#dc2626', '#fef2f2'],
+                            'KGKiller' => ['#1e293b', '#f8fafc'],
+                            'SamsungTool' => ['#1e40af', '#eff6ff'],
+                            'IMEI Service' => ['#0d9488', '#f0fdfa'],
+                        ];
+                        $matched = $sColors[$sType] ?? null;
+                        if (!$matched) {
+                            foreach ($sColors as $key => $colors) {
+                                if (stripos($sType, $key) !== false) { $matched = $colors; break; }
+                            }
+                        }
+                    @endphp
+                    @if($matched)
+                        <span style="background: {{ $matched[1] }}; color: {{ $matched[0] }}; padding: 4px 10px; border-radius: 6px; font-weight: 600; font-size: 12px; white-space: nowrap;">{{ $sType }}</span>
+                    @else
+                        <span style="color: #64748b;">{{ $sType }}</span>
+                    @endif
+                </td>
                 <td>{{ $order->hours }} giờ</td>
                 <td style="color: #10b981; font-weight: 600;">{{ number_format($order->amount, 0, ',', '.') }}đ</td>
                 <td>
