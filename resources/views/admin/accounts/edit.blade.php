@@ -97,9 +97,9 @@
                 🗑️ Xóa
             </button>
             
-            <!-- Reset TG (Telegram) -->
-            <button type="button" class="btn" style="background: #facc15;" onclick="resetTelegram()">
-                ⭕ Reset TG
+            <!-- Reset TG (Thời gian) -->
+            <button type="button" class="btn" style="background: #facc15;" onclick="resetTime()">
+                ⏱️ Reset TG
             </button>
         </div>
     </form>
@@ -200,8 +200,8 @@ function changePassword() {
     }
 }
 
-function resetTelegram() {
-    if (confirm('Reset Telegram session của tài khoản này?')) {
+function resetTime() {
+    if (confirm('Reset thời gian của tài khoản này?\n- Đang thuê → Hết hạn ngay\n- Chờ thuê → Reset thời gian chờ về 0')) {
         document.getElementById('resetTGForm').submit();
     }
 }

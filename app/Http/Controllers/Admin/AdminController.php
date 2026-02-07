@@ -463,7 +463,9 @@ class AdminController extends Controller
     }
     
     /**
-     * Reset Account Telegram Session
+     * Reset Account Time
+     * - Đang thuê: set latest order expires_at to NOW (expired)
+     * - Chờ thuê: reset idle timer (set latest order expires_at to NOW)
      */
     public function resetAccountTG($id)
     {
@@ -473,14 +475,27 @@ class AdminController extends Controller
             return redirect()->route('admin.accounts')->with('error', 'Tài khoản không tồn tại!');
         }
         
-        // Reset telegram session fields
-        DB::table('accounts')->where('id', $id)->update([
-            'tg_session' => null,
-            'tg_logged' => 0,
-            'updated_at' => now(),
-        ]);
+        // Find the latest order for this account
+        $latestOrder = DB::table('orders')
+            ->where('account_id', $id)
+            ->orderBy('expires_at', 'desc')
+            ->first();
         
-        return redirect()->route('admin.accounts', ['type' => $account->type ?? 'Unlocktool'])->with('success', 'Đã reset Telegram session!');
+        if ($latestOrder) {
+            // Set expires_at to NOW
+            DB::table('orders')->where('id', $latestOrder->id)->update([
+                'expires_at' => now(),
+            ]);
+            $msg = 'Đã reset thời gian thành công!';
+        } else {
+            // No orders — update created_at to now to reset idle timer
+            DB::table('accounts')->where('id', $id)->update([
+                'created_at' => now(),
+            ]);
+            $msg = 'Đã reset thời gian (từ ngày tạo)!';
+        }
+        
+        return redirect()->route('admin.accounts', ['type' => $account->type ?? 'Unlocktool'])->with('success', $msg);
     }
     
     /**
