@@ -243,44 +243,29 @@ class AdminController extends Controller
             ->where('status', 'completed')
             ->groupBy('account_id');
 
+        // Safe sorting: Đang thuê trước, Chờ thuê sau
         $accounts = DB::table('accounts')
             ->leftJoinSub($latestOrders, 'latest_orders', function ($join) {
                 $join->on('accounts.id', '=', 'latest_orders.account_id');
             })
             ->select('accounts.*', 'latest_orders.latest_expires_at as sorting_expires_at')
             ->where('accounts.type', $currentType)
+            ->orderBy('accounts.is_available', 'asc')
             ->orderByRaw("
                 CASE 
-                    -- 1. Đang thuê + hết hạn + không ghi chú
-                    WHEN accounts.is_available = 0 AND sorting_expires_at < NOW() AND (accounts.note IS NULL OR accounts.note = '') THEN 1
-                    
-                    -- 2. Đang thuê + còn hạn + không ghi chú (sắp xếp theo hạn ít→nhiều)
-                    WHEN accounts.is_available = 0 AND sorting_expires_at >= NOW() AND (accounts.note IS NULL OR accounts.note = '') THEN 2
-                    
-                    -- 3. Đang thuê + còn hạn nhiều + không ghi chú (fallback cho NULL expires)
-                    WHEN accounts.is_available = 0 AND (accounts.note IS NULL OR accounts.note = '') THEN 3
-                    
-                    -- 4. Đang thuê + hết hạn + có ghi chú
-                    WHEN accounts.is_available = 0 AND sorting_expires_at < NOW() AND accounts.note IS NOT NULL AND accounts.note != '' THEN 4
-                    
-                    -- 5. Đang thuê + còn hạn + có ghi chú (sắp xếp theo hạn ít→nhiều)
-                    WHEN accounts.is_available = 0 AND sorting_expires_at >= NOW() AND accounts.note IS NOT NULL AND accounts.note != '' THEN 5
-                    
-                    -- 6. Đang thuê + có ghi chú (fallback cho NULL expires)
-                    WHEN accounts.is_available = 0 AND accounts.note IS NOT NULL AND accounts.note != '' THEN 6
-                    
-                    -- 7. Chờ thuê (ID thấp = chờ lâu nhất trước)
-                    ELSE 7
+                    WHEN accounts.is_available = 0 AND latest_orders.latest_expires_at < NOW() THEN 1
+                    WHEN accounts.is_available = 0 AND latest_orders.latest_expires_at >= NOW() THEN 2
+                    WHEN accounts.is_available = 0 THEN 3
+                    ELSE 4
                 END ASC
             ")
             ->orderByRaw("
                 CASE 
-                    -- Nhóm 2,5: Sắp xếp theo thời gian hết hạn ASC (sắp hết trước)
-                    WHEN accounts.is_available = 0 AND sorting_expires_at >= NOW() THEN sorting_expires_at
+                    WHEN accounts.is_available = 0 AND latest_orders.latest_expires_at >= NOW() THEN latest_orders.latest_expires_at
                     ELSE NULL 
                 END ASC
             ")
-            ->orderByRaw("accounts.id ASC")
+            ->orderBy('accounts.id', 'asc')
             ->paginate(50)
             ->withQueryString();
         
