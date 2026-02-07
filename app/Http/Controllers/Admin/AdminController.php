@@ -16,25 +16,37 @@ class AdminController extends Controller
      */
     public function dashboard()
     {
-        // Revenue stats
-        $todayRevenue = Order::whereIn('status', ['paid', 'completed'])
-            ->whereDate('paid_at', today())
-            ->sum('amount');
-            
-        $weekRevenue = Order::whereIn('status', ['paid', 'completed'])
-            ->where('paid_at', '>=', now()->startOfWeek())
-            ->sum('amount');
-            
-        $monthRevenue = Order::whereIn('status', ['paid', 'completed'])
-            ->where('paid_at', '>=', now()->startOfMonth())
-            ->sum('amount');
+        // Revenue stats - 1 query instead of 3
+        $revenue = DB::table('orders')
+            ->whereIn('status', ['paid', 'completed'])
+            ->whereNotNull('paid_at')
+            ->select(
+                DB::raw("SUM(CASE WHEN DATE(paid_at) = CURDATE() THEN amount ELSE 0 END) as today"),
+                DB::raw("SUM(CASE WHEN paid_at >= '" . now()->startOfWeek()->format('Y-m-d H:i:s') . "' THEN amount ELSE 0 END) as week"),
+                DB::raw("SUM(CASE WHEN paid_at >= '" . now()->startOfMonth()->format('Y-m-d H:i:s') . "' THEN amount ELSE 0 END) as month")
+            )
+            ->first();
         
-        // Order stats
-        $totalOrders = Order::count();
-        $pendingOrders = Order::where('status', 'pending')->count();
-        $paidOrders = Order::where('status', 'paid')->count();
-        $completedOrders = Order::where('status', 'completed')->count();
-        $todayOrders = Order::whereDate('created_at', today())->count();
+        $todayRevenue = $revenue->today ?? 0;
+        $weekRevenue = $revenue->week ?? 0;
+        $monthRevenue = $revenue->month ?? 0;
+        
+        // Order stats - 1 query instead of 5
+        $orderStats = DB::table('orders')
+            ->select(
+                DB::raw("COUNT(*) as total"),
+                DB::raw("SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending"),
+                DB::raw("SUM(CASE WHEN status = 'paid' THEN 1 ELSE 0 END) as paid"),
+                DB::raw("SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as completed"),
+                DB::raw("SUM(CASE WHEN DATE(created_at) = CURDATE() THEN 1 ELSE 0 END) as today")
+            )
+            ->first();
+        
+        $totalOrders = $orderStats->total ?? 0;
+        $pendingOrders = $orderStats->pending ?? 0;
+        $paidOrders = $orderStats->paid ?? 0;
+        $completedOrders = $orderStats->completed ?? 0;
+        $todayOrders = $orderStats->today ?? 0;
         
         // User stats
         $totalUsers = User::count();
@@ -299,11 +311,20 @@ class AdminController extends Controller
             }
         }
         
-        // Get stats
+        // Get stats - 1 query instead of 3
+        $statsRaw = DB::table('accounts')
+            ->where('type', $currentType)
+            ->select(
+                DB::raw("COUNT(*) as total"),
+                DB::raw("SUM(CASE WHEN is_available = 1 THEN 1 ELSE 0 END) as available"),
+                DB::raw("SUM(CASE WHEN is_available = 0 THEN 1 ELSE 0 END) as renting")
+            )
+            ->first();
+        
         $stats = [
-            'total' => DB::table('accounts')->where('type', $currentType)->count(),
-            'available' => DB::table('accounts')->where('type', $currentType)->where('is_available', 1)->count(),
-            'renting' => DB::table('accounts')->where('type', $currentType)->where('is_available', 0)->count(),
+            'total' => $statsRaw->total ?? 0,
+            'available' => $statsRaw->available ?? 0,
+            'renting' => $statsRaw->renting ?? 0,
         ];
         
         return view('admin.accounts.index', compact('accounts', 'currentType', 'allowedTypes', 'stats'));
