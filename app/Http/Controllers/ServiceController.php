@@ -142,7 +142,7 @@ class ServiceController extends Controller
                 ['q' => 'TSM có gỡ được Knox Guard không?', 'a' => 'Có, TSM Tool hỗ trợ gỡ KG / Knox Guard và Remove MDM.'],
             ],
         ],
-        'DFT' => [
+        'DFTPro' => [
             'name' => 'DFT Pro Tool',
             'slug' => 'thue-dft',
             'description' => 'Flash, repair, unlock đa nền tảng: hỗ trợ Qualcomm, MediaTek, HiSilicon, Unisoc; đọc/ghi NVRAM, repair IMEI',
@@ -166,7 +166,7 @@ class ServiceController extends Controller
                 ['q' => 'DFT có repair được IMEI không?', 'a' => 'Có, DFT Pro hỗ trợ repair IMEI / baseband tuân thủ quy định địa phương.'],
             ],
         ],
-        'KG' => [
+        'KGKiller' => [
             'name' => 'KG Killer Tool',
             'slug' => 'thue-kg-killer',
             'description' => 'Xóa KG, Gỡ IT Admin & MDM chuyên nghiệp: Xóa KG Android 13 & 14, gỡ IT Admin & Device Owner, gỡ MDM tất cả hãng Android, bật ADB bằng mã QR',
@@ -300,7 +300,7 @@ class ServiceController extends Controller
      */
     public function dft()
     {
-        return $this->showService('DFT');
+        return $this->showService('DFTPro');
     }
     
     /**
@@ -308,7 +308,7 @@ class ServiceController extends Controller
      */
     public function kgKiller()
     {
-        return $this->showService('KG');
+        return $this->showService('KGKiller');
     }
     
     /**
