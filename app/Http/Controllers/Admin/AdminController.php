@@ -456,6 +456,7 @@ class AdminController extends Controller
         DB::table('accounts')->where('id', $id)->update([
             'password' => $request->password,
             'password_changed' => 1,
+            'updated_at' => now(),
         ]);
         
         return redirect()->route('admin.accounts', ['type' => $account->type ?? 'Unlocktool'])->with('success', 'Đã đổi mật khẩu thành công!');
