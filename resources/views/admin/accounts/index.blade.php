@@ -380,11 +380,7 @@
         @if($currentType === 'Unlocktool')
         <a href="https://unlocktool.net" target="_blank" class="action-btn blue">🔗 Unlocktool.net</a>
         @endif
-        <form action="{{ route('admin.accounts.lock-with-notes') }}" method="POST" style="display: inline;" onsubmit="return confirm('Khóa tất cả tài khoản có ghi chú của {{ $currentType }}?');">
-            @csrf
-            <input type="hidden" name="type" value="{{ $currentType }}">
-            <button type="submit" class="action-btn yellow">🔒 Khóa TK có ghi chú</button>
-        </form>
+
         <button class="action-btn red">💾 Lưu trạng thái</button>
     </div>
 </div>
