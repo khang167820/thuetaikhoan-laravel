@@ -416,21 +416,28 @@
                 <td>
                     @if($account->is_available ?? false)
                         <span class="status-badge available">Chờ thuê</span>
-                        @if(isset($account->sorting_expires_at) && $account->sorting_expires_at)
-                            @php
+                        @php
+                            // Use last rental expiry if exists, otherwise use account creation date
+                            $idleSince = null;
+                            if (isset($account->sorting_expires_at) && $account->sorting_expires_at) {
                                 $lastExpired = \Carbon\Carbon::parse($account->sorting_expires_at);
-                                $isExpired = $lastExpired->isPast();
+                                if ($lastExpired->isPast()) {
+                                    $idleSince = $lastExpired;
+                                }
+                            }
+                            if (!$idleSince && isset($account->created_at)) {
+                                $idleSince = \Carbon\Carbon::parse($account->created_at);
+                            }
+                        @endphp
+                        @if($idleSince)
+                            @php
+                                $diff = $idleSince->diff(now());
+                                $totalHours = ($diff->days * 24) + $diff->h;
+                                $waitingTime = $totalHours . 'h ' . $diff->i . 'p';
                             @endphp
-                            @if($isExpired)
-                                @php
-                                    $diff = $lastExpired->diff(now());
-                                    $totalHours = ($diff->days * 24) + $diff->h;
-                                    $waitingTime = $totalHours . 'h ' . $diff->i . 'p';
-                                @endphp
-                                <div class="status-time idle-timer" style="color: #64748b; font-size: 11px;" data-since="{{ $lastExpired->toIso8601String() }}">
-                                    ⏱️ {{ $waitingTime }}
-                                </div>
-                            @endif
+                            <div class="status-time idle-timer" style="color: #64748b; font-size: 11px;" data-since="{{ $idleSince->toIso8601String() }}">
+                                ⏱️ {{ $waitingTime }}
+                            </div>
                         @endif
                     @else
                         <span class="status-badge renting">Đang thuê</span>
