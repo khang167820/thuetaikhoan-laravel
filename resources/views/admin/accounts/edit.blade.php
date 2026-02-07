@@ -73,33 +73,33 @@
         
         <div class="btn-row">
             <!-- Chờ thuê (Set Available) -->
-            <button type="button" class="btn btn-success" onclick="setStatus('available')">
-                ✓ Chờ thuê
+            <button type="button" class="btn" style="background: #22c55e;" onclick="setStatus('available')">
+                ☑️ Chờ thuê
             </button>
             
             <!-- Đổi pass -->
-            <button type="button" class="btn" style="background: #dc2626;" onclick="changePassword()">
-                🔑 Đổi pass
+            <button type="button" class="btn" style="background: #f97316;" onclick="changePassword()">
+                🔐 Đổi pass
             </button>
             
             <!-- Cập nhật -->
-            <button type="submit" class="btn btn-primary">
+            <button type="button" class="btn" style="background: #3b82f6;" onclick="this.closest('form').submit()">
                 💾 Cập nhật
             </button>
             
             <!-- Quay lại -->
-            <a href="{{ route('admin.accounts') }}" class="btn btn-secondary">
+            <a href="{{ route('admin.accounts') }}" class="btn" style="background: #6b7280;">
                 ← Quay lại
             </a>
             
             <!-- Xóa -->
-            <button type="button" class="btn btn-danger" onclick="deleteAccount()">
+            <button type="button" class="btn" style="background: #ef4444;" onclick="deleteAccount()">
                 🗑️ Xóa
             </button>
             
             <!-- Reset TG (Telegram) -->
-            <button type="button" class="btn" style="background: #f97316;" onclick="resetTelegram()">
-                📱 Reset TG
+            <button type="button" class="btn" style="background: #eab308; color: #fff;" onclick="resetTelegram()">
+                ⭕ Reset TG
             </button>
         </div>
     </form>
