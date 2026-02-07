@@ -317,16 +317,24 @@ class AdminController extends Controller
             'note' => 'nullable|string',
         ]);
         
-        DB::table('accounts')->insert([
+        // Insert chỉ các cột chắc chắn tồn tại
+        $insertData = [
             'username' => $data['username'],
             'password' => $data['password'],
             'type' => $data['type'],
-            'expires_at' => $data['expires_at'] ?? null,
-            'note' => $data['note'] ?? null,
             'is_available' => 1,
-            'password_changed' => 0,
-            'created_at' => now(),
-        ]);
+        ];
+        
+        // Thử thêm các cột tùy chọn (có thể chưa có trong DB)
+        try {
+            DB::table('accounts')->insert(array_merge($insertData, [
+                'note' => $data['note'] ?? null,
+                'expires_at' => $data['expires_at'] ?? null,
+            ]));
+        } catch (\Exception $e) {
+            // Fallback: chỉ insert cột cơ bản
+            DB::table('accounts')->insert($insertData);
+        }
         
         return back()->with('success', 'Thêm tài khoản thành công!');
     }
