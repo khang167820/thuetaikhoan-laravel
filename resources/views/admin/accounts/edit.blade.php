@@ -68,7 +68,17 @@
                 <input type="date" name="note_date" class="form-input" 
                        value="{{ isset($account->note_date) && $account->note_date ? \Carbon\Carbon::parse($account->note_date)->format('Y-m-d') : '' }}">
             </div>
-            <div class="form-group"></div>
+            <div class="form-group">
+                <label class="form-label">Ngày hết hạn TK</label>
+                <input type="date" name="expires_at" class="form-input" 
+                       value="{{ isset($account->expires_at) && $account->expires_at ? \Carbon\Carbon::parse($account->expires_at)->format('Y-m-d') : '' }}"
+                       style="{{ isset($account->expires_at) && $account->expires_at && \Carbon\Carbon::parse($account->expires_at)->isPast() ? 'border-color: #ef4444; background: #fef2f2;' : '' }}">
+                @if(isset($account->expires_at) && $account->expires_at && \Carbon\Carbon::parse($account->expires_at)->isPast())
+                    <div class="form-note" style="color: #ef4444; font-weight: 600;">⚠️ TK đã hết hạn!</div>
+                @elseif(isset($account->expires_at) && $account->expires_at)
+                    <div class="form-note" style="color: #22c55e;">Còn {{ \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($account->expires_at)) }} ngày</div>
+                @endif
+            </div>
         </div>
         
         <div class="btn-row">

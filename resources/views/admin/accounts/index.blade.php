@@ -468,7 +468,16 @@
                             </form>
                             <span title="{{ $account->password_changed ? 'Đã đổi pass' : 'Chưa đổi pass' }}" style="display:inline-block; width:20px; height:20px; border-radius:50%; background: {{ $account->password_changed ? '#4ade80' : '#f87171' }}; vertical-align:middle; cursor:default;"></span>
                         </div>
-                        <div class="action-note">Ngày kích hoạt: -</div>
+                        @if(isset($account->expires_at) && $account->expires_at)
+                            @php $expiryDate = \Carbon\Carbon::parse($account->expires_at); @endphp
+                            @if($expiryDate->isPast())
+                                <div class="action-note" style="color:#ef4444; font-weight:600;">⚠️ Hết hạn TK!</div>
+                            @else
+                                <div class="action-note" style="color:#64748b;">HH: {{ $expiryDate->format('d/m/Y') }} ({{ now()->diffInDays($expiryDate) }}d)</div>
+                            @endif
+                        @else
+                            <div class="action-note" style="color:#cbd5e1;">-</div>
+                        @endif
                     </div>
                 </td>
             </tr>
