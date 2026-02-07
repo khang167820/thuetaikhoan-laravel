@@ -416,16 +416,21 @@
                 <td>
                     @if($account->is_available ?? false)
                         <span class="status-badge available">Chờ thuê</span>
-                        @if(isset($account->available_since) && $account->available_since)
+                        @if(isset($account->sorting_expires_at) && $account->sorting_expires_at)
                             @php
-                                $availableSince = \Carbon\Carbon::parse($account->available_since);
-                                $diff = $availableSince->diff(now());
-                                $totalHours = ($diff->days * 24) + $diff->h;
-                                $waitingTime = $totalHours . 'h ' . $diff->i . 'p ' . $diff->s . 's';
+                                $lastExpired = \Carbon\Carbon::parse($account->sorting_expires_at);
+                                $isExpired = $lastExpired->isPast();
                             @endphp
-                            <div class="status-time" style="color: #64748b; font-size: 11px;">
-                                ⏱️ {{ $waitingTime }}
-                            </div>
+                            @if($isExpired)
+                                @php
+                                    $diff = $lastExpired->diff(now());
+                                    $totalHours = ($diff->days * 24) + $diff->h;
+                                    $waitingTime = $totalHours . 'h ' . $diff->i . 'p';
+                                @endphp
+                                <div class="status-time idle-timer" style="color: #64748b; font-size: 11px;" data-since="{{ $lastExpired->toIso8601String() }}">
+                                    ⏱️ {{ $waitingTime }}
+                                </div>
+                            @endif
                         @endif
                     @else
                         <span class="status-badge renting">Đang thuê</span>
@@ -538,5 +543,25 @@ function updateCountdowns() {
 
 updateCountdowns();
 setInterval(updateCountdowns, 1000);
+
+// Real-time idle timer (accounts waiting to be rented)
+function updateIdleTimers() {
+    document.querySelectorAll('.idle-timer').forEach(el => {
+        const since = new Date(el.dataset.since);
+        const now = new Date();
+        const diff = now - since;
+        
+        if (diff <= 0) return;
+        
+        const totalHours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        
+        el.textContent = `⏱️ ${totalHours}h ${String(minutes).padStart(2,'0')}p ${String(seconds).padStart(2,'0')}s`;
+    });
+}
+
+updateIdleTimers();
+setInterval(updateIdleTimers, 1000);
 </script>
 @endsection
