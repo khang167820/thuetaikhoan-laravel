@@ -39,8 +39,13 @@ class AccountAllocationService
             }
 
             // Find available account with row lock
+            // Ưu tiên: chờ lâu nhất (available_since ASC) + không có ghi chú
             $account = Account::where('type', $serviceType)
                 ->where('is_available', 1)
+                ->where(function ($q) {
+                    $q->whereNull('note')->orWhere('note', '');
+                })
+                ->orderBy('available_since', 'asc')
                 ->lockForUpdate()
                 ->first();
 
@@ -56,6 +61,7 @@ class AccountAllocationService
 
             // Mark account as rented
             $account->is_available = 0;
+            $account->available_since = null;
             $account->save();
 
             // Update order with account info
@@ -121,16 +127,20 @@ class AccountAllocationService
                         ->first();
 
                     if ($account && !$account->is_available) {
-                        // Mark account as available again
-                        $account->is_available = 1;
-                        $account->save();
-
                         // Update order status to expired
                         $order->status = 'expired';
                         $order->save();
 
+                        // Chỉ chuyển Chờ thuê nếu KHÔNG có ghi chú
+                        // Có ghi chú → giữ is_available = 0 (admin click thủ công)
+                        if (empty($account->note)) {
+                            $account->is_available = 1;
+                            $account->available_since = now();
+                            $account->save();
+                        }
+
                         $count++;
-                        Log::info("Reclaimed account: {$account->id} from order: {$order->tracking_code}");
+                        Log::info("Reclaimed account: {$account->id} from order: {$order->tracking_code}" . (!empty($account->note) ? " (kept locked due to note)" : ""));
                     }
 
                     DB::commit();

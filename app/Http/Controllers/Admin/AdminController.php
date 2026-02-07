@@ -251,27 +251,36 @@ class AdminController extends Controller
             ->where('accounts.type', $currentType)
             ->orderByRaw("
                 CASE 
-                    -- 1. Hết thời gian (Đang thuê nhưng đã hết hạn)
-                    WHEN accounts.is_available = 0 AND sorting_expires_at < NOW() THEN 1
+                    -- 1. Đang thuê + hết hạn + không ghi chú
+                    WHEN accounts.is_available = 0 AND sorting_expires_at < NOW() AND (accounts.note IS NULL OR accounts.note = '') THEN 1
                     
-                    -- 2. Sắp hết thời gian (Đang thuê, chưa hết hạn)
-                    WHEN accounts.is_available = 0 AND sorting_expires_at >= NOW() THEN 2
+                    -- 2. Đang thuê + còn hạn + không ghi chú (sắp xếp theo hạn ít→nhiều)
+                    WHEN accounts.is_available = 0 AND sorting_expires_at >= NOW() AND (accounts.note IS NULL OR accounts.note = '') THEN 2
                     
-                    -- 3. Có ghi chú (Chờ thuê + Có Note)
-                    WHEN accounts.is_available = 1 AND accounts.note IS NOT NULL AND accounts.note != '' THEN 3
+                    -- 3. Đang thuê + còn hạn nhiều + không ghi chú (fallback cho NULL expires)
+                    WHEN accounts.is_available = 0 AND (accounts.note IS NULL OR accounts.note = '') THEN 3
                     
-                    -- 4. Chờ thuê (Còn lại)
-                    ELSE 4
+                    -- 4. Đang thuê + hết hạn + có ghi chú
+                    WHEN accounts.is_available = 0 AND sorting_expires_at < NOW() AND accounts.note IS NOT NULL AND accounts.note != '' THEN 4
+                    
+                    -- 5. Đang thuê + còn hạn + có ghi chú (sắp xếp theo hạn ít→nhiều)
+                    WHEN accounts.is_available = 0 AND sorting_expires_at >= NOW() AND accounts.note IS NOT NULL AND accounts.note != '' THEN 5
+                    
+                    -- 6. Đang thuê + có ghi chú (fallback cho NULL expires)
+                    WHEN accounts.is_available = 0 AND accounts.note IS NOT NULL AND accounts.note != '' THEN 6
+                    
+                    -- 7. Chờ thuê (sắp xếp available_since ASC = chờ lâu nhất trước)
+                    ELSE 7
                 END ASC
             ")
             ->orderByRaw("
                 CASE 
-                    -- Group 2: Sort by expiration time ASC (soonest first)
+                    -- Nhóm 2,5: Sắp xếp theo thời gian hết hạn ASC (sắp hết trước)
                     WHEN accounts.is_available = 0 AND sorting_expires_at >= NOW() THEN sorting_expires_at
                     ELSE NULL 
                 END ASC
             ")
-            ->orderBy('accounts.id', 'desc')
+            ->orderByRaw("accounts.available_since ASC")
             ->paginate(50)
             ->withQueryString();
         
@@ -347,6 +356,12 @@ class AdminController extends Controller
         
         $newAvailable = !$account->is_available;
         
+        // Chặn chuyển Chờ thuê nếu có ghi chú
+        if ($newAvailable && !empty($account->note)) {
+            return redirect()->route('admin.accounts', ['type' => $account->type ?? 'Unlocktool'])
+                ->with('error', 'Không thể chuyển Chờ thuê khi có ghi chú! Xóa ghi chú trước.');
+        }
+        
         $updateData = ['is_available' => $newAvailable ? 1 : 0];
         
         // Also save password if provided (from edit page)
@@ -380,6 +395,12 @@ class AdminController extends Controller
         if ($request->has('type')) $data['type'] = $request->type;
         if ($request->has('note_date')) $data['note_date'] = $request->note_date;
         if ($request->has('expires_at')) $data['expires_at'] = $request->expires_at;
+        
+        // Nếu thêm ghi chú → tự động chuyển Đang thuê
+        if ($request->has('note') && !empty($request->note)) {
+            $data['is_available'] = 0;
+            $data['available_since'] = null;
+        }
         
         if (!empty($data)) {
             DB::table('accounts')->where('id', $id)->update($data);
