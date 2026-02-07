@@ -243,20 +243,22 @@ class AdminController extends Controller
             ->where('status', 'completed')
             ->groupBy('account_id');
 
-        // Safe sorting: Đang thuê trước, Chờ thuê sau
+        // 8-tier sorting: Đang thuê (expired/no note → earliest first), Chờ thuê
         $accounts = DB::table('accounts')
             ->leftJoinSub($latestOrders, 'latest_orders', function ($join) {
                 $join->on('accounts.id', '=', 'latest_orders.account_id');
             })
             ->select('accounts.*', 'latest_orders.latest_expires_at as sorting_expires_at')
             ->where('accounts.type', $currentType)
-            ->orderBy('accounts.is_available', 'asc')
             ->orderByRaw("
                 CASE 
-                    WHEN accounts.is_available = 0 AND latest_orders.latest_expires_at < NOW() THEN 1
-                    WHEN accounts.is_available = 0 AND latest_orders.latest_expires_at >= NOW() THEN 2
-                    WHEN accounts.is_available = 0 THEN 3
-                    ELSE 4
+                    WHEN accounts.is_available = 0 AND latest_orders.latest_expires_at < NOW() AND (accounts.note IS NULL OR accounts.note = '') THEN 1
+                    WHEN accounts.is_available = 0 AND latest_orders.latest_expires_at >= NOW() AND (accounts.note IS NULL OR accounts.note = '') THEN 2
+                    WHEN accounts.is_available = 0 AND (accounts.note IS NULL OR accounts.note = '') THEN 3
+                    WHEN accounts.is_available = 0 AND latest_orders.latest_expires_at < NOW() AND accounts.note IS NOT NULL AND accounts.note != '' THEN 4
+                    WHEN accounts.is_available = 0 AND latest_orders.latest_expires_at >= NOW() AND accounts.note IS NOT NULL AND accounts.note != '' THEN 5
+                    WHEN accounts.is_available = 0 AND accounts.note IS NOT NULL AND accounts.note != '' THEN 6
+                    ELSE 7
                 END ASC
             ")
             ->orderByRaw("
@@ -313,28 +315,18 @@ class AdminController extends Controller
             'username' => 'required|string',
             'password' => 'required|string',
             'type' => 'required|string',
-            'expires_at' => 'nullable|date',
             'note' => 'nullable|string',
         ]);
         
-        // Insert chỉ các cột chắc chắn tồn tại
-        $insertData = [
+        DB::table('accounts')->insert([
             'username' => $data['username'],
             'password' => $data['password'],
             'type' => $data['type'],
             'is_available' => 1,
-        ];
-        
-        // Thử thêm các cột tùy chọn (có thể chưa có trong DB)
-        try {
-            DB::table('accounts')->insert(array_merge($insertData, [
-                'note' => $data['note'] ?? null,
-                'expires_at' => $data['expires_at'] ?? null,
-            ]));
-        } catch (\Exception $e) {
-            // Fallback: chỉ insert cột cơ bản
-            DB::table('accounts')->insert($insertData);
-        }
+            'note' => $data['note'] ?? null,
+            'password_changed' => 0,
+            'created_at' => now(),
+        ]);
         
         return back()->with('success', 'Thêm tài khoản thành công!');
     }
