@@ -161,8 +161,21 @@ function suggestPassword(btn) {
 }
 
 function setStatus(status) {
+    // Also include the current password so it gets saved
+    const newPass = document.getElementById('password').value;
+    const form = document.getElementById('toggleForm');
+    
+    let pwInput = form.querySelector('input[name="password"]');
+    if (!pwInput) {
+        pwInput = document.createElement('input');
+        pwInput.type = 'hidden';
+        pwInput.name = 'password';
+        form.appendChild(pwInput);
+    }
+    pwInput.value = newPass;
+    
     document.getElementById('toggleStatus').value = status;
-    document.getElementById('toggleForm').submit();
+    form.submit();
 }
 
 function changePassword() {

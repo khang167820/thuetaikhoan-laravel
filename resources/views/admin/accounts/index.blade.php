@@ -499,7 +499,7 @@ function promptChangePassword(id, currentPass) {
         // Submit form to change password
         const form = document.createElement('form');
         form.method = 'POST';
-        form.action = '/admin/accounts/' + id + '/password';
+        form.action = '/admin/accounts/' + id + '/change-pass';
         form.innerHTML = '@csrf<input name="password" value="' + newPass + '">';
         document.body.appendChild(form);
         form.submit();

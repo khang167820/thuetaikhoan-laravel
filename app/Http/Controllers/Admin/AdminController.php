@@ -343,7 +343,13 @@ class AdminController extends Controller
         $newAvailable = !$account->is_available;
         
         $updateData = ['is_available' => $newAvailable ? 1 : 0];
-        
+    
+        // Also save password if provided (from edit page)
+        if (request()->has('password') && request()->password) {
+            $updateData['password'] = request()->password;
+            $updateData['updated_at'] = now();
+        }
+    
         // Set available_since when account becomes available
         if ($newAvailable) {
             $updateData['available_since'] = now();
