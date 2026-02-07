@@ -81,7 +81,6 @@ class OrderHistoryController extends Controller
     public function orderDetail(Request $request)
     {
         $code = $request->input('code');
-        $customerIp = $request->ip();
         
         if (empty($code)) {
             return redirect()->route('order-history')->with('error', 'Mã đơn hàng không hợp lệ');
@@ -106,20 +105,6 @@ class OrderHistoryController extends Controller
 
         if (!$order) {
             return redirect()->route('order-history')->with('error', 'Không tìm thấy đơn hàng');
-        }
-
-        // Security: Only allow access if order belongs to this IP or authenticated user
-        $canAccess = false;
-        if (Auth::check()) {
-            // Check if user_id property exists to avoid error if migration not run
-            $hasUserId = property_exists($order, 'user_id');
-            $canAccess = (($hasUserId && $order->user_id == Auth::id()) || $order->ip_address == $customerIp);
-        } else {
-            $canAccess = ($order->ip_address == $customerIp);
-        }
-
-        if (!$canAccess) {
-            return redirect()->route('order-history')->with('error', 'Bạn không có quyền xem đơn hàng này');
         }
 
         return view('pages.order-detail', compact('order'));
