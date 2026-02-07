@@ -34,7 +34,7 @@ class AdminAuthController extends Controller
         ]);
         
         // Query admin table (same as legacy)
-        $admin = DB::table('admin')
+        $admin = DB::table('admins')
             ->where('username', $request->username)
             ->first();
         
@@ -88,7 +88,7 @@ class AdminAuthController extends Controller
         ]);
         
         $adminId = session('admin_id');
-        $admin = DB::table('admin')->where('id', $adminId)->first();
+        $admin = DB::table('admins')->where('id', $adminId)->first();
         
         if (!$admin) {
             return back()->withErrors(['error' => 'Không tìm thấy tài khoản admin.']);
@@ -100,7 +100,7 @@ class AdminAuthController extends Controller
         }
         
         // Update with new bcrypt hash
-        DB::table('admin')
+        DB::table('admins')
             ->where('id', $adminId)
             ->update(['password' => Hash::make($request->new_password)]);
         
