@@ -58,11 +58,11 @@
                         <span class="badge badge-cancelled">{{ $order->status }}</span>
                     @endif
                 </td>
-                <td style="font-size: 11px;">
+                <td style="font-size: 13px;">
                     @if($order->account)
                         <div style="color: #16a34a; font-weight: 600;">🔑 {{ $order->account->username ?? $order->account->email ?? 'TK #'.$order->account->id }}</div>
                         @if($order->assigned_password)
-                            <div style="color: #64748b; font-family: monospace; font-size: 10px;">🔒 {{ $order->assigned_password }}</div>
+                            <div style="color: #64748b; font-family: monospace; font-size: 11px;">🔒 {{ $order->assigned_password }}</div>
                         @endif
                     @elseif($order->status === 'completed')
                         <span style="color: #f59e0b;">⚠️ Chưa gán</span>
