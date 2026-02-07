@@ -366,7 +366,15 @@ class AdminController extends Controller
             return redirect()->route('admin.accounts')->with('error', 'Tài khoản không tồn tại!');
         }
         
-        $newAvailable = !$account->is_available;
+        // Use explicit status from form if provided, otherwise toggle
+        $status = request()->input('status');
+        if ($status === 'available') {
+            $newAvailable = true;
+        } elseif ($status === 'renting') {
+            $newAvailable = false;
+        } else {
+            $newAvailable = !$account->is_available;
+        }
         
         $updateData = ['is_available' => $newAvailable ? 1 : 0];
         
