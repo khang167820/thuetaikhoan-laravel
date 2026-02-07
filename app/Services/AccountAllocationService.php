@@ -39,13 +39,13 @@ class AccountAllocationService
             }
 
             // Find available account with row lock
-            // Ưu tiên: chờ lâu nhất (available_since ASC) + không có ghi chú
+            // Ưu tiên: ID thấp nhất (chờ lâu nhất) + không có ghi chú
             $account = Account::where('type', $serviceType)
                 ->where('is_available', 1)
                 ->where(function ($q) {
                     $q->whereNull('note')->orWhere('note', '');
                 })
-                ->orderBy('available_since', 'asc')
+                ->orderBy('id', 'asc')
                 ->lockForUpdate()
                 ->first();
 
@@ -61,7 +61,6 @@ class AccountAllocationService
 
             // Mark account as rented
             $account->is_available = 0;
-            $account->available_since = null;
             $account->save();
 
             // Update order with account info
@@ -135,7 +134,6 @@ class AccountAllocationService
                         // Có ghi chú → giữ is_available = 0 (admin click thủ công)
                         if (empty($account->note)) {
                             $account->is_available = 1;
-                            $account->available_since = now();
                             $account->save();
                         }
 

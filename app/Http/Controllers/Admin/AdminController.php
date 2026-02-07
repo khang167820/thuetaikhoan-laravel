@@ -269,7 +269,7 @@ class AdminController extends Controller
                     -- 6. Đang thuê + có ghi chú (fallback cho NULL expires)
                     WHEN accounts.is_available = 0 AND accounts.note IS NOT NULL AND accounts.note != '' THEN 6
                     
-                    -- 7. Chờ thuê (sắp xếp available_since ASC = chờ lâu nhất trước)
+                    -- 7. Chờ thuê (ID thấp = chờ lâu nhất trước)
                     ELSE 7
                 END ASC
             ")
@@ -280,7 +280,7 @@ class AdminController extends Controller
                     ELSE NULL 
                 END ASC
             ")
-            ->orderByRaw("accounts.available_since ASC")
+            ->orderByRaw("accounts.id ASC")
             ->paginate(50)
             ->withQueryString();
         
@@ -370,13 +370,6 @@ class AdminController extends Controller
             $updateData['password'] = $password;
         }
         
-        // Set available_since when account becomes available
-        if ($newAvailable) {
-            $updateData['available_since'] = now();
-        } else {
-            $updateData['available_since'] = null;
-        }
-        
         DB::table('accounts')->where('id', $id)->update($updateData);
         
         return redirect()->route('admin.accounts', ['type' => $account->type ?? 'Unlocktool'])->with('success', 'Đã cập nhật trạng thái tài khoản!');
@@ -399,7 +392,6 @@ class AdminController extends Controller
         // Nếu thêm ghi chú → tự động chuyển Đang thuê
         if ($request->has('note') && !empty($request->note)) {
             $data['is_available'] = 0;
-            $data['available_since'] = null;
         }
         
         if (!empty($data)) {
