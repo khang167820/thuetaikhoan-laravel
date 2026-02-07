@@ -381,7 +381,7 @@
         <a href="https://unlocktool.net" target="_blank" class="action-btn blue">🔗 Unlocktool.net</a>
         @endif
 
-        <button class="action-btn red">💾 Lưu trạng thái</button>
+        <button class="action-btn red" onclick="submitBatchToggle()" id="saveBtn">💾 Lưu trạng thái</button>
     </div>
 </div>
 
@@ -460,12 +460,13 @@
                 <td>
                     <div class="action-btns">
                         <div style="display: flex; gap: 4px;">
-                            <form action="{{ route('admin.accounts.toggle', $account->id) }}" method="POST" style="margin:0;">
-                                @csrf
-                                <button type="submit" class="toggle-btn {{ $account->is_available ? 'blue' : 'green' }}">
-                                    {{ $account->is_available ? 'Chuyển TT' : 'Chuyển TT' }}
-                                </button>
-                            </form>
+                            @if(!$account->is_available)
+                            <button type="button" class="toggle-btn green" data-id="{{ $account->id }}" onclick="toggleSelect(this)">
+                                Đang thuê
+                            </button>
+                            @else
+                            <span class="toggle-btn blue" style="cursor:default;">Chờ thuê</span>
+                            @endif
                             <span title="{{ $account->password_changed ? 'Đã đổi pass' : 'Chưa đổi pass' }}" style="display:inline-block; width:20px; height:20px; border-radius:50%; background: {{ $account->password_changed ? '#4ade80' : '#f87171' }}; vertical-align:middle; cursor:default;"></span>
                         </div>
                         <div class="action-note">Ngày kích hoạt: -</div>
@@ -566,5 +567,61 @@ function updateIdleTimers() {
 
 updateIdleTimers();
 setInterval(updateIdleTimers, 1000);
+
+// === Batch Toggle Logic ===
+const selectedIds = new Set();
+
+function toggleSelect(btn) {
+    const id = btn.getAttribute('data-id');
+    if (selectedIds.has(id)) {
+        selectedIds.delete(id);
+        btn.classList.remove('blue');
+        btn.classList.add('green');
+        btn.textContent = 'Đang thuê';
+    } else {
+        selectedIds.add(id);
+        btn.classList.remove('green');
+        btn.classList.add('blue');
+        btn.textContent = '✓ Chờ thuê';
+    }
+    // Update save button counter
+    const saveBtn = document.getElementById('saveBtn');
+    if (selectedIds.size > 0) {
+        saveBtn.textContent = '💾 Lưu trạng thái (' + selectedIds.size + ')';
+        saveBtn.style.background = '#4ade80';
+    } else {
+        saveBtn.textContent = '💾 Lưu trạng thái';
+        saveBtn.style.background = '';
+    }
+}
+
+function submitBatchToggle() {
+    if (selectedIds.size === 0) {
+        alert('Chưa chọn tài khoản nào! Bấm vào nút "Đang thuê" để chọn.');
+        return;
+    }
+    if (!confirm('Chuyển ' + selectedIds.size + ' tài khoản sang Chờ thuê?')) return;
+    
+    const form = document.getElementById('batchForm');
+    // Clear old hidden inputs
+    form.querySelectorAll('.batch-id').forEach(el => el.remove());
+    // Add selected IDs
+    selectedIds.forEach(id => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'ids[]';
+        input.value = id;
+        input.className = 'batch-id';
+        form.appendChild(input);
+    });
+    form.submit();
+}
 </script>
+
+<!-- Hidden batch form -->
+<form action="{{ route('admin.accounts.batch-toggle') }}" method="POST" id="batchForm" style="display:none;">
+    @csrf
+    <input type="hidden" name="type" value="{{ $currentType }}">
+</form>
+
 @endsection

@@ -516,6 +516,32 @@ class AdminController extends Controller
             ->with('success', "Đã khóa {$affected} tài khoản có ghi chú!");
     }
     
+    /**
+     * Batch toggle accounts to available (Chờ thuê)
+     */
+    public function batchToggleAccounts(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        $type = $request->input('type', 'Unlocktool');
+        
+        if (empty($ids)) {
+            return redirect()->route('admin.accounts', ['type' => $type])
+                ->with('error', 'Chưa chọn tài khoản nào!');
+        }
+        
+        $affected = DB::table('accounts')
+            ->whereIn('id', $ids)
+            ->update([
+                'is_available' => 1,
+                'note' => null,
+                'note_date' => null,
+                'password_changed' => 0,
+            ]);
+        
+        return redirect()->route('admin.accounts', ['type' => $type])
+            ->with('success', "Đã chuyển {$affected} tài khoản sang Chờ thuê!");
+    }
+    
     // ==================== PRICES ====================
     
     public function prices(Request $request)

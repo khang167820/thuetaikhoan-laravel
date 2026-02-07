@@ -147,6 +147,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('/accounts', [AdminController::class, 'accounts'])->name('admin.accounts');
     Route::post('/accounts', [AdminController::class, 'addAccount'])->name('admin.accounts.add');
     Route::post('/accounts/lock-with-notes', [AdminController::class, 'lockAccountsWithNotes'])->name('admin.accounts.lock-with-notes');
+    Route::post('/accounts/batch-toggle', [AdminController::class, 'batchToggleAccounts'])->name('admin.accounts.batch-toggle');
     Route::get('/accounts/{id}/edit', [AdminController::class, 'editAccount'])->name('admin.accounts.edit');
     Route::post('/accounts/{id}/toggle', [AdminController::class, 'toggleAccount'])->name('admin.accounts.toggle');
     Route::post('/accounts/{id}', [AdminController::class, 'updateAccount'])->name('admin.accounts.update');
