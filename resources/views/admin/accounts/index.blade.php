@@ -265,11 +265,11 @@
         transition: all 0.2s;
     }
     .toggle-btn.green { 
-        background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); 
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); 
         color: #fff; 
     }
     .toggle-btn.blue { 
-        background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); 
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); 
         color: #fff; 
     }
     .toggle-btn:hover { transform: translateY(-1px); }
