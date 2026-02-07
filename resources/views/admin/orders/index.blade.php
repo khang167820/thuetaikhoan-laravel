@@ -29,13 +29,13 @@
             <tr>
                 <th>ID</th>
                 <th>Mã đơn</th>
-                <th>Người thuê</th>
                 <th>Dịch vụ</th>
                 <th>Thời gian</th>
                 <th>Số tiền</th>
                 <th>Trạng thái</th>
                 <th>Tài khoản cấp</th>
                 <th>Ngày tạo</th>
+                <th>Người thuê</th>
                 <th>Hành động</th>
             </tr>
         </thead>
@@ -44,26 +44,6 @@
             <tr>
                 <td>#{{ $order->id }}</td>
                 <td><strong>{{ $order->tracking_code }}</strong></td>
-                <td style="font-size: 11px;">
-                    @if($order->user)
-                        <div style="color: var(--primary); font-weight: 500;" title="Tài khoản đăng nhập">
-                            👤 {{ Str::limit($order->user->name ?? $order->user->email, 20) }}
-                        </div>
-                    @endif
-                    @if($order->customer_email)
-                        <div style="color: var(--text-primary); font-weight: 500;">
-                            ✉️ {{ Str::limit($order->customer_email, 22) }}
-                        </div>
-                    @endif
-                    @if($order->ip_address)
-                        <div style="color: var(--text-dimmed); font-family: monospace; font-size: 10px;" title="{{ $order->ip_address }}">
-                            🌐 {{ $order->ip_address }}
-                        </div>
-                    @endif
-                    @if(!$order->customer_email && !$order->ip_address && !$order->user)
-                        <span style="color: #64748b;">—</span>
-                    @endif
-                </td>
                 <td>{{ $order->service_type ?? 'N/A' }}</td>
                 <td>{{ $order->hours }} giờ</td>
                 <td style="color: #10b981; font-weight: 600;">{{ number_format($order->amount, 0, ',', '.') }}đ</td>
@@ -91,6 +71,26 @@
                     @endif
                 </td>
                 <td>{{ $order->created_at ? $order->created_at->format('d/m/Y H:i') : 'N/A' }}</td>
+                <td style="font-size: 11px;">
+                    @if($order->user)
+                        <div style="color: var(--primary); font-weight: 500;" title="Tài khoản đăng nhập">
+                            👤 {{ Str::limit($order->user->name ?? $order->user->email, 20) }}
+                        </div>
+                    @endif
+                    @if($order->customer_email)
+                        <div style="color: var(--text-primary); font-weight: 500;">
+                            ✉️ {{ Str::limit($order->customer_email, 22) }}
+                        </div>
+                    @endif
+                    @if($order->ip_address)
+                        <div style="color: var(--text-dimmed); font-family: monospace; font-size: 10px;" title="{{ $order->ip_address }}">
+                            🌐 {{ $order->ip_address }}
+                        </div>
+                    @endif
+                    @if(!$order->customer_email && !$order->ip_address && !$order->user)
+                        <span style="color: #64748b;">—</span>
+                    @endif
+                </td>
                 <td>
                     <form action="{{ route('admin.orders.status', $order->id) }}" method="POST" style="display: inline;">
                         @csrf
