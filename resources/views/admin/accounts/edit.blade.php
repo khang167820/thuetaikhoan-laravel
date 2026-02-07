@@ -161,8 +161,9 @@ function suggestPassword(btn) {
 }
 
 function setStatus(status) {
-    // Also include the current password so it gets saved
+    // Also include the current password and note so they get saved
     const newPass = document.getElementById('password').value;
+    const noteValue = document.querySelector('input[name="note"]').value;
     const form = document.getElementById('toggleForm');
     
     let pwInput = form.querySelector('input[name="password"]');
@@ -173,6 +174,15 @@ function setStatus(status) {
         form.appendChild(pwInput);
     }
     pwInput.value = newPass;
+    
+    let noteInput = form.querySelector('input[name="note"]');
+    if (!noteInput) {
+        noteInput = document.createElement('input');
+        noteInput.type = 'hidden';
+        noteInput.name = 'note';
+        form.appendChild(noteInput);
+    }
+    noteInput.value = noteValue;
     
     document.getElementById('toggleStatus').value = status;
     form.submit();

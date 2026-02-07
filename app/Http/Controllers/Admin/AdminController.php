@@ -368,13 +368,23 @@ class AdminController extends Controller
         
         $newAvailable = !$account->is_available;
         
-        // Chặn chuyển Chờ thuê nếu có ghi chú
-        if ($newAvailable && !empty($account->note)) {
+        // Check note from form (if submitted) or from DB
+        $formNote = request()->input('note');
+        $currentNote = $formNote !== null ? $formNote : $account->note;
+        
+        // Chặn chuyển Chờ thuê nếu có ghi chú (check form value)
+        if ($newAvailable && !empty($currentNote)) {
             return redirect()->route('admin.accounts', ['type' => $account->type ?? 'Unlocktool'])
                 ->with('error', 'Không thể chuyển Chờ thuê khi có ghi chú! Xóa ghi chú trước.');
         }
         
         $updateData = ['is_available' => $newAvailable ? 1 : 0];
+        
+        // If toggling to available, also clear note and note_date
+        if ($newAvailable) {
+            $updateData['note'] = null;
+            $updateData['note_date'] = null;
+        }
         
         // Also save password if provided (from edit page)
         $password = request()->input('password');
