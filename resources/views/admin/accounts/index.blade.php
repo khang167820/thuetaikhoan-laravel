@@ -470,7 +470,7 @@
                                     {{ $account->is_available ? 'Chuyển TT' : 'Chuyển TT' }}
                                 </button>
                             </form>
-                            <button class="pass-btn" onclick="promptChangePassword({{ $account->id }}, '{{ $account->password }}')">Đổi pass</button>
+                            <span title="{{ $account->password_changed ? 'Đã đổi pass' : 'Chưa đổi pass' }}" style="display:inline-block; width:12px; height:12px; border-radius:50%; background: {{ $account->password_changed ? '#4ade80' : '#f87171' }}; vertical-align:middle; cursor:default;"></span>
                         </div>
                         <div class="action-note">Ngày kích hoạt: -</div>
                     </div>
