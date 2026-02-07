@@ -64,11 +64,6 @@
         
         <div class="form-row">
             <div class="form-group">
-                <label class="form-label">Ngày ghi chú (lịch)</label>
-                <input type="date" name="note_date" class="form-input" 
-                       value="{{ isset($account->note_date) && $account->note_date ? \Carbon\Carbon::parse($account->note_date)->format('Y-m-d') : '' }}">
-            </div>
-            <div class="form-group">
                 <label class="form-label">Ngày hết hạn TK</label>
                 <input type="date" name="expires_at" class="form-input" 
                        value="{{ isset($account->expires_at) && $account->expires_at ? \Carbon\Carbon::parse($account->expires_at)->format('Y-m-d') : '' }}"
